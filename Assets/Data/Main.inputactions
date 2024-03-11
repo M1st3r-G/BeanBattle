@@ -1,0 +1,34 @@
+{
+    "name": "Main",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "7c7f33e4-adf9-4f62-ae1a-407ccdaf0922",
+            "actions": [
+                {
+                    "name": "NextPhase",
+                    "type": "Button",
+                    "id": "8d175cb2-38e3-47ff-8776-b1e11c11f633",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "bcb013fa-5698-4f19-8cb9-ed19fe268758",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextPhase",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
