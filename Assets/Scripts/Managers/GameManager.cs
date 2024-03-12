@@ -50,6 +50,7 @@ namespace Managers
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    _current.Initiative++;
                     print(_current);
                 }
 
