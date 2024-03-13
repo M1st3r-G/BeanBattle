@@ -6,9 +6,11 @@ namespace Controller
     public class CharController : MonoBehaviour
     {
         //Components
+        public CharData GetData => data;
         [SerializeField] private CharData data;
-        private MeshRenderer _renderer; 
-        
+        private MeshRenderer _renderer;
+
+        public int CurrentHealth => _health;
         private int _health;
 
         public int Initiative
