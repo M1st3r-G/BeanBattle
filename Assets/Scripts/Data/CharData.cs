@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Data
@@ -5,6 +6,9 @@ namespace Data
     [CreateAssetMenu(fileName = "Character")]
     public class CharData : ScriptableObject
     {
+        public List<CharacterAction> Actions => action;
+        [SerializeField] private List<CharacterAction> action = new();
+        
         public Material Material => coloredMaterial;
         [SerializeField] private Material coloredMaterial;
 

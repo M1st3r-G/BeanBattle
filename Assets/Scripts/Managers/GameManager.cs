@@ -21,6 +21,9 @@ namespace Managers
         public delegate void OnOrderChangeDelegate(CharController[] newOrder);
         public static OnOrderChangeDelegate OnOrderChanged;
 
+        public delegate void OnCurrentChangeDelegate(CharController newChar);
+        public static OnCurrentChangeDelegate OnCurrentChange;
+        
         private void Awake()
         {
             _playOrder = new List<CharController>();
@@ -33,14 +36,12 @@ namespace Managers
 
         private IEnumerator UpdateLoop()
         {
-            print("SetUp");
             StartCoroutine(SetUpPhase());
             yield return WaitTillNextPhase();
             
             while(true)
             {
                 yield return StartCoroutine(NextPlayer());
-                print("PlayerPhase");
                 StartCoroutine(PlayerPhase());
                 yield return WaitTillNextPhase();
             }
@@ -60,31 +61,32 @@ namespace Managers
                 yield return null;
             }
 
-            print("Phase End");
+            print("Player Phase End");
         }
         
         private IEnumerator SetUpPhase()
         {
+            print("SetUp");
             while (!_nextPhasePressed)
             {
                 if (Input.GetKeyDown(KeyCode.A))
                 {
-                    print("Add Player");
-                    GameObject newPlayer = Instantiate(player);
+                    GameObject newPlayer = Instantiate(player, Vector3.left * 7 + Vector3.right * _playOrder.Count, Quaternion.identity);
                     _playOrder.Add(newPlayer.GetComponent<CharController>());
                 }
                 else if (Input.GetKeyDown(KeyCode.D))
                 {
-                    print("Add Enemy");
-                    GameObject newEnemy = Instantiate(enemy);
+                    GameObject newEnemy = Instantiate(enemy, Vector3.left * 7 + Vector3.right * _playOrder.Count, Quaternion.identity);
                     _playOrder.Add(newEnemy.GetComponent<CharController>());
                 }
 
+                if (_playOrder.Count >= 12) break;
                 yield return null;
             }
             
             _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
             DisplayOrder();
+            print("SetUp Phase Ends");
         }
         
         private IEnumerator WaitTillNextPhase()
@@ -104,13 +106,12 @@ namespace Managers
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
                 DisplayOrder();
             }
-
-            yield return new WaitForSeconds(2f);
             
             //Reorder
             int min = _playOrder.Min(c => c.Initiative);
             if (min != 0)
             {
+                yield return new WaitForSeconds(2f);
                 foreach (CharController p in _playOrder)
                 {
                     p.Initiative -= min;
@@ -120,6 +121,8 @@ namespace Managers
             
             _current = _playOrder[0];
             _playOrder.RemoveAt(0);
+            
+            OnCurrentChange.Invoke(_current);
         }
         
         private void SetNextPhaseFlag(InputAction.CallbackContext _) => _nextPhasePressed = true;
@@ -137,8 +140,7 @@ namespace Managers
         private void DisplayOrder()
         {
             OnOrderChanged.Invoke(_playOrder.ToArray());
-            print(_playOrder.Aggregate("Current Order:\n",
-                (current, c) => current + $"{c}\n"));
+            //print(_playOrder.Aggregate("Current Order:\n",(current, c) => current + $"{c}\n"));
         }
     }
 }
