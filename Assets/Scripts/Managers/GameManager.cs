@@ -20,7 +20,6 @@ namespace Managers
         
         public delegate void OnOrderChangeDelegate(CharController[] newOrder);
         public static OnOrderChangeDelegate OnOrderChanged;
-
         public delegate void OnCurrentChangeDelegate(CharController newChar);
         public static OnCurrentChangeDelegate OnCurrentChange;
         
