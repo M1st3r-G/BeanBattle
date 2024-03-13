@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,25 +15,35 @@ namespace Controller
             _banner = GetComponentsInChildren<BannerController>(true);
         }
 
-        private void UpdateUI(List<CharController> currentOrder)
+        private void UpdateUI(CharController[] currentOrder)
         {
-            for (int i = 0; i < currentOrder.Count; i++)
+            for (int i = 0; i < currentOrder.Length; i++)
             {
                 _banner[i].gameObject.SetActive(true);
                 _banner[i].SetTo(currentOrder[i]);
             }
 
-            for (int i = currentOrder.Count; i < 12; i++)
+            for (int i = currentOrder.Length; i < 12; i++)
             {
                 _banner[i].gameObject.SetActive(false);
             }
 
-            AdjustBottomPadding(currentOrder.Count);
+            AdjustBottomPadding(currentOrder.Length);
         }
 
         private void AdjustBottomPadding(int numberOfActives)
         {
             _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);
+        }
+
+        private void OnEnable()
+        {
+            GameManager.OnOrderChanged += UpdateUI;
+        }
+
+        private void OnDisable()
+        {
+            GameManager.OnOrderChanged -= UpdateUI;
         }
     }
 }

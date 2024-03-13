@@ -17,6 +17,9 @@ namespace Managers
         private List<CharController> _playOrder;
         private CharController _current;
         private bool _nextPhasePressed;
+        
+        public delegate void OnOrderChangeDelegate(CharController[] newOrder);
+        public static OnOrderChangeDelegate OnOrderChanged;
 
         private void Awake()
         {
@@ -36,7 +39,7 @@ namespace Managers
             
             while(true)
             {
-                NextPlayer();
+                yield return StartCoroutine(NextPlayer());
                 print("PlayerPhase");
                 StartCoroutine(PlayerPhase());
                 yield return WaitTillNextPhase();
@@ -81,7 +84,7 @@ namespace Managers
             }
             
             _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-            print(DisplayOrder());
+            DisplayOrder();
         }
         
         private IEnumerator WaitTillNextPhase()
@@ -93,14 +96,16 @@ namespace Managers
             _nextPhasePressed = false;
         }
 
-        private void NextPlayer()
+        private IEnumerator NextPlayer()
         {
             if (_current is not null)
             {
                 _playOrder.Add(_current);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-                print(DisplayOrder());
+                DisplayOrder();
             }
+
+            yield return new WaitForSeconds(2f);
             
             //Reorder
             int min = _playOrder.Min(c => c.Initiative);
@@ -110,7 +115,7 @@ namespace Managers
                 {
                     p.Initiative -= min;
                 }
-                print(DisplayOrder());
+                DisplayOrder();
             }
             
             _current = _playOrder[0];
@@ -129,7 +134,11 @@ namespace Managers
             nextPhaseAction.action.performed -= SetNextPhaseFlag;
         }
 
-        private string DisplayOrder() => _playOrder.Aggregate("Current Order:\n", 
-            (current, c) => current + $"{c}\n");
+        private void DisplayOrder()
+        {
+            OnOrderChanged.Invoke(_playOrder.ToArray());
+            print(_playOrder.Aggregate("Current Order:\n",
+                (current, c) => current + $"{c}\n"));
+        }
     }
 }
