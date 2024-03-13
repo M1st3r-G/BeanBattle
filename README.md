@@ -1,7 +1,5 @@
 # BeanBattle
  
 ToDo:
-- Fix Scaling
-    - Add Down Padding dependent of Size
-- Add Code Interface for UI
-- Add Components to UI
+- UI for Selected Unit
+- Choose Actions for Selected Unit
