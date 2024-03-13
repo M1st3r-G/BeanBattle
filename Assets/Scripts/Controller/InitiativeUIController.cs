@@ -1,26 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Controller
 {
     public class InitiativeUIController : MonoBehaviour
     {
-        //Debug
-        [SerializeField] private CharController test;
-        
         private BannerController[] _banner = new BannerController[12];
-
+        private VerticalLayoutGroup _layoutGroup;
+        
         private void Awake()
         {
+            _layoutGroup = GetComponent<VerticalLayoutGroup>();
             _banner = GetComponentsInChildren<BannerController>(true);
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                UpdateUI(new List<CharController> {test});
-            }
         }
 
         private void UpdateUI(List<CharController> currentOrder)
@@ -35,8 +27,13 @@ namespace Controller
             {
                 _banner[i].gameObject.SetActive(false);
             }
-            
-            // Fix Border Height
+
+            AdjustBottomPadding(currentOrder.Count);
+        }
+
+        private void AdjustBottomPadding(int numberOfActives)
+        {
+            _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);
         }
     }
 }
