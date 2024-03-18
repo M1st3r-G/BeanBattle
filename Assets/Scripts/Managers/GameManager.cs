@@ -13,6 +13,7 @@ namespace Managers
         private List<CharController> _playOrder;
         private CharController _current;
         private bool _nextPhasePressed;
+        private bool _gameLoop;
         
         public delegate void OnOrderChangeDelegate(CharController[] newOrder);
         public static OnOrderChangeDelegate OnOrderChanged;
@@ -24,6 +25,8 @@ namespace Managers
             _playOrder = new List<CharController>();
             _playOrder = GameObject.FindGameObjectsWithTag("Character").Select(obj => obj.GetComponent<CharController>()).ToList();
             //Dangerous
+
+            _gameLoop = true;
         }
 
         private void Start()
@@ -38,7 +41,7 @@ namespace Managers
             DisplayOrder();
             print("SetUp Phase Ends");
             
-            while(true)
+            while(_gameLoop)
             {
                 yield return StartCoroutine(NextPlayer());
                 StartCoroutine(PlayerPhase());
