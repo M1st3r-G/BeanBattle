@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 490a5bd2ea4f49a7a38a1cbcccad3dad, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  action:
+  - {fileID: 11400000, guid: 18a9ef9b33b87824b8125f7a0cc97c6f, type: 2}
+  - {fileID: 11400000, guid: 1eb753c5ec2650a45a5bbf6ca069b880, type: 2}
+  - {fileID: 11400000, guid: 40873d4334f75b342847066035984709, type: 2}
   coloredMaterial: {fileID: 2100000, guid: 58b0e84cb17421342a81b0391a9678f0, type: 2}
   charName: DefaultPlayer
   startHealth: 15
