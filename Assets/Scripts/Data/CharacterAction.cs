@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Data
 {
+    [CreateAssetMenu(fileName = "CharacterAction")]
     public class CharacterAction : ScriptableObject
     {
         public Sprite ActionImage => actionImage;

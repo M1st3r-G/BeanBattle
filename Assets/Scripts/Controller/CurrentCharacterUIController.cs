@@ -1,4 +1,5 @@
 using Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace Controller
     {
         private ActionsUIController _actionController;
         [SerializeField] private Image portrait;
+        [SerializeField] private TextMeshProUGUI nameText; 
 
         private void Awake()
         {
@@ -18,6 +20,7 @@ namespace Controller
         {
             _actionController.SetDisplay(newChar.GetData.Actions);
             portrait.color = newChar.GetData.Material.color;
+            nameText.text = newChar.GetData.Name;
         }
 
         private void OnEnable()
