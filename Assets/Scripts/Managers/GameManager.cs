@@ -9,10 +9,6 @@ namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private GameObject enemy;
-        [SerializeField] private GameObject player;
-        
-        
         [SerializeField] private InputActionReference nextPhaseAction;
         private List<CharController> _playOrder;
         private CharController _current;
@@ -26,6 +22,8 @@ namespace Managers
         private void Awake()
         {
             _playOrder = new List<CharController>();
+            _playOrder = GameObject.FindGameObjectsWithTag("Character").Select(obj => obj.GetComponent<CharController>()).ToList();
+            //Dangerous
         }
 
         private void Start()
@@ -35,8 +33,10 @@ namespace Managers
 
         private IEnumerator UpdateLoop()
         {
-            StartCoroutine(SetUpPhase());
-            yield return WaitTillNextPhase();
+            print("SetUp");
+            _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
+            DisplayOrder();
+            print("SetUp Phase Ends");
             
             while(true)
             {
@@ -62,32 +62,7 @@ namespace Managers
 
             print("Player Phase End");
         }
-        
-        private IEnumerator SetUpPhase()
-        {
-            print("SetUp");
-            while (!_nextPhasePressed)
-            {
-                if (Input.GetKeyDown(KeyCode.A))
-                {
-                    GameObject newPlayer = Instantiate(player, Vector3.left * 7 + Vector3.right * _playOrder.Count, Quaternion.identity);
-                    _playOrder.Add(newPlayer.GetComponent<CharController>());
-                }
-                else if (Input.GetKeyDown(KeyCode.D))
-                {
-                    GameObject newEnemy = Instantiate(enemy, Vector3.left * 7 + Vector3.right * _playOrder.Count, Quaternion.identity);
-                    _playOrder.Add(newEnemy.GetComponent<CharController>());
-                }
 
-                if (_playOrder.Count >= 12) break;
-                yield return null;
-            }
-            
-            _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-            DisplayOrder();
-            print("SetUp Phase Ends");
-        }
-        
         private IEnumerator WaitTillNextPhase()
         {
             _nextPhasePressed = false;
