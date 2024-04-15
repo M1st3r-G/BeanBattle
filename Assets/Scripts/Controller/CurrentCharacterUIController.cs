@@ -1,4 +1,3 @@
-using System;
 using Data;
 using Managers;
 using TMPro;
@@ -15,7 +14,8 @@ namespace Controller
         [SerializeField] private TextMeshProUGUI nameText; 
         [SerializeField] private InputActionReference numberAction;
         private CharData _current;
-
+        private Coroutine _currentAction;
+        
         public static CurrentCharacterUIController Instance { get; private set; }
 
         private void Awake()
@@ -46,16 +46,27 @@ namespace Controller
 
         private void NumberPressed(InputAction.CallbackContext ctx)
         {
-            ExecuteAction((int)ctx.ReadValue<float>());
+            SelectAction((int)ctx.ReadValue<float>());
         }
         
-        private void ExecuteAction(int num)
+        private void SelectAction(int num)
         {
-            if(num > _current.Actions.Count) print($"Action{num} is not Available");
-            else{print($"Executing the {_current.Actions[num-1].ActionName} action");}
+            if (num > _current.Actions.Count)
+            {
+                print($"Action{num} is not Available");
+                return;
+            }
+
+            print($"Description: {_current.Actions[num-1].ActionDescription}");
+            if(_currentAction is not null) StopCoroutine(_currentAction);
+            
+            switch (_current.Actions[num].Action)
+            {
+                //THIS IS NOT THE PLACE FOR THIS TO BE
+            }
         }
 
-        public void ActionCellPressed(int index) => ExecuteAction(index);
+        public void ActionCellPressed(int index) => SelectAction(index);
         
         private void OnDisable()
         {
