@@ -6,8 +6,8 @@ namespace Data
     [CreateAssetMenu(fileName = "Character")]
     public class CharData : ScriptableObject
     {
-        public List<CharacterAction> Actions => action;
-        [SerializeField] private List<CharacterAction> action = new();
+        public List<CharacterActionPacket> Actions => action;
+        [SerializeField] private List<CharacterActionPacket> action = new();
         
         public Material Material => coloredMaterial;
         [SerializeField] private Material coloredMaterial;

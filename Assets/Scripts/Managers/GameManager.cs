@@ -44,26 +44,9 @@ namespace Managers
             while(_gameLoop)
             {
                 yield return StartCoroutine(NextPlayer());
-                StartCoroutine(PlayerPhase());
+                print($"Now its {_current.name}s Turn");
                 yield return WaitTillNextPhase();
             }
-        }
-
-        private IEnumerator PlayerPhase()
-        {
-            print($"Now its {_current.name}s Turn");
-            while (!_nextPhasePressed)
-            {
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    _current.Initiative++;
-                    print(_current);
-                }
-
-                yield return null;
-            }
-
-            print("Player Phase End");
         }
 
         private IEnumerator WaitTillNextPhase()
@@ -113,7 +96,7 @@ namespace Managers
         {
             nextPhaseAction.action.performed -= SetNextPhaseFlag;
         }
-
+        
         private void DisplayOrder()
         {
             OnOrderChanged.Invoke(_playOrder.ToArray());

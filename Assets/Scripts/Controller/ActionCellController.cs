@@ -10,7 +10,7 @@ namespace Controller
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
 
-        public void SetTo(CharacterAction action, int index)
+        public void SetTo(CharacterActionPacket action, int index)
         {
             image.sprite = action.ActionImage;
             nameText.text = $"[{index}]\n{action.ActionName}";

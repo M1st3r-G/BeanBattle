@@ -128,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   portrait: {fileID: 2423255458115264720}
   nameText: {fileID: 727155219073449143}
+  numberAction: {fileID: 7080820377471110002, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
 --- !u!1 &4485308140579897136
 GameObject:
   m_ObjectHideFlags: 0
