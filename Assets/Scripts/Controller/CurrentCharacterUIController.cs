@@ -1,3 +1,4 @@
+using System;
 using Data;
 using Managers;
 using TMPro;
@@ -14,9 +15,17 @@ namespace Controller
         [SerializeField] private TextMeshProUGUI nameText; 
         [SerializeField] private InputActionReference numberAction;
         private CharData _current;
-        
+
+        public static CurrentCharacterUIController Instance { get; private set; }
+
         private void Awake()
         {
+            if (Instance is not null){
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
             _actionController = GetComponentInChildren<ActionsUIController>();
         }
 
@@ -32,22 +41,33 @@ namespace Controller
         {
             GameManager.OnCurrentChange += OnChangeEvent;
             numberAction.action.Enable();
-            numberAction.action.performed += ExecuteAction;
+            numberAction.action.performed += NumberPressed;
         }
 
-        private void ExecuteAction(InputAction.CallbackContext ctx)
+        private void NumberPressed(InputAction.CallbackContext ctx)
         {
-            int num = (int) ctx.ReadValue<float>();
+            ExecuteAction((int)ctx.ReadValue<float>());
+        }
+        
+        private void ExecuteAction(int num)
+        {
             if(num > _current.Actions.Count) print($"Action{num} is not Available");
             else{print($"Executing the {_current.Actions[num-1].ActionName} action");}
         }
 
+        public void ActionCellPressed(int index) => ExecuteAction(index);
+        
         private void OnDisable()
         {
             GameManager.OnCurrentChange -= OnChangeEvent;
-            numberAction.action.performed -= ExecuteAction;
+            numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
 
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
     }
 }
