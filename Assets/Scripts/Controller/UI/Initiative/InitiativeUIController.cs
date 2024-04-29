@@ -2,7 +2,7 @@ using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller
+namespace Controller.UI.Initiative
 {
     public class InitiativeUIController : MonoBehaviour
     {

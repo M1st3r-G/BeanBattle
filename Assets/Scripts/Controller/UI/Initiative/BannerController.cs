@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller
+namespace Controller.UI.Initiative
 {
     public class BannerController : MonoBehaviour
     {

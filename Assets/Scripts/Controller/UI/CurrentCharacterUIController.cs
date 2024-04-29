@@ -1,3 +1,4 @@
+using Controller.UI.TopActions;
 using Data;
 using Managers;
 using TMPro;
@@ -5,17 +6,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Controller
+namespace Controller.UI
 {
     public class CurrentCharacterUIController : MonoBehaviour
     {
+        //ComponentReferences
         private ActionsUIController _actionController;
+        
         [SerializeField] private Image portrait;
         [SerializeField] private TextMeshProUGUI nameText; 
         [SerializeField] private InputActionReference numberAction;
-        private CharData _current;
-        private Coroutine _currentAction;
         
+        //Temps
+        private CharData _current;
+        
+        //Public
         public static CurrentCharacterUIController Instance { get; private set; }
 
         private void Awake()
@@ -58,12 +63,7 @@ namespace Controller
             }
 
             print($"Description: {_current.Actions[num-1].ActionDescription}");
-            if(_currentAction is not null) StopCoroutine(_currentAction);
-            
-            switch (_current.Actions[num].Action)
-            {
-                //THIS IS NOT THE PLACE FOR THIS TO BE
-            }
+            GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
         }
 
         public void ActionCellPressed(int index) => SelectAction(index);
@@ -73,7 +73,6 @@ namespace Controller
             GameManager.OnCurrentChange -= OnChangeEvent;
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
-
         }
 
         private void OnDestroy()

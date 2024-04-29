@@ -10,31 +10,29 @@ namespace Controller
         [SerializeField] private CharData data;
         private MeshRenderer _renderer;
 
-        public int CurrentHealth => _health;
-        private int _health;
+        public int CurrentHealth { get; private set; }
 
-        public int Initiative
-        {
-            get => _initiative;
-            set => _initiative = value;
-        }
+        public int Initiative { get; set; }
 
-        private int _initiative;
-        
         private void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
             _renderer.material = data.Material;
 
-            _initiative = Random.Range(data.InitiativeStartRange.x, data.InitiativeStartRange.y);
+            Initiative = Random.Range(data.InitiativeStartRange.x, data.InitiativeStartRange.y);
             
             name = data.Name;
-            _health = data.BaseHealth;
+            CurrentHealth = data.BaseHealth;
         }
 
+        public void TriggerState(CharacterAction.ActionTypes type)
+        {
+            print($"Ich, {this} muss jetzt {type} ausführen");
+        }
+        
         public override string ToString()
         {
-            return $"{name} ({_health}): {_initiative}";
+            return $"{name} ({CurrentHealth}): {Initiative}";
         }
         
     }

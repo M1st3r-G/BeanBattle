@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,8 +21,19 @@ namespace Managers
         public delegate void OnCurrentChangeDelegate(CharController newChar);
         public static OnCurrentChangeDelegate OnCurrentChange;
         
+        public static GameManager Instance { get; private set;  }
+        
         private void Awake()
         {
+            if (Instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+            
+            
             _playOrder = new List<CharController>();
             _playOrder = GameObject.FindGameObjectsWithTag("Character").Select(obj => obj.GetComponent<CharController>()).ToList();
             //Dangerous
@@ -95,6 +107,11 @@ namespace Managers
         private void OnDisable()
         {
             nextPhaseAction.action.performed -= SetNextPhaseFlag;
+        }
+
+        public void TriggerState(CharacterAction.ActionTypes type)
+        {
+            _current.TriggerState(type);
         }
         
         private void DisplayOrder()

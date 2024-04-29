@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller
+namespace Controller.UI.TopActions
 {
     public class ActionCellController : MonoBehaviour
     {
@@ -11,7 +11,7 @@ namespace Controller
         [SerializeField] private TextMeshProUGUI nameText;
         private int _index;
         
-        public void SetTo(CharacterActionPacket action, int index)
+        public void SetTo(CharacterAction action, int index)
         {
             _index = index;
             image.sprite = action.ActionImage;

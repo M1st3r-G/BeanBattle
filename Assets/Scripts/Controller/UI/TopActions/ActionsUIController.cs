@@ -3,7 +3,7 @@ using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller
+namespace Controller.UI.TopActions
 {
     public class ActionsUIController : MonoBehaviour
     {
@@ -16,7 +16,7 @@ namespace Controller
             _group = GetComponent<HorizontalLayoutGroup>();
         }
         
-        public void SetDisplay(List<CharacterActionPacket> actions)
+        public void SetDisplay(List<CharacterAction> actions)
         {
             for (int i = 0; i < actions.Count; i++)
             {
