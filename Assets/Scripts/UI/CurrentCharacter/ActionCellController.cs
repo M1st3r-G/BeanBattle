@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.TopActions
+namespace UI.CurrentCharacter
 {
     public class ActionCellController : MonoBehaviour
     {

@@ -3,7 +3,7 @@ using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.TopActions
+namespace UI.CurrentCharacter
 {
     public class ActionsUIController : MonoBehaviour
     {

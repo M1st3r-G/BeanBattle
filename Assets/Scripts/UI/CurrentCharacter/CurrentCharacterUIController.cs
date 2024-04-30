@@ -2,12 +2,11 @@ using Controller;
 using Data;
 using Managers;
 using TMPro;
-using UI.TopActions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.CurrentCharacter
 {
     public class CurrentCharacterUIController : MonoBehaviour
     {
