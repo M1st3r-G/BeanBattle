@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Controller;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,8 +11,10 @@ namespace Managers
         //ComponentReferences
         private Grid _grid;
         private Camera _mainCamera;
-        private List<Vector2Int> _occupied;
+        private Dictionary<CharController, Vector2Int> _occupied;
 
+        private Coroutine testVar;
+        
         public static MouseInputManager Instance { get; private set; }
         
         private void Awake()
@@ -26,6 +29,8 @@ namespace Managers
 
             _grid = GameObject.FindGameObjectWithTag("Ground").GetComponent<Grid>();
             _mainCamera = Camera.main;
+
+            _occupied = new Dictionary<CharController, Vector2Int>();
         }
 
         public Vector3Int? GetCellFromMouse()
@@ -44,18 +49,18 @@ namespace Managers
             return _grid.GetCellCenterWorld(cell);
         }
 
-        public void SetOccupied(Vector3Int cell)
+        public void SetOccupied(CharController charController,Vector3Int cell)
         {
             if (!IsOccupied(cell))
             {
-                _occupied.Add((Vector2Int)cell);
+                _occupied[charController] = (Vector2Int)cell;
             }
             else throw new Exception("Cell already full");
         }
 
         public bool IsOccupied(Vector3Int cell)
         {
-            return _occupied.Contains((Vector2Int)cell);
+            return _occupied.ContainsValue((Vector2Int)cell);
         }
 
         private void OnDestroy()

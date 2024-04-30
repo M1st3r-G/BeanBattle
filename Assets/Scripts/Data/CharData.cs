@@ -12,6 +12,9 @@ namespace Data
         public Material Material => coloredMaterial;
         [SerializeField] private Material coloredMaterial;
 
+        public Material Shadow => shadowMaterial;
+        [SerializeField] private Material shadowMaterial;
+        
         public string Name => charName;
         [SerializeField] private string charName;
         

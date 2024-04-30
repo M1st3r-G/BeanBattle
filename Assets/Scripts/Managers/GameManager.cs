@@ -74,6 +74,7 @@ namespace Managers
         {
             if (_current is not null)
             {
+                _current.EndState();
                 _playOrder.Add(_current);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
                 DisplayOrder();
