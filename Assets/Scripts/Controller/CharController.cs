@@ -48,7 +48,6 @@ namespace Controller
 
         public void TriggerState(CharacterAction.ActionTypes type)
         {
-            print($"Ich, {this} muss jetzt {type} ausführen");
             if (currentState is not null) EndState();
             switch (type)
             {

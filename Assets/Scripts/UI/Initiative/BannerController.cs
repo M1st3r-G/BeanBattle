@@ -1,9 +1,10 @@
+using Controller;
 using Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller.UI.Initiative
+namespace UI.Initiative
 {
     public class BannerController : MonoBehaviour
     {

@@ -3,17 +3,26 @@ using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Controller.UI.TopActions
+namespace UI.TopActions
 {
     public class ActionsUIController : MonoBehaviour
     {
         private ActionCellController[] _actionCells = new ActionCellController[7];
         private HorizontalLayoutGroup _group;
+
+        private int currentSelection = -1;
         
         private void Awake()
         {
             _actionCells = GetComponentsInChildren<ActionCellController>(true);
             _group = GetComponent<HorizontalLayoutGroup>();
+        }
+
+        public void Select(int idx)
+        {
+            if(currentSelection != -1) _actionCells[currentSelection].SetSelected(false);
+            currentSelection = idx;
+            _actionCells[currentSelection].SetSelected(true);
         }
         
         public void SetDisplay(List<CharacterAction> actions)
@@ -29,10 +38,10 @@ namespace Controller.UI.TopActions
                 _actionCells[i].gameObject.SetActive(false);
             }
 
-            FixBorder(actions.Count);
+            FixLayout(actions.Count);
         }
 
-        private void FixBorder(int numberOfActives)
+        private void FixLayout(int numberOfActives)
         {
             _group.padding.right = (7 - numberOfActives) * 150;
         }

@@ -1,12 +1,13 @@
-using Controller.UI.TopActions;
+using Controller;
 using Data;
 using Managers;
 using TMPro;
+using UI.TopActions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace Controller.UI
+namespace UI
 {
     public class CurrentCharacterUIController : MonoBehaviour
     {
@@ -62,6 +63,7 @@ namespace Controller.UI
                 return;
             }
 
+            _actionController.Select(num - 1);
             print($"Description: {_current.Actions[num-1].ActionDescription}");
             GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
         }
