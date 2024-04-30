@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Data;
 using Managers;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -88,6 +89,7 @@ namespace Controller
                         newPosition.y = transform.position.y;
                         _indicator.transform.position = newPosition;
                         MouseInputManager.Instance.SetOccupied(this, (Vector3Int)hoveredCell);
+                        CurrentActionController.Instance.SetTimeCost((int)Vector2.Distance(new Vector2(transform.position.x, transform.position.z), (Vector3)(Vector3Int)hoveredCell));
                     }
 
                     if (Mouse.current.leftButton.wasPressedThisFrame)
