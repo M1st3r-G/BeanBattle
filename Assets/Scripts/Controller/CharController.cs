@@ -3,6 +3,7 @@ using System.Collections;
 using Data;
 using Managers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Controller
@@ -78,16 +79,20 @@ namespace Controller
             while (true)
             {
                 Vector3Int? hoveredCell = MouseInputManager.Instance.GetCellFromMouse();
-                if (hoveredCell is null) yield return null;
-                else
+                
+                if (hoveredCell is not null)
                 {
-                    if (MouseInputManager.Instance.IsOccupied((Vector3Int)hoveredCell)) yield return null;
-                    else
+                    if (!MouseInputManager.Instance.IsOccupied((Vector3Int)hoveredCell))
                     {
                         Vector3 newPosition = MouseInputManager.Instance.CellToCenterWorld((Vector3Int)hoveredCell);
                         newPosition.y = transform.position.y;
                         _indicator.transform.position = newPosition;
                         MouseInputManager.Instance.SetOccupied(this, (Vector3Int)hoveredCell);
+                    }
+
+                    if (Mouse.current.leftButton.wasPressedThisFrame)
+                    {
+                        print("Accepted");
                     }
                 }
 
