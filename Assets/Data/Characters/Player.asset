@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1eb753c5ec2650a45a5bbf6ca069b880, type: 2}
   - {fileID: 11400000, guid: 40873d4334f75b342847066035984709, type: 2}
   coloredMaterial: {fileID: 2100000, guid: 58b0e84cb17421342a81b0391a9678f0, type: 2}
+  shadowMaterial: {fileID: 2100000, guid: 84d94e97cff36e64197f4524f68603b4, type: 2}
   charName: DefaultPlayer
   startHealth: 15
   iniRange: {x: 3, y: 8}
