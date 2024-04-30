@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -31,6 +32,14 @@ namespace Managers
             _mainCamera = Camera.main;
 
             _occupied = new Dictionary<CharController, Vector2Int>();
+        }
+
+        private void Start()
+        {
+            foreach (CharController charC in GameObject.FindGameObjectsWithTag("Character").Select(g => g.GetComponent<CharController>()))
+            {
+                _occupied[charC] = (Vector2Int)_grid.WorldToCell(charC.transform.position);
+            }
         }
 
         public Vector3Int? GetCellFromMouse()
