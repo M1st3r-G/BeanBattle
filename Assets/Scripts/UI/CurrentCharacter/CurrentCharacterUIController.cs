@@ -58,12 +58,11 @@ namespace UI.CurrentCharacter
         {
             if (num > _current.Actions.Count)
             {
-                print($"Action{num} is not Available");
+                Debug.Log($"Action{num} is not Available");
                 return;
             }
 
             _actionController.Select(num - 1);
-            print($"Description: {_current.Actions[num-1].ActionDescription}");
             GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
         }
 

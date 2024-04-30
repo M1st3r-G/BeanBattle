@@ -1,3 +1,4 @@
+using System;
 using Data;
 using TMPro;
 using UnityEngine;
@@ -15,10 +16,23 @@ namespace UI
         //Params
         //Temps
         //Public
+        public static CurrentActionController Instance { get; private set; }
      
         private void Awake()
         {
+            if (Instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            
             gameObject.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         public void SetAction(CharacterAction action)

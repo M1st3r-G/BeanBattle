@@ -11,11 +11,13 @@ namespace UI.CurrentCharacter
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
         private int _index;
+        private CharacterAction _action;
         
         public void SetTo(CharacterAction action, int index)
         {
             background.gameObject.SetActive(false);
             _index = index;
+            _action = action;
             image.sprite = action.ActionImage;
             nameText.text = $"[{index}]\n{action.ActionName}";
         }
@@ -23,6 +25,7 @@ namespace UI.CurrentCharacter
         public void SetSelected(bool state)
         {
             background.gameObject.SetActive(state);
+            CurrentActionController.Instance.SetAction(_action);
         }
         
         public void OnClicked()
