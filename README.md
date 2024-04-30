@@ -1,11 +1,10 @@
 # BeanBattle
  
 ToDo:
-- Choose Actions for Selected Unit
-- - Numbers and Click
-- - Display Selection
+- Execute Actions
+- Implement More Actions
+- - Move
+- - Attack
+- - Evil/Help
 
-Actions Code? Where to Save, where to execute
-
-- Move Action
-- Attack Action
+- Display the Current Action
