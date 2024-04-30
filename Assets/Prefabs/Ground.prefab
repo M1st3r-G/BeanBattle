@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 346085426319540764}
   - component: {fileID: 3172084681633350682}
   - component: {fileID: 34574833709024140}
-  - component: {fileID: 5639968443542875420}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,15 +119,3 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 1
---- !u!114 &5639968443542875420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5430621608694388835}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12733fbb2906ee8449945b15646d1c13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
