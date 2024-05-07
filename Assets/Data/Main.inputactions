@@ -22,6 +22,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "EndAction",
+                    "type": "Button",
+                    "id": "af547fe0-b10e-4c25-8b21-a67a4c59dea6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -110,6 +119,17 @@
                     "processors": "Scale(factor=7)",
                     "groups": "",
                     "action": "NumberAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e5df62a1-4e0d-4248-b139-e0939293037c",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "EndAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

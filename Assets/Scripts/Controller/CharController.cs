@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using Data;
 using Managers;
+using Misc;
 using UI;
+using UI.CurrentCharacter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -12,6 +14,7 @@ namespace Controller
     public class CharController : MonoBehaviour
     {
         //Components
+        [SerializeField] private InputActionReference stopAction;
         public CharData GetData => data;
         [SerializeField] private CharData data;
         private MeshRenderer _renderer;
@@ -51,6 +54,8 @@ namespace Controller
         public void TriggerState(CharacterAction.ActionTypes type)
         {
             if (_currentState is not null) EndState();
+            
+            stopAction.action.Enable();
             switch (type)
             {
                 case CharacterAction.ActionTypes.Move:
@@ -69,37 +74,53 @@ namespace Controller
 
         public void EndState()
         {
+            //General
             if(_currentState is not null) StopCoroutine(_currentState);
             _currentState = null;
+            stopAction.action.Disable();
+            CurrentCharacterUIController.Instance.DeselectCurrentAction();
+            
+            //Personal
             _indicator.SetActive(false);
         }
         
         private IEnumerator MoveState()
         {
             _indicator.SetActive(true);
-            while (true)
+            bool stateIsActive = true;
+            
+            while (stateIsActive)
             {
-                Vector3Int? hoveredCell = MouseInputManager.Instance.GetCellFromMouse();
-                
-                if (hoveredCell is not null)
+                if(MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell))
                 {
-                    if (!GridManager.Instance.IsOccupied((Vector3Int)hoveredCell))
+                    if (!GridManager.Instance.IsOccupied(hoveredCell))
                     {
-                        Vector3 newPosition = GridManager.Instance.CellToCenterWorld((Vector3Int)hoveredCell);
+                        Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
                         newPosition.y = transform.position.y;
                         _indicator.transform.position = newPosition;
-                        GridManager.Instance.SetOccupied(this, (Vector3Int)hoveredCell);
-                        CurrentActionController.Instance.SetTimeCost((int)Vector2.Distance(new Vector2(transform.position.x, transform.position.z), (Vector3)(Vector3Int)hoveredCell));
+                        
+                        int timeCost = GridManager.Instance.GetPosition(this).ManhattanDistance(hoveredCell);
+                        CurrentActionController.Instance.SetTimeCost(timeCost);
                     }
 
                     if (Mouse.current.leftButton.wasPressedThisFrame)
                     {
                         print("Accepted");
+                        transform.position = _indicator.transform.position;
+                        GridManager.Instance.SetOccupied(this, hoveredCell);
+                        stateIsActive = false;
+                    }
+
+                    if (stopAction.action.WasPerformedThisFrame())
+                    {
+                        stateIsActive = false;
                     }
                 }
 
                 yield return null;
             }
+            
+            EndState();
         }
         
         public override string ToString()
