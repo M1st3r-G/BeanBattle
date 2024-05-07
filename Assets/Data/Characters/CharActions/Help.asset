@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Help
   m_EditorClassIdentifier: 
   actionImage: {fileID: 21300000, guid: a0eed09e8db2ba34a9c01cfcea2dba53, type: 3}
-  actionType: 3
+  actionType: 4
   actionDescription: Decreses the Time of another Player in Range by 5

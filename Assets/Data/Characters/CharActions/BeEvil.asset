@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BeEvil
   m_EditorClassIdentifier: 
   actionImage: {fileID: 21300000, guid: 08b344a3d29355045bbebd8af1791971, type: 3}
-  actionType: 2
+  actionType: 3
   actionDescription: Decreases your Time by 3

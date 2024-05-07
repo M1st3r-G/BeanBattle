@@ -8,7 +8,7 @@ namespace Data
     {
         public enum ActionTypes
         {
-            Move, Attack, BeEvil, Help    
+            None, Move, Attack, BeEvil, Help
         }
         
         public Sprite ActionImage => actionImage;

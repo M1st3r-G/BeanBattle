@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: 
   actionImage: {fileID: 21300000, guid: ae74093f36c185d41bc3b865895aaa97, type: 3}
-  actionType: 1
+  actionType: 2
   actionDescription: Attacks a Player in Range
