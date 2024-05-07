@@ -15,7 +15,7 @@ namespace Controller
         public CharData GetData => data;
         [SerializeField] private CharData data;
         private MeshRenderer _renderer;
-        private Coroutine currentState ;
+        private Coroutine _currentState ;
         private GameObject _indicator;
         
         public int CurrentHealth { get; private set; }
@@ -30,7 +30,7 @@ namespace Controller
             
             name = data.Name;
             CurrentHealth = data.BaseHealth;
-            currentState = null;
+            _currentState = null;
         }
 
         private void Start()
@@ -50,11 +50,11 @@ namespace Controller
 
         public void TriggerState(CharacterAction.ActionTypes type)
         {
-            if (currentState is not null) EndState();
+            if (_currentState is not null) EndState();
             switch (type)
             {
                 case CharacterAction.ActionTypes.Move:
-                    currentState = StartCoroutine(MoveState());
+                    _currentState = StartCoroutine(MoveState());
                     break;
                 case CharacterAction.ActionTypes.Attack:
                     break;
@@ -69,8 +69,8 @@ namespace Controller
 
         public void EndState()
         {
-            if(currentState is not null) StopCoroutine(currentState);
-            currentState = null;
+            if(_currentState is not null) StopCoroutine(_currentState);
+            _currentState = null;
             _indicator.SetActive(false);
         }
         
@@ -83,12 +83,12 @@ namespace Controller
                 
                 if (hoveredCell is not null)
                 {
-                    if (!MouseInputManager.Instance.IsOccupied((Vector3Int)hoveredCell))
+                    if (!GridManager.Instance.IsOccupied((Vector3Int)hoveredCell))
                     {
-                        Vector3 newPosition = MouseInputManager.Instance.CellToCenterWorld((Vector3Int)hoveredCell);
+                        Vector3 newPosition = GridManager.Instance.CellToCenterWorld((Vector3Int)hoveredCell);
                         newPosition.y = transform.position.y;
                         _indicator.transform.position = newPosition;
-                        MouseInputManager.Instance.SetOccupied(this, (Vector3Int)hoveredCell);
+                        GridManager.Instance.SetOccupied(this, (Vector3Int)hoveredCell);
                         CurrentActionController.Instance.SetTimeCost((int)Vector2.Distance(new Vector2(transform.position.x, transform.position.z), (Vector3)(Vector3Int)hoveredCell));
                     }
 
