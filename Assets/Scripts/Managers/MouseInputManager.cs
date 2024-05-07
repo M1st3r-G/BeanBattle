@@ -23,15 +23,18 @@ namespace Managers
             _mainCamera = Camera.main;
         }
 
-        public Vector3Int? GetCellFromMouse()
+        public bool GetCellFromMouse(out Vector2Int cell)
         {
+            cell = new Vector2Int();
             Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.value);
 
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return null;
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return false;
             GameObject target = hit.collider.gameObject;
 
-            if (target.CompareTag("Ground")) return GridManager.Instance.Grid.WorldToCell(hit.point);
-            return null;
+            if (!target.CompareTag("Ground")) return false;
+            
+            cell = (Vector2Int)GridManager.Instance.Grid.WorldToCell(hit.point);
+            return true;
         }
         
         private void OnDestroy()

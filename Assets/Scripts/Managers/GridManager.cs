@@ -38,25 +38,29 @@ namespace Managers
             }
         }
         
-        public Vector3 CellToCenterWorld(Vector3Int cell)
+        public Vector3 CellToCenterWorld(Vector2Int cell)
         {
-            return Grid.GetCellCenterWorld(cell);
+            return Grid.GetCellCenterWorld((Vector3Int)cell);
         }
 
-        public void SetOccupied(CharController charController,Vector3Int cell)
+        public void SetOccupied(CharController charController,Vector2Int cell)
         {
             if (!IsOccupied(cell))
             {
-                _occupied[charController] = (Vector2Int)cell;
+                _occupied[charController] = cell;
             }
-            else throw new Exception("Cell already full");
         }
 
-        public bool IsOccupied(Vector3Int cell)
+        public bool IsOccupied(Vector2Int cell)
         {
-            return _occupied.ContainsValue((Vector2Int)cell);
+            return _occupied.ContainsValue(cell);
         }
 
+        public Vector2Int GetPosition(CharController charController)
+        {
+            return _occupied[charController];
+        }
+        
         private void OnDestroy()
         {
             if(Instance == this) Destroy(gameObject);
