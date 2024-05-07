@@ -66,6 +66,11 @@ namespace UI.CurrentCharacter
             GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
         }
 
+        public void DeselectCurrentAction()
+        {
+            _actionController.Deselect();
+        }
+        
         public void ActionCellPressed(int index) => SelectAction(index);
         
         private void OnDisable()

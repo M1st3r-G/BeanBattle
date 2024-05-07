@@ -25,7 +25,7 @@ namespace UI.CurrentCharacter
         public void SetSelected(bool state)
         {
             background.gameObject.SetActive(state);
-            CurrentActionController.Instance.SetAction(_action);
+            CurrentActionController.Instance.SetAction(state ? _action : null);
         }
         
         public void OnClicked()

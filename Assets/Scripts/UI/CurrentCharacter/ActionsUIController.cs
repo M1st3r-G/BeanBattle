@@ -24,6 +24,12 @@ namespace UI.CurrentCharacter
             currentSelection = idx;
             _actionCells[currentSelection].SetSelected(true);
         }
+
+        public void Deselect()
+        {
+            _actionCells[currentSelection].SetSelected(false);
+            currentSelection = -1;
+        }
         
         public void SetDisplay(List<CharacterAction> actions)
         {
