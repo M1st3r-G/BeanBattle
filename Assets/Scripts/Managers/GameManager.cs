@@ -4,6 +4,7 @@ using System.Linq;
 using Controller;
 using Data;
 using UI.CurrentCharacter;
+using UI.Initiative;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,6 +68,7 @@ namespace Managers
             _nextPhasePressed = false;
             nextPhaseAction.action.Enable();
             yield return new WaitUntil(() => _nextPhasePressed);
+            CurrentCharacterUIController.Instance.SetNumberActions(false);
             nextPhaseAction.action.Disable();
             _nextPhasePressed = false;
         }
@@ -113,6 +115,15 @@ namespace Managers
             nextPhaseAction.action.performed -= SetNextPhaseFlag;
         }
 
+        public void RefreshInitiative(CharController c)
+        {
+            InitiativeUIController.Instance.SetInitiative(c);
+            
+            if (c.Initiative < 10) return;
+            Debug.LogWarning("Overflow");
+            SetNextPhaseFlag(new InputAction.CallbackContext());
+        }
+        
         public void TriggerState(CharacterAction.ActionTypes type)
         {
             _current.TriggerState(type);

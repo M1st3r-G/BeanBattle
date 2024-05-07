@@ -5,6 +5,7 @@ using Managers;
 using Misc;
 using UI;
 using UI.CurrentCharacter;
+using UI.Initiative;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -98,6 +99,7 @@ namespace Controller
         {
             _indicator.SetActive(true);
             bool stateIsActive = true;
+            int timeCost = 0;
             
             while (stateIsActive)
             {
@@ -109,7 +111,7 @@ namespace Controller
                         newPosition.y = transform.position.y;
                         _indicator.transform.position = newPosition;
                         
-                        int timeCost = GridManager.Instance.GetPosition(this).ManhattanDistance(hoveredCell);
+                        timeCost = GridManager.Instance.GetPosition(this).ManhattanDistance(hoveredCell);
                         CurrentActionController.Instance.SetTimeCost(timeCost);
                     }
 
@@ -126,8 +128,15 @@ namespace Controller
                 
                 yield return null;
             }
-            
+
+            AddInitiative(timeCost);
             EndState();
+        }
+
+        private void AddInitiative(int val)
+        {
+            Initiative += val;
+            GameManager.Instance.RefreshInitiative(this);
         }
         
         public override string ToString()

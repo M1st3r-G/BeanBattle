@@ -50,6 +50,8 @@ namespace UI
             SetTimeCost(3);
         }
 
+        public int GetTimeCost() => int.Parse(timeValue.text);
+
         public void SetTimeCost(int value)
         {
             timeValue.text = value.ToString();

@@ -9,9 +9,13 @@ namespace UI.Initiative
     {
         private BannerController[] _banner = new BannerController[12];
         private VerticalLayoutGroup _layoutGroup;
+
+        public static InitiativeUIController Instance { get; private set; }
         
         private void Awake()
         {
+            Instance = this; // TODO Dangerous
+            
             _layoutGroup = GetComponent<VerticalLayoutGroup>();
             _banner = GetComponentsInChildren<BannerController>(true);
         }
@@ -37,6 +41,11 @@ namespace UI.Initiative
             _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);
         }
 
+        public void SetInitiative(CharController c)
+        {
+            _banner[0].SetTo(c);
+        }
+        
         private void OnEnable()
         {
             GameManager.OnOrderChanged += UpdateUI;
