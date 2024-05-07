@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Data;
+using UI.CurrentCharacter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -96,6 +97,8 @@ namespace Managers
             _playOrder.RemoveAt(0);
             
             OnCurrentChange.Invoke(_current);
+            
+            CurrentCharacterUIController.Instance.SetNumberActions(true); // Enables number Shortcuts
         }
         
         private void SetNextPhaseFlag(InputAction.CallbackContext _) => _nextPhasePressed = true;

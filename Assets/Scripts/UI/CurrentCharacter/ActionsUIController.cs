@@ -10,8 +10,8 @@ namespace UI.CurrentCharacter
         private ActionCellController[] _actionCells = new ActionCellController[7];
         private HorizontalLayoutGroup _group;
 
-        private int currentSelection = -1;
-        
+        public int CurrentSelection { get; private set; } = -1;
+
         private void Awake()
         {
             _actionCells = GetComponentsInChildren<ActionCellController>(true);
@@ -20,15 +20,17 @@ namespace UI.CurrentCharacter
 
         public void Select(int idx)
         {
-            if(currentSelection != -1) _actionCells[currentSelection].SetSelected(false);
-            currentSelection = idx;
-            _actionCells[currentSelection].SetSelected(true);
+            if(CurrentSelection != -1) _actionCells[CurrentSelection].SetSelected(false);
+            CurrentSelection = idx;
+            _actionCells[CurrentSelection].SetSelected(true);
         }
 
         public void Deselect()
         {
-            _actionCells[currentSelection].SetSelected(false);
-            currentSelection = -1;
+            if (CurrentSelection == -1) return;
+            
+            _actionCells[CurrentSelection].SetSelected(false);
+            CurrentSelection = -1;
         }
         
         public void SetDisplay(List<CharacterAction> actions)

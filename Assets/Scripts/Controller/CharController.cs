@@ -18,7 +18,8 @@ namespace Controller
         public CharData GetData => data;
         [SerializeField] private CharData data;
         private MeshRenderer _renderer;
-        private Coroutine _currentState ;
+        private Coroutine _currentState;
+        private CharacterAction.ActionTypes _stateType;
         private GameObject _indicator;
         
         public int CurrentHealth { get; private set; }
@@ -34,6 +35,7 @@ namespace Controller
             name = data.Name;
             CurrentHealth = data.BaseHealth;
             _currentState = null;
+            _stateType = CharacterAction.ActionTypes.None;
         }
 
         private void Start()
@@ -53,9 +55,15 @@ namespace Controller
 
         public void TriggerState(CharacterAction.ActionTypes type)
         {
+            if (_stateType == type)
+            {
+                EndState();
+                return;
+            }
             if (_currentState is not null) EndState();
             
             stopAction.action.Enable();
+            _stateType = type;
             switch (type)
             {
                 case CharacterAction.ActionTypes.Move:
@@ -67,8 +75,9 @@ namespace Controller
                     break;
                 case CharacterAction.ActionTypes.Help:
                     break;
+                case CharacterAction.ActionTypes.None:
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+                    throw new ArgumentOutOfRangeException(nameof(type), type, "None kann nicht getriggert werden");
             }
         }
 
@@ -77,6 +86,7 @@ namespace Controller
             //General
             if(_currentState is not null) StopCoroutine(_currentState);
             _currentState = null;
+            _stateType = CharacterAction.ActionTypes.None;
             stopAction.action.Disable();
             CurrentCharacterUIController.Instance.DeselectCurrentAction();
             
@@ -110,13 +120,10 @@ namespace Controller
                         GridManager.Instance.SetOccupied(this, hoveredCell);
                         stateIsActive = false;
                     }
-
-                    if (stopAction.action.WasPerformedThisFrame())
-                    {
-                        stateIsActive = false;
-                    }
                 }
 
+                if (stopAction.action.WasPerformedThisFrame()) stateIsActive = false;
+                
                 yield return null;
             }
             

@@ -42,17 +42,21 @@ namespace UI.CurrentCharacter
             nameText.text = _current.Name;
         }
 
-        private void OnEnable()
+        public void SetNumberActions(bool state)
         {
-            GameManager.OnCurrentChange += OnChangeEvent;
-            numberAction.action.Enable();
-            numberAction.action.performed += NumberPressed;
+            if (state)
+            {
+                numberAction.action.Enable();
+                numberAction.action.performed += NumberPressed;
+            }
+            else
+            {
+                numberAction.action.performed -= NumberPressed;
+                numberAction.action.Disable();
+            }
         }
-
-        private void NumberPressed(InputAction.CallbackContext ctx)
-        {
-            SelectAction((int)ctx.ReadValue<float>());
-        }
+        
+        private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
         
         private void SelectAction(int num)
         {
@@ -62,24 +66,17 @@ namespace UI.CurrentCharacter
                 return;
             }
 
-            _actionController.Select(num - 1);
+            if(num -1 == _actionController.CurrentSelection) DeselectCurrentAction();
+            else _actionController.Select(num - 1);
+            
             GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
         }
 
-        public void DeselectCurrentAction()
-        {
-            _actionController.Deselect();
-        }
-        
+        public void DeselectCurrentAction() => _actionController.Deselect();
         public void ActionCellPressed(int index) => SelectAction(index);
         
-        private void OnDisable()
-        {
-            GameManager.OnCurrentChange -= OnChangeEvent;
-            numberAction.action.performed -= NumberPressed;
-            numberAction.action.Disable();
-        }
-
+        private void OnDisable() => GameManager.OnCurrentChange -= OnChangeEvent;
+        private void OnEnable() => GameManager.OnCurrentChange += OnChangeEvent;
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
