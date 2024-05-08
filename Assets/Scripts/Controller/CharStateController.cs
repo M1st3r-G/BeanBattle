@@ -28,7 +28,7 @@ namespace Controller
                 return;
             }
             
-            EndCurrentState();
+            DisassembleCurrentState();
 
             stopAction.action.Enable();
             currentState = targetState switch
@@ -51,12 +51,17 @@ namespace Controller
             if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
         }
         
-        private void EndCurrentState()
+        private void DisassembleCurrentState()
         {
             currentState.StateDisassembly();
             currentState = stateLibrary.EmptyState;
 
             stopAction.action.Disable();
+        }
+        
+        private void EndCurrentState()
+        {
+            DisassembleCurrentState();
             CurrentCharacterUIController.Instance.DeselectCurrentAction();
         }
     }
