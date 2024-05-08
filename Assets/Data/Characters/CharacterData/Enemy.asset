@@ -21,3 +21,4 @@ MonoBehaviour:
   charName: Boris Backbreaker
   startHealth: 10
   iniRange: {x: 2, y: 5}
+  attackRange: 1

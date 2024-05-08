@@ -21,3 +21,4 @@ MonoBehaviour:
   charName: DefaultPlayer
   startHealth: 15
   iniRange: {x: 3, y: 8}
+  attackRange: 1

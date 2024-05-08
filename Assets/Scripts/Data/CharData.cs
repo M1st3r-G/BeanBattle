@@ -23,5 +23,8 @@ namespace Data
 
         public Vector2Int InitiativeStartRange => iniRange;
         [SerializeField] private Vector2Int iniRange;
+
+        public int AttackRange => attackRange;
+        [SerializeField] private int attackRange;
     }
 }
