@@ -5,7 +5,6 @@ using Managers;
 using Misc;
 using UI;
 using UI.CurrentCharacter;
-using UI.Initiative;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -26,6 +25,8 @@ namespace Controller
         public int CurrentHealth { get; private set; }
         public int Initiative { get; set; }
 
+        #region Setup
+        
         private void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
@@ -37,10 +38,7 @@ namespace Controller
             CurrentHealth = data.BaseHealth;
             _currentState = null;
             _stateType = CharacterAction.ActionTypes.None;
-        }
-
-        private void Start()
-        {
+            
             _indicator = CreateIndicator();
         }
 
@@ -53,6 +51,25 @@ namespace Controller
             ind.SetActive(false);
             return ind;
         }
+
+        #endregion
+
+        #region GeneralMethods
+
+        private void AddInitiative(int val)
+        {
+            Initiative += val;
+            GameManager.Instance.RefreshInitiative(this);
+        }
+        
+        public override string ToString()
+        {
+            return $"{name} ({CurrentHealth}): {Initiative}";
+        }
+
+        #endregion
+        
+        #region StateManagement
 
         public void TriggerState(CharacterAction.ActionTypes type)
         {
@@ -94,7 +111,11 @@ namespace Controller
             //Personal
             _indicator.SetActive(false);
         }
-        
+
+        #endregion
+
+        #region StatesLogic
+
         private IEnumerator MoveState()
         {
             _indicator.SetActive(true);
@@ -133,16 +154,6 @@ namespace Controller
             EndState();
         }
 
-        private void AddInitiative(int val)
-        {
-            Initiative += val;
-            GameManager.Instance.RefreshInitiative(this);
-        }
-        
-        public override string ToString()
-        {
-            return $"{name} ({CurrentHealth}): {Initiative}";
-        }
-        
+        #endregion
     }
 }
