@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionImage: {fileID: 21300000, guid: 8192c70cb13cc5c47b1c1bfe8cf574c3, type: 3}
   actionType: 1
-  actionDescription: Moves the Lost time is dependent on the distance moved.
+  actionDescription: Moves the Player. The lost time is dependent on the distance. 
+    moved.
