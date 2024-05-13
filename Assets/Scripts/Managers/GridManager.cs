@@ -118,7 +118,6 @@ namespace Managers
             foreach (GameObject cell in activeCells)
             {
                 Vector2Int coordinate = (Vector2Int)Grid.WorldToCell(cell.transform.position);
-                Debug.Log(coordinate);
                 if (!IsOccupied(coordinate)) continue;
                 counter++;
                 charList.Add(GetOccupier(coordinate));

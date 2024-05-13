@@ -30,17 +30,17 @@ namespace Data.CharacterStates
             GridManager.Instance.DisplayRange(ActiveCharacter, attackRange);
 
             int numOfChars = GridManager.Instance.CharactersInRange(out CharController[] charsInRange);
-            if (numOfChars == 1)
+            switch (numOfChars)
             {
-                Debug.LogError("There is no one in Range");
-            }
-            if(numOfChars == 2){
-                Debug.LogWarning("Found only two Characters");
-                //SetSelection(charsInRange);
-            }
-            else
-            {
-                MouseInputManager.OnCharacterClicked += Stuff;
+                case 1:
+                    Debug.LogError("There is no one in Range");
+                    break;
+                case 2:
+                    SetSelection(charsInRange[0] == ActiveCharacter ? charsInRange[1] : charsInRange[0]);
+                    break;
+                default:
+                    MouseInputManager.OnCharacterClicked += Stuff;
+                    break;
             }
         }
 
