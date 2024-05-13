@@ -1,18 +1,26 @@
+using System;
 using Controller;
 using Managers;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Data.CharacterStates
 {
     [CreateAssetMenu(fileName = "Attack", menuName = "States/Attack", order = 10)]
     public class CharacterAttackState : CharacterStateBase
     {
+        [SerializeField] private InputActionReference acceptAction;
         private int attackRange;
         private CharController currentSelection;
         
         public override bool ExecuteStateFrame()
         {
-            return false;
+            if(currentSelection is null) return false;
+            if (!acceptAction.action.WasPerformedThisFrame()) return false;
+            
+            Debug.Log($"Attacked {currentSelection.name}");
+            return true;
+
         }
 
         public override void InternalStateSetUp()
@@ -21,6 +29,8 @@ namespace Data.CharacterStates
             attackRange = ActiveCharacter.GetData.AttackRange;
             GridManager.Instance.DisplayRange(ActiveCharacter, attackRange);
 
+            acceptAction.action.Enable();
+            
             CharController[] charsInRange = GridManager.Instance.CharactersInRange();
             //Filter Characters of opposing teams
             switch (charsInRange.Length)
@@ -60,6 +70,8 @@ namespace Data.CharacterStates
 
         public override void StateDisassembly()
         {
+            acceptAction.action.Disable();
+            
             if (currentSelection is not null) currentSelection.SetSelector(false);
             GridManager.Instance.ResetRange();
             MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: 
   type: 2
+  acceptAction: {fileID: -864339171949513493, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
