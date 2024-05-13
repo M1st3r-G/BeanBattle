@@ -12,14 +12,6 @@ namespace Data.CharacterStates
         
         public override bool ExecuteStateFrame()
         {
-            if (currentSelection is null)
-            {
-                return false;
-            }
-            else
-            {
-                Debug.Log("Wait For Accept"); 
-            }
             return false;
         }
 
@@ -47,7 +39,7 @@ namespace Data.CharacterStates
 
         private void SetSelection(CharController c)
         {
-            if (currentSelection is not null) c.SetSelector(false);
+            if (currentSelection is not null) currentSelection.SetSelector(false);
 
             currentSelection = c;
             c.SetSelector(true);
@@ -55,13 +47,15 @@ namespace Data.CharacterStates
         
         private void SelectClickedCharacter(CharController hitCharacter)
         {
-            if (hitCharacter != ActiveCharacter)
+            if (hitCharacter == ActiveCharacter)
+            {
+                Debug.LogWarning("Target Self");
+            }
+            else
             {
                 Debug.LogWarning($"Target {hitCharacter.gameObject.name}");
                 SetSelection(hitCharacter);
             }
-
-            Debug.LogWarning("Target Self");
         }
 
         public override void StateDisassembly()
