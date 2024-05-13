@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using Controller;
 using UnityEngine;
 
@@ -21,6 +20,7 @@ namespace Managers
         
         //Temps
         private Dictionary<CharController, Vector2Int> _occupied;
+        public List<GameObject> activeCells;
         
         //Publics
         public static GridManager Instance { get; private set; }
@@ -35,7 +35,8 @@ namespace Managers
             DontDestroyOnLoad(gameObject);
             Instance = this;
 
-            allCells = new GameObject[numberOfCells.x, numberOfCells.y]; 
+            allCells = new GameObject[numberOfCells.x, numberOfCells.y];
+            activeCells = new List<GameObject>();
             _occupied = new Dictionary<CharController, Vector2Int>();
             Grid = GetComponent<Grid>();
             
@@ -47,7 +48,11 @@ namespace Managers
         {
             foreach (CharController charC in GameObject.FindGameObjectsWithTag("Character").Select(g => g.GetComponent<CharController>()))
             {
-                _occupied[charC] = (Vector2Int)Grid.WorldToCell(charC.transform.position);
+                Vector2Int pos = (Vector2Int)Grid.WorldToCell(charC.transform.position);
+                _occupied[charC] = pos;
+                Vector3 playerPos = CellToCenterWorld(pos);
+                playerPos.y = charC.transform.position.y;
+                charC.transform.position = playerPos; 
             }
         }
         
@@ -89,14 +94,49 @@ namespace Managers
             DisplayRange(GetPosition(centerChar), range);
         }
 
-        public void DisplayRange(Vector2Int position, int range)
+        private void DisplayRange(Vector2Int position, int range)
         {
+            if (0 > position.x || position.x >= numberOfCells.x || 0 > position.y ||
+                position.y >= numberOfCells.y) return;
             
+            GameObject currentCell = allCells[position.x, position.y];
+            
+            if (!currentCell.activeSelf) activeCells.Add(currentCell);
+            currentCell.SetActive(true);
+            
+            if (range <= 0) return;
+            DisplayRange(position + Vector2Int.down, range - 1);
+            DisplayRange(position + Vector2Int.up, range - 1);
+            DisplayRange(position + Vector2Int.left, range - 1);
+            DisplayRange(position + Vector2Int.right, range - 1);
         }
-        
+
+        public int CharactersInRange(out CharController[] lastCharacter)
+        {
+            List<CharController> charList = new();
+            int counter = 0;
+            foreach (GameObject cell in activeCells)
+            {
+                Vector2Int coordinate = (Vector2Int)Grid.WorldToCell(cell.transform.position);
+                Debug.Log(coordinate);
+                if (!IsOccupied(coordinate)) continue;
+                counter++;
+                charList.Add(GetOccupier(coordinate));
+            }
+
+            lastCharacter = charList.ToArray();
+            return counter;
+        }
+
+        private CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
+
         public void ResetRange()
         {
-            
+            for (int i = activeCells.Count - 1; i >= 0; i--)
+            {
+                activeCells[i].gameObject.SetActive(false);
+                activeCells.RemoveAt(i);
+            }
         }
         
         public void SetOccupied(CharController charController,Vector2Int cell)
