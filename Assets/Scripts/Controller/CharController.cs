@@ -13,6 +13,7 @@ namespace Controller
         [SerializeField] private CharData data;
         
         [SerializeField] private GameObject shadow;
+        [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
         
@@ -33,6 +34,7 @@ namespace Controller
             _stateController = GetComponent<CharStateController>();
             
             Indicator = CreateIndicator();
+            selector = transform.GetChild(0).gameObject;
         }
 
         private GameObject CreateIndicator()
@@ -43,7 +45,6 @@ namespace Controller
             ind.SetActive(false);
             return ind;
         }
-
         #endregion
 
         #region Methods
@@ -67,6 +68,11 @@ namespace Controller
         public void EndState()
         {
             _stateController.SwitchState(CharacterAction.ActionTypes.None);
+        }
+
+        public void SetSelector(bool state)
+        {
+            selector.SetActive(state);
         }
         #endregion
     }
