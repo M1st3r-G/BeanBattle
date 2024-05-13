@@ -33,8 +33,7 @@ namespace Controller
             stopAction.action.Enable();
             currentState = targetState switch
             {
-                CharacterAction.ActionTypes.None => throw new ArgumentOutOfRangeException(nameof(targetState),
-                    targetState, null),
+                CharacterAction.ActionTypes.None => stateLibrary.EmptyState,
                 _ => stateLibrary.GetState(targetState)
             };
 
