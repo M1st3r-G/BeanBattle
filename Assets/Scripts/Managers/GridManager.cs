@@ -111,20 +111,17 @@ namespace Managers
             DisplayRange(position + Vector2Int.right, range - 1);
         }
 
-        public int CharactersInRange(out CharController[] lastCharacter)
+        public CharController[] CharactersInRange()
         {
             List<CharController> charList = new();
-            int counter = 0;
             foreach (GameObject cell in activeCells)
             {
                 Vector2Int coordinate = (Vector2Int)Grid.WorldToCell(cell.transform.position);
                 if (!IsOccupied(coordinate)) continue;
-                counter++;
                 charList.Add(GetOccupier(coordinate));
             }
 
-            lastCharacter = charList.ToArray();
-            return counter;
+            return charList.ToArray();
         }
 
         private CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;

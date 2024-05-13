@@ -29,8 +29,9 @@ namespace Data.CharacterStates
             attackRange = ActiveCharacter.GetData.AttackRange;
             GridManager.Instance.DisplayRange(ActiveCharacter, attackRange);
 
-            int numOfChars = GridManager.Instance.CharactersInRange(out CharController[] charsInRange);
-            switch (numOfChars)
+            CharController[] charsInRange = GridManager.Instance.CharactersInRange();
+            //Filter Characters of opposing teams
+            switch (charsInRange.Length)
             {
                 case 1:
                     Debug.LogError("There is no one in Range");
@@ -39,7 +40,7 @@ namespace Data.CharacterStates
                     SetSelection(charsInRange[0] == ActiveCharacter ? charsInRange[1] : charsInRange[0]);
                     break;
                 default:
-                    MouseInputManager.OnCharacterClicked += Stuff;
+                    MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
                     break;
             }
         }
@@ -52,7 +53,7 @@ namespace Data.CharacterStates
             c.SetSelector(true);
         }
         
-        private void Stuff(CharController hitCharacter)
+        private void SelectClickedCharacter(CharController hitCharacter)
         {
             if (hitCharacter != ActiveCharacter)
             {
@@ -67,7 +68,7 @@ namespace Data.CharacterStates
         {
             if (currentSelection is not null) currentSelection.SetSelector(false);
             GridManager.Instance.ResetRange();
-            MouseInputManager.OnCharacterClicked -= Stuff;
+            MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;
         }
     }
 }
