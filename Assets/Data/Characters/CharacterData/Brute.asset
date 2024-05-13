@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490a5bd2ea4f49a7a38a1cbcccad3dad, type: 3}
+  m_Name: Brute
+  m_EditorClassIdentifier: 
+  action:
+  - {fileID: 11400000, guid: 18a9ef9b33b87824b8125f7a0cc97c6f, type: 2}
+  - {fileID: 11400000, guid: 1eb753c5ec2650a45a5bbf6ca069b880, type: 2}
+  - {fileID: 11400000, guid: 70e2fc5b721a27a458ada675c8029d57, type: 2}
+  coloredMaterial: {fileID: 2100000, guid: 250893024ec84f64b92006e453163e50, type: 2}
+  shadowMaterial: {fileID: 2100000, guid: 55ffac8b3f0d5394e8c5eeb1ca38f7b1, type: 2}
+  charName: Boris Backbreaker
+  startHealth: 30
+  iniRange: {x: 0, y: 0}
+  attackRange: 2
