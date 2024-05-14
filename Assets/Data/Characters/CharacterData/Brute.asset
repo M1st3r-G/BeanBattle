@@ -22,3 +22,4 @@ MonoBehaviour:
   startHealth: 30
   iniRange: {x: 0, y: 0}
   attackRange: 2
+  baseDamage: 10
