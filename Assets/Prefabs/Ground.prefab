@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2267184282942525723}
   - component: {fileID: 8149276599027498405}
   - component: {fileID: 8607434483695877235}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 6723792434848135141}
   - component: {fileID: 2605845387004570154}
   - component: {fileID: 1710499488328981749}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 3796297409373696465}
   - component: {fileID: 819922481887602842}
   - component: {fileID: 8783605127936192071}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 3732450569613375366}
   - component: {fileID: 5881617761447431300}
   - component: {fileID: 5660698188901033746}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 4614261118772376199}
   - component: {fileID: 2363924463761502264}
   - component: {fileID: 8929636471111443007}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,9 +426,9 @@ GameObject:
   - component: {fileID: 5077461802377332718}
   - component: {fileID: 3114533126841612659}
   - component: {fileID: 34574833709024140}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,6 +466,7 @@ MonoBehaviour:
   cellContainer: {fileID: 6707782347862970410}
   plane: {fileID: 9149771848404829089}
   numberOfCells: {x: 15, y: 15}
+  activeCells: []
 --- !u!156049354 &34574833709024140
 Grid:
   m_ObjectHideFlags: 0
@@ -489,7 +490,7 @@ GameObject:
   - component: {fileID: 7473065601670721623}
   - component: {fileID: 1695078568460731196}
   - component: {fileID: 7586603812272920078}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -572,7 +573,7 @@ GameObject:
   - component: {fileID: 6882030514646732544}
   - component: {fileID: 1325724298792072870}
   - component: {fileID: 1970833007099216009}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -653,9 +654,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9057041735785112971}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cells
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -686,7 +687,7 @@ GameObject:
   - component: {fileID: 775479651425188889}
   - component: {fileID: 4344906663404781061}
   - component: {fileID: 2043674864292720080}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -767,7 +768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7115420679171256877}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +810,7 @@ GameObject:
   - component: {fileID: 1932863378625525488}
   - component: {fileID: 5362542988702538430}
   - component: {fileID: 2555577950085885043}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Ground
   m_Icon: {fileID: 0}

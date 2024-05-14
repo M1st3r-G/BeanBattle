@@ -1,4 +1,5 @@
 using Controller;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,7 +47,7 @@ namespace Managers
             cell = new Vector2Int();
             Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.value);
 
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return false;
+            if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, LayerMask.GetMask("Ground"))) return false;
             GameObject target = hit.collider.gameObject;
 
             if (!target.CompareTag("Ground")) return false;
