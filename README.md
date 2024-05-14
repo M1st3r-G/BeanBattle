@@ -1,10 +1,9 @@
 # BeanBattle
  
 ToDo:
-- Execute Actions
+- PlayerDeath
+- Terrain? 
+  - Pathfinding
 - Implement More Actions
-- - Move
-- - Attack
-- - Evil/Help
-
-- Display the Current Action
+  - Evil/Help
+  - Hide/Cover
