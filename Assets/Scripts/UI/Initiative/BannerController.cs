@@ -13,22 +13,17 @@ namespace UI.Initiative
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI initText;
-        private CharController currentChar;
-        
+        public CharController DisplayedChar { get; private set; }
+
         public void SetTo(CharController cC)
         {
             CharData data = cC.GetData;
-            currentChar = cC;
+            DisplayedChar = cC;
             
             portrait.color = data.Material.color;
             title.text = data.Name;
             healthText.text = cC.CurrentHealth.ToString();
             initText.text = cC.Initiative.ToString();
-        }
-
-        public void UpdateHealth()
-        {
-            healthText.text = currentChar.CurrentHealth.ToString();
         }
     }
 }

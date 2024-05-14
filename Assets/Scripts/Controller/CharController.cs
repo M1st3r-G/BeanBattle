@@ -79,7 +79,7 @@ namespace Controller
         public void PerformAttack(CharController other)
         {
             other.CurrentHealth -= data.Damage;
-            InitiativeUIController.Instance.UpdateHealth();
+            InitiativeUIController.Instance.RefreshCharacter(other);
         }
         #endregion
     }

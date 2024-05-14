@@ -117,7 +117,7 @@ namespace Managers
 
         public void RefreshInitiative(CharController c)
         {
-            InitiativeUIController.Instance.SetInitiative(c);
+            InitiativeUIController.Instance.RefreshCharacter(c);
             
             if (c.Initiative < 10) return;
             Debug.LogWarning("Overflow");

@@ -36,22 +36,20 @@ namespace UI.Initiative
             AdjustBottomPadding(currentOrder.Length);
         }
 
-        public void UpdateHealth()
-        {
-            foreach (BannerController banner in _banner)
-            {
-                banner.UpdateHealth();
-            }
-        }
-        
         private void AdjustBottomPadding(int numberOfActives)
         {
             _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);
         }
 
-        public void SetInitiative(CharController c)
+        public void RefreshCharacter(CharController c)
         {
-            _banner[0].SetTo(c);
+            foreach (BannerController banner in _banner)
+            {
+                if (banner.DisplayedChar == c)
+                {
+                    banner.SetTo(c);
+                }
+            }
         }
         
         private void OnEnable()
