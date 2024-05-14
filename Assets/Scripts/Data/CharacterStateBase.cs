@@ -17,7 +17,7 @@ namespace Data
         }
         
         public abstract bool ExecuteStateFrame();
-        public abstract void InternalStateSetUp();
+        protected abstract void InternalStateSetUp();
         public abstract void StateDisassembly();
     }
 }

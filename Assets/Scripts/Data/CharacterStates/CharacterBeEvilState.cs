@@ -6,7 +6,8 @@ namespace Data.CharacterStates
     public class CharacterBeEvilState : CharacterStateBase
     {
         public override bool ExecuteStateFrame() => false;
-        public override void InternalStateSetUp() { }
+
+        protected override void InternalStateSetUp() { }
         public override void StateDisassembly(){ }
     }
 }

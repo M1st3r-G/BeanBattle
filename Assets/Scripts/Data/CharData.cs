@@ -26,5 +26,8 @@ namespace Data
 
         public int AttackRange => attackRange;
         [SerializeField] private int attackRange;
+        
+        public int Damage => baseDamage;
+        [SerializeField] private int baseDamage;
     }
 }

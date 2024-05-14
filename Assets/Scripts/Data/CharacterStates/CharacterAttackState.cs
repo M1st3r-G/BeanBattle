@@ -1,4 +1,3 @@
-using System;
 using Controller;
 using Managers;
 using UnityEngine;
@@ -18,12 +17,12 @@ namespace Data.CharacterStates
             if(currentSelection is null) return false;
             if (!acceptAction.action.WasPerformedThisFrame()) return false;
             
-            Debug.Log($"Attacked {currentSelection.name}");
+            ActiveCharacter.PerformAttack(currentSelection);
             return true;
 
         }
 
-        public override void InternalStateSetUp()
+        protected override void InternalStateSetUp()
         {
             currentSelection = null;
             attackRange = ActiveCharacter.GetData.AttackRange;
@@ -35,7 +34,7 @@ namespace Data.CharacterStates
             //Filter Characters of opposing teams
             switch (charsInRange.Length)
             {
-                case 1:
+                case 1: //Own Character is counted too
                     Debug.LogError("There is no one in Range");
                     break;
                 case 2:
@@ -57,15 +56,7 @@ namespace Data.CharacterStates
         
         private void SelectClickedCharacter(CharController hitCharacter)
         {
-            if (hitCharacter == ActiveCharacter)
-            {
-                Debug.LogWarning("Target Self");
-            }
-            else
-            {
-                Debug.LogWarning($"Target {hitCharacter.gameObject.name}");
-                SetSelection(hitCharacter);
-            }
+            if (hitCharacter != ActiveCharacter) SetSelection(hitCharacter);
         }
 
         public override void StateDisassembly()

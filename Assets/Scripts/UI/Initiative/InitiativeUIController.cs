@@ -36,6 +36,14 @@ namespace UI.Initiative
             AdjustBottomPadding(currentOrder.Length);
         }
 
+        public void UpdateHealth()
+        {
+            foreach (BannerController banner in _banner)
+            {
+                banner.UpdateHealth();
+            }
+        }
+        
         private void AdjustBottomPadding(int numberOfActives)
         {
             _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);

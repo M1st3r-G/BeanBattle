@@ -1,6 +1,7 @@
 using Data;
 using Managers;
 using UI;
+using UI.Initiative;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -73,6 +74,12 @@ namespace Controller
         public void SetSelector(bool state)
         {
             selector.SetActive(state);
+        }
+        
+        public void PerformAttack(CharController other)
+        {
+            other.CurrentHealth -= data.Damage;
+            InitiativeUIController.Instance.UpdateHealth();
         }
         #endregion
     }

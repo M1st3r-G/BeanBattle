@@ -34,8 +34,8 @@ namespace Data.CharacterStates
 
             return false;
         }
-        
-        public override void InternalStateSetUp()
+
+        protected override void InternalStateSetUp()
         {
             ActiveCharacter.Indicator.SetActive(true);
         }
