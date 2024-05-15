@@ -23,6 +23,9 @@ namespace Managers
         public delegate void OnCurrentChangeDelegate(CharController newChar);
         public static OnCurrentChangeDelegate OnCurrentChange;
         
+        public delegate void OnGameOverDelegate(int winningTeam);
+        public static OnGameOverDelegate OnGameOver;
+        
         public static GameManager Instance { get; private set;  }
         
         private void Awake()
@@ -114,10 +117,13 @@ namespace Managers
             _playOrder.Remove(player);
             int membersLeft = _playOrder.Count(c => c.TeamID == player.TeamID);
             if (membersLeft != 0) return;
+
+            int otherTeamId = 1 - player.TeamID;
             
-            Debug.Log($"Game Over, team {1 - player.TeamID} won!");
+            Debug.Log($"Game Over, team {otherTeamId} won!");
             _gameLoop = false;
             SetNextPhaseFlag(new InputAction.CallbackContext());
+            OnGameOver?.Invoke(otherTeamId);
         }
 
         private void OnDisable()

@@ -75,8 +75,25 @@ namespace UI.CurrentCharacter
         public void DeselectCurrentAction() => _actionController.Deselect();
         public void ActionCellPressed(int index) => SelectAction(index);
         
-        private void OnDisable() => GameManager.OnCurrentChange -= OnChangeEvent;
-        private void OnEnable() => GameManager.OnCurrentChange += OnChangeEvent;
+        private void OnEnable()
+        {
+            GameManager.OnCurrentChange += OnChangeEvent;
+            GameManager.OnGameOver += OnGameOver;
+        }
+        
+        private void OnDisable()
+        {
+            GameManager.OnCurrentChange -= OnChangeEvent;
+            GameManager.OnGameOver -= OnGameOver;
+        }
+
+        private void OnGameOver(int winningTeam)
+        {
+            DeselectCurrentAction();
+            gameObject.SetActive(false);
+        }
+
+        
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;

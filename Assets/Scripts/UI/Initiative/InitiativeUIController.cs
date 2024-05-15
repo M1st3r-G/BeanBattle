@@ -68,13 +68,19 @@ namespace UI.Initiative
         {
             GameManager.OnOrderChanged += UpdateUI;
             CharController.OnPlayerDeath += RemoveDeadPlayer;
-            
+            GameManager.OnGameOver += OnGameOver;
+        }
+
+        private void OnGameOver(int _)
+        {
+            gameObject.SetActive(false);
         }
 
         private void OnDisable()
         {
             GameManager.OnOrderChanged -= UpdateUI;
             CharController.OnPlayerDeath -= RemoveDeadPlayer;
+            GameManager.OnGameOver -= OnGameOver;
         }
     }
 }
