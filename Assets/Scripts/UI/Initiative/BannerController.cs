@@ -20,7 +20,7 @@ namespace UI.Initiative
             CharData data = cC.GetData;
             DisplayedChar = cC;
             
-            portrait.color = data.Material.color;
+            portrait.color = data.Material(cC.TeamID).color;
             title.text = data.Name;
             healthText.text = cC.CurrentHealth.ToString();
             initText.text = cC.Initiative.ToString();

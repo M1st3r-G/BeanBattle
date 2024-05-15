@@ -9,11 +9,11 @@ namespace Data
         public List<CharacterAction> Actions => action;
         [SerializeField] private List<CharacterAction> action = new();
         
-        public Material Material => coloredMaterial;
-        [SerializeField] private Material coloredMaterial;
+        public Material Material(int teamId) => coloredMaterial[teamId];
+        [SerializeField] private Material[] coloredMaterial;
 
-        public Material Shadow => shadowMaterial;
-        [SerializeField] private Material shadowMaterial;
+        public Material Shadow(int teamId) => shadowMaterial[teamId];
+        [SerializeField] private Material[] shadowMaterial;
         
         public string Name => charName;
         [SerializeField] private string charName;

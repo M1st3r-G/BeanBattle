@@ -38,7 +38,7 @@ namespace UI.CurrentCharacter
         {
             _current = newChar.GetData;
             _actionController.SetDisplay(_current.Actions);
-            portrait.color = _current.Material.color;
+            portrait.color = _current.Material(newChar.TeamID).color;
             nameText.text = _current.Name;
         }
 

@@ -15,8 +15,12 @@ MonoBehaviour:
   action:
   - {fileID: 11400000, guid: 18a9ef9b33b87824b8125f7a0cc97c6f, type: 2}
   - {fileID: 11400000, guid: 1eb753c5ec2650a45a5bbf6ca069b880, type: 2}
-  coloredMaterial: {fileID: 2100000, guid: 58b0e84cb17421342a81b0391a9678f0, type: 2}
-  shadowMaterial: {fileID: 2100000, guid: 84d94e97cff36e64197f4524f68603b4, type: 2}
+  coloredMaterial:
+  - {fileID: 2100000, guid: 58b0e84cb17421342a81b0391a9678f0, type: 2}
+  - {fileID: 2100000, guid: d8eb47618156e2a408074e20dc3af3a8, type: 2}
+  shadowMaterial:
+  - {fileID: 2100000, guid: 84d94e97cff36e64197f4524f68603b4, type: 2}
+  - {fileID: 2100000, guid: 5354f1772e9044345832e053d005c021, type: 2}
   charName: Riffle
   startHealth: 15
   iniRange: {x: 3, y: 8}

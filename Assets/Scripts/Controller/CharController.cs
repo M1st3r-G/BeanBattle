@@ -1,3 +1,4 @@
+using System;
 using Data;
 using Managers;
 using UI;
@@ -17,6 +18,9 @@ namespace Controller
         [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
+
+        public int TeamID => teamId;
+        [SerializeField] [Range(0,1)] private int teamId;
         
         public GameObject Indicator { get; private set; }
         public int CurrentHealth { get; private set; }
@@ -29,11 +33,11 @@ namespace Controller
         private void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
-            _renderer.material = data.Material;
+            _renderer.material = data.Material(teamId);
 
             Initiative = Random.Range(data.InitiativeStartRange.x, data.InitiativeStartRange.y);
             
-            name = data.Name;
+            name = data.Name + $"(Team {TeamID})";
             CurrentHealth = data.BaseHealth;
             _stateController = GetComponent<CharStateController>();
             
@@ -44,7 +48,7 @@ namespace Controller
         private GameObject CreateIndicator()
         {
             GameObject ind = Instantiate(shadow, transform.position, Quaternion.identity, transform);
-            ind.GetComponent<MeshRenderer>().material = data.Shadow; // Maybe Own Script if more Complex
+            ind.GetComponent<MeshRenderer>().material = data.Shadow(teamId); // Maybe Own Script if more Complex
             ind.name += "(shadow)";
             ind.SetActive(false);
             return ind;

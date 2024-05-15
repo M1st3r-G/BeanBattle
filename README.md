@@ -2,6 +2,8 @@
  
 ToDo:
 - Teams
+  - Win Condition
+  - Friendly Fire
 
 
 - Animations

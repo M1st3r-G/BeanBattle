@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
@@ -142,7 +143,23 @@ namespace Managers
         public bool IsOccupied(Vector2Int cell) => _occupied.ContainsValue(cell);
         public Vector2Int GetPosition(CharController charController) => _occupied[charController];
         public Vector3 CellToCenterWorld(Vector2Int cell) => Grid.GetCellCenterWorld((Vector3Int)cell);
+
+        private void RemoveDeadPlayer(CharController player)
+        {
+            _occupied.Remove(player);
+        }
         
+
+        private void OnEnable()
+        {
+            CharController.OnPlayerDeath += RemoveDeadPlayer;
+        }
+
+        private void OnDisable()
+        {
+            CharController.OnPlayerDeath -= RemoveDeadPlayer;
+        }
+
         private void OnDestroy()
         {
             if(Instance == this) Destroy(gameObject);
