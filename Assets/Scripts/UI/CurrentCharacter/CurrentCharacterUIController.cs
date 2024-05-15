@@ -12,7 +12,6 @@ namespace UI.CurrentCharacter
     {
         //ComponentReferences
         private ActionsUIController _actionController;
-        
         [SerializeField] private Image portrait;
         [SerializeField] private TextMeshProUGUI nameText; 
         [SerializeField] private InputActionReference numberAction;
@@ -23,6 +22,7 @@ namespace UI.CurrentCharacter
         //Public
         public static CurrentCharacterUIController Instance { get; private set; }
 
+        #region SetUp
         private void Awake()
         {
             if (Instance is not null){
@@ -33,15 +33,25 @@ namespace UI.CurrentCharacter
             Instance = this;
             _actionController = GetComponentInChildren<ActionsUIController>();
         }
-
-        private void OnChangeEvent(CharController newChar)
+        
+        private void OnEnable()
         {
-            _current = newChar.GetData;
-            _actionController.SetDisplay(_current.Actions);
-            portrait.color = _current.Material(newChar.TeamID).color;
-            nameText.text = _current.Name;
+            GameManager.OnCurrentChange += OnChangeEvent;
+            GameManager.OnGameOver += OnGameOver;
         }
+        
+        private void OnDisable()
+        {
+            GameManager.OnCurrentChange -= OnChangeEvent;
+            GameManager.OnGameOver -= OnGameOver;
+        }
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
+        #endregion
 
+        #region MainMethods
         public void SetNumberActions(bool state)
         {
             if (state)
@@ -55,8 +65,6 @@ namespace UI.CurrentCharacter
                 numberAction.action.Disable();
             }
         }
-        
-        private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
         
         private void SelectAction(int actionIndex)
         {
@@ -72,31 +80,25 @@ namespace UI.CurrentCharacter
             GameManager.Instance.TriggerState(_current.Actions[actionIndex - 1].Type);
         }
 
+        private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
         public void DeselectCurrentAction() => _actionController.Deselect();
         public void ActionCellPressed(int index) => SelectAction(index);
+        #endregion
         
-        private void OnEnable()
-        {
-            GameManager.OnCurrentChange += OnChangeEvent;
-            GameManager.OnGameOver += OnGameOver;
-        }
-        
-        private void OnDisable()
-        {
-            GameManager.OnCurrentChange -= OnChangeEvent;
-            GameManager.OnGameOver -= OnGameOver;
-        }
-
+        #region EventHandling
         private void OnGameOver(int winningTeam)
         {
             DeselectCurrentAction();
             gameObject.SetActive(false);
         }
-
         
-        private void OnDestroy()
+        private void OnChangeEvent(CharController newChar)
         {
-            if (Instance == this) Instance = null;
+            _current = newChar.GetData;
+            _actionController.SetDisplay(_current.Actions);
+            portrait.color = _current.Material(newChar.TeamID).color;
+            nameText.text = _current.Name;
         }
+        #endregion
     }
 }

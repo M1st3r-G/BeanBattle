@@ -1,4 +1,3 @@
-using System;
 using Data;
 using Managers;
 using UI;
@@ -11,18 +10,20 @@ namespace Controller
     [RequireComponent(typeof(CharStateController))]
     public class CharController : MonoBehaviour
     {
+        //ComponentReferences
         [SerializeField] private GameObject shadow;
         [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
-        
-        public CharData GetData { get; private set; }
-        public int TeamID { get; private set; }
-
         public GameObject Indicator { get; private set; }
+        
+        // PubicTemps
+        public int TeamID { get; private set; }
         public int CurrentHealth { get; private set; }
         public int Initiative { get; set; }
-
+        public CharData GetData { get; private set; }
+        
+        // Events
         public delegate void OnPlayerDeathEvent(CharController c);
         public static OnPlayerDeathEvent OnPlayerDeath;
         
@@ -58,31 +59,10 @@ namespace Controller
         #endregion
 
         #region Methods
-
         public void AddInitiative()
         {
             Initiative += CurrentActionController.Instance.GetTimeCost();
             GameManager.Instance.RefreshInitiative(this);
-        }
-        
-        public override string ToString()
-        {
-            return $"{name} ({CurrentHealth}): {Initiative}";
-        }
-
-        public void TriggerState(CharacterAction.ActionTypes type)
-        {
-            _stateController.SwitchState(type);
-        }
-
-        public void EndState()
-        {
-            _stateController.SwitchState(CharacterAction.ActionTypes.None);
-        }
-
-        public void SetSelector(bool state)
-        {
-            selector.SetActive(state);
         }
         
         public void PerformAttack(CharController other)
@@ -96,10 +76,14 @@ namespace Controller
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
             
-            Debug.LogWarning($"{name} died!");
             OnPlayerDeath?.Invoke(this);
             Destroy(gameObject);
         }
+
+        public void TriggerState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);
+        public void EndState() => _stateController.SwitchState(CharacterAction.ActionTypes.None);
+        public void SetSelector(bool state) => selector.SetActive(state);
+        public override string ToString() => $"{name} ({CurrentHealth}): {Initiative}";
         #endregion
     }
 }

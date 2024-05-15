@@ -17,6 +17,7 @@ ToDo:
 
 - AI
 
+GridManager
 
 Math:
 - [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)

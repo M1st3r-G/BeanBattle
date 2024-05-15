@@ -7,17 +7,22 @@ namespace UI.CurrentCharacter
 {
     public class ActionsUIController : MonoBehaviour
     {
+        // ComponentReferences
         private ActionCellController[] _actionCells = new ActionCellController[7];
         private HorizontalLayoutGroup _group;
 
+        // Temps
         public int CurrentSelection { get; private set; } = -1;
 
+        #region SetUp
         private void Awake()
         {
             _actionCells = GetComponentsInChildren<ActionCellController>(true);
             _group = GetComponent<HorizontalLayoutGroup>();
         }
+        #endregion
 
+        #region MainMethods
         public void Select(int idx)
         {
             if(CurrentSelection != -1) _actionCells[CurrentSelection].SetSelected(false);
@@ -46,12 +51,8 @@ namespace UI.CurrentCharacter
                 _actionCells[i].gameObject.SetActive(false);
             }
 
-            FixLayout(actions.Count);
+            _group.padding.right = (7 - actions.Count) * 150;
         }
-
-        private void FixLayout(int numberOfActives)
-        {
-            _group.padding.right = (7 - numberOfActives) * 150;
-        }
+        #endregion
     }
 }

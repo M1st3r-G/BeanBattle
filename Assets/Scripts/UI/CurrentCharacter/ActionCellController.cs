@@ -7,9 +7,12 @@ namespace UI.CurrentCharacter
 {
     public class ActionCellController : MonoBehaviour
     {
+        // ComponentReferences
         [SerializeField] private Image background;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
+        
+        // Temps
         private int _index;
         private CharacterAction _action;
         
@@ -28,9 +31,6 @@ namespace UI.CurrentCharacter
             CurrentActionController.Instance.SetAction(state ? _action : null);
         }
         
-        public void OnClicked()
-        {
-            CurrentCharacterUIController.Instance.ActionCellPressed(_index);
-        }
+        public void OnClicked() => CurrentCharacterUIController.Instance.ActionCellPressed(_index);
     }
 }

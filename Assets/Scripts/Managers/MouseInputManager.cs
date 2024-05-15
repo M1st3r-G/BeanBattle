@@ -10,11 +10,14 @@ namespace Managers
         [SerializeField] private InputActionReference mouseClickAction;
         private Camera _mainCamera;
 
+        // Public
         public static MouseInputManager Instance { get; private set; }
 
+        // Events
         public delegate void OnCharacterClickedDelegate(CharController clickedChar);
         public static OnCharacterClickedDelegate OnCharacterClicked;
-        
+
+        #region SetUp
         private void Awake()
         {
             if (Instance is not null)
@@ -27,7 +30,26 @@ namespace Managers
 
             _mainCamera = Camera.main;
         }
+        
+        private void OnEnable()
+        {
+            mouseClickAction.action.Enable();
+            mouseClickAction.action.performed += CustomOnMouseDown;
+        }
+        
+        private void OnDisable()
+        {
+            mouseClickAction.action.Disable();
+            mouseClickAction.action.performed -= CustomOnMouseDown;
+        }
 
+        private void OnDestroy()
+        {
+            if(Instance == this) Destroy(gameObject);
+        }
+        #endregion
+
+        #region MainMethods
         private void CustomOnMouseDown(InputAction.CallbackContext ctx)
         {
             Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.value);
@@ -54,22 +76,6 @@ namespace Managers
             cell = (Vector2Int)GridManager.Instance.Grid.WorldToCell(hit.point);
             return true;
         }
-
-        private void OnEnable()
-        {
-            mouseClickAction.action.Enable();
-            mouseClickAction.action.performed += CustomOnMouseDown;
-        }
-        
-        private void OnDisable()
-        {
-            mouseClickAction.action.Disable();
-            mouseClickAction.action.performed -= CustomOnMouseDown;
-        }
-
-        private void OnDestroy()
-        {
-            if(Instance == this) Destroy(gameObject);
-        }
+        #endregion
     }
 }

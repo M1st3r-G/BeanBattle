@@ -13,6 +13,8 @@ namespace UI.Initiative
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private TextMeshProUGUI initText;
+        
+        // Temps
         public CharController DisplayedChar { get; private set; }
 
         public void SetTo(CharController cC)

@@ -9,6 +9,10 @@ namespace Data.CharacterStates
     [CreateAssetMenu(fileName = "Move", menuName = "States/Move", order = 10)]
     public class CharacterMoveState : CharacterStateBase
     {
+        #region DefaultStateMethods
+        protected override void InternalStateSetUp() => ActiveCharacter.Indicator.SetActive(true);
+        public override void StateDisassembly() => ActiveCharacter.Indicator.SetActive(false);
+        
         public override bool ExecuteStateFrame()
         {
             if (!MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell)) return false;
@@ -29,15 +33,6 @@ namespace Data.CharacterStates
             GridManager.Instance.SetOccupied(ActiveCharacter, hoveredCell);
             return true;
         }
-
-        protected override void InternalStateSetUp()
-        {
-            ActiveCharacter.Indicator.SetActive(true);
-        }
-
-        public override void StateDisassembly()
-        {
-            ActiveCharacter.Indicator.SetActive(false);
-        }
+        #endregion
     }
 }

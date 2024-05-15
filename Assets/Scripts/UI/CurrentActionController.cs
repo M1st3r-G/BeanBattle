@@ -12,11 +12,10 @@ namespace UI
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI description;
         [SerializeField] private TextMeshProUGUI timeValue;
-        //Params
-        //Temps
         //Public
         public static CurrentActionController Instance { get; private set; }
-     
+
+        #region SetUp
         private void Awake()
         {
             if (Instance is not null)
@@ -33,7 +32,9 @@ namespace UI
         {
             if (Instance == this) Instance = null;
         }
+        #endregion
 
+        #region MainMethods
         public void SetAction(CharacterAction action)
         {
             if (action is null)
@@ -50,10 +51,7 @@ namespace UI
         }
 
         public int GetTimeCost() => int.Parse(timeValue.text);
-
-        public void SetTimeCost(int value)
-        {
-            timeValue.text = value.ToString();
-        }
+        public void SetTimeCost(int value) => timeValue.text = value.ToString();
+        #endregion
     }
 }

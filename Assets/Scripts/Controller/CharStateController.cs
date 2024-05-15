@@ -7,18 +7,35 @@ namespace Controller
 {
     public class CharStateController: MonoBehaviour
     {
-        private CharController myCharacter;
+        // ComponentReferences
         [SerializeField] private InputActionReference stopAction;
         [SerializeField] private StateLibrary stateLibrary;
+        private CharController myCharacter;
         
+        // Temps
         private CharacterStateBase currentState;
-        
+
+        #region SetUp
         private void Awake()
         {
             myCharacter = GetComponent<CharController>();
             currentState = stateLibrary.EmptyState;
         }
+        #endregion
 
+        #region MainLoop
+        private void Update()
+        {
+            if (currentState.ExecuteStateFrame())
+            {
+                EndCurrentState();
+                myCharacter.AddInitiative();
+            }
+            if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
+        }
+        #endregion
+
+        #region StateManagement
         public void SwitchState(CharacterAction.ActionTypes targetState)
         {
             if (currentState.Type == targetState)
@@ -38,22 +55,11 @@ namespace Controller
 
             currentState.StateSetUp(myCharacter);
         }
-
-        private void Update()
-        {
-            if (currentState.ExecuteStateFrame())
-            {
-                EndCurrentState();
-                myCharacter.AddInitiative();
-            }
-            if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
-        }
         
         private void DisassembleCurrentState()
         {
             currentState.StateDisassembly();
             currentState = stateLibrary.EmptyState;
-
             stopAction.action.Disable();
         }
         
@@ -62,5 +68,6 @@ namespace Controller
             DisassembleCurrentState();
             CurrentCharacterUIController.Instance.DeselectCurrentAction();
         }
+        #endregion
     }
 }

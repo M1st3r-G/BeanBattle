@@ -1,4 +1,4 @@
-using System.Text;
+using System.Linq;
 using UnityEngine;
 
 namespace Data
@@ -6,11 +6,13 @@ namespace Data
     [CreateAssetMenu(fileName = "CharacterAction")]
     public class CharacterAction : ScriptableObject
     {
+        // Publics
         public enum ActionTypes
         {
             None, Move, Attack, BeEvil, Help, Cover
         }
-        
+
+        #region Fields
         public Sprite ActionImage => actionImage;
         [SerializeField] private Sprite actionImage;
 
@@ -20,20 +22,11 @@ namespace Data
 
         public string ActionDescription => actionDescription;
         [SerializeField] private string actionDescription;
+        #endregion
 
-        private static string AddSpacesToSentence(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return "";
-            StringBuilder newText = new StringBuilder(text.Length * 2);
-            newText.Append(text[0]);
-            for (int i = 1; i < text.Length; i++)
-            {
-                if (char.IsUpper(text[i]) && text[i - 1] != ' ')
-                    newText.Append(' ');
-                newText.Append(text[i]);
-            }
-            return newText.ToString();
-        }
+        #region Methods
+        private static string AddSpacesToSentence(string text) =>
+            text.Aggregate("", (current, t) => current + (char.IsUpper(t) ? $" {t}" : t))[1..];
+        #endregion
     }
 }

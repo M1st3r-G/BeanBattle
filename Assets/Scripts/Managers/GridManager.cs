@@ -88,9 +88,9 @@ namespace Managers
             Destroy(reference);
         }
         
-        public void DisplayRange(CharController centerChar, int range)
+        public void DisplayRange(CharController centerChar)
         {
-            DisplayRange(GetPosition(centerChar), range);
+            DisplayRange(GetPosition(centerChar), centerChar.GetData.AttackRange);
         }
 
         private void DisplayRange(Vector2Int position, int range)

@@ -10,9 +10,37 @@ namespace Data.CharacterStates
     [CreateAssetMenu(fileName = "Attack", menuName = "States/Attack", order = 10)]
     public class CharacterAttackState : CharacterStateBase
     {
+        // ComponentReferences
         [SerializeField] private InputActionReference acceptAction;
-        private int attackRange;
+        
+        // Temps
         private CharController currentSelection;
+
+        #region DefaultStateMethods
+        protected override void InternalStateSetUp()
+        {
+            currentSelection = null;
+            acceptAction.action.Enable();
+            CharController.OnPlayerDeath += RemoveDeadSelection;
+            
+            GridManager.Instance.DisplayRange(ActiveCharacter);
+            CharController[] enemiesInRange = GetEnemiesInRange(GridManager.Instance.CharactersInRange());
+
+            if (enemiesInRange.Length == 1) SetSelection(enemiesInRange[0]);
+            else MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
+        }
+        
+        public override void StateDisassembly()
+        {
+            acceptAction.action.Disable();
+            CharController.OnPlayerDeath -= RemoveDeadSelection;
+            MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;
+            
+            GridManager.Instance.ResetRange();
+            
+            if (currentSelection is not null) currentSelection.SetSelector(false);
+            currentSelection = null;
+        }
         
         public override bool ExecuteStateFrame()
         {
@@ -22,38 +50,9 @@ namespace Data.CharacterStates
             ActiveCharacter.PerformAttack(currentSelection);
             return true;
         }
+        #endregion
 
-        protected override void InternalStateSetUp()
-        {
-            currentSelection = null;
-            attackRange = ActiveCharacter.GetData.AttackRange;
-            GridManager.Instance.DisplayRange(ActiveCharacter, attackRange);
-
-            acceptAction.action.Enable();
-            
-            CharController[] enemiesInRange = GetEnemiesInRange(GridManager.Instance.CharactersInRange());
-
-            switch (enemiesInRange.Length)
-            {
-                case 0:
-                    Debug.LogWarning("No enemy in Range");
-                    break;
-                case 1:
-                    SetSelection(enemiesInRange[0]);
-                    break;
-                default:
-                    MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
-                    break;
-            }
-
-            CharController.OnPlayerDeath += RemoveDeadSelection;
-        }
-
-        private CharController[] GetEnemiesInRange(IEnumerable<CharController> charsInRange)
-        {
-            return charsInRange.Where(c => c.TeamID != ActiveCharacter.TeamID).ToArray();
-        }
-
+        #region StateMethods
         private void SetSelection(CharController c)
         {
             if (currentSelection is not null) currentSelection.SetSelector(false);
@@ -66,22 +65,14 @@ namespace Data.CharacterStates
         {
             if (hitCharacter.TeamID != ActiveCharacter.TeamID) SetSelection(hitCharacter);
         }
-
+        
         private void RemoveDeadSelection(CharController c)
         {
             if (currentSelection == c) currentSelection = null;
         }
         
-        public override void StateDisassembly()
-        {
-            CharController.OnPlayerDeath -= RemoveDeadSelection;
-            acceptAction.action.Disable();
-            
-            if (currentSelection is not null) currentSelection.SetSelector(false);
-            currentSelection = null;
-            
-            GridManager.Instance.ResetRange();
-            MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;
-        }
+        private CharController[] GetEnemiesInRange(IEnumerable<CharController> charsInRange) =>
+            charsInRange.Where(c => c.TeamID != ActiveCharacter.TeamID).ToArray();
+        #endregion
     }
 }
