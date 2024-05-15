@@ -11,28 +11,23 @@ namespace Data.CharacterStates
     {
         public override bool ExecuteStateFrame()
         {
-            if(MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell))
+            if (!MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell)) return false;
+            
+            if (!GridManager.Instance.IsOccupied(hoveredCell))
             {
-                if (!GridManager.Instance.IsOccupied(hoveredCell))
-                {
-                    Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
-                    newPosition.y = ActiveCharacter.transform.position.y;
-                    ActiveCharacter.Indicator.transform.position = newPosition;
+                Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
+                newPosition.y = ActiveCharacter.transform.position.y;
+                ActiveCharacter.Indicator.transform.position = newPosition;
                         
-                    int timeCost = GridManager.Instance.GetPosition(ActiveCharacter).ManhattanDistance(hoveredCell);
-                    CurrentActionController.Instance.SetTimeCost(timeCost);
-                }
-
-                if (Mouse.current.leftButton.wasPressedThisFrame)
-                {
-                    Debug.Log("Accepted");
-                    ActiveCharacter.transform.position = ActiveCharacter.Indicator.transform.position;
-                    GridManager.Instance.SetOccupied(ActiveCharacter, hoveredCell);
-                    return true;
-                }
+                int timeCost = GridManager.Instance.GetPosition(ActiveCharacter).ManhattanDistance(hoveredCell);
+                CurrentActionController.Instance.SetTimeCost(timeCost);
             }
 
-            return false;
+            if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
+            
+            ActiveCharacter.transform.position = ActiveCharacter.Indicator.transform.position;
+            GridManager.Instance.SetOccupied(ActiveCharacter, hoveredCell);
+            return true;
         }
 
         protected override void InternalStateSetUp()

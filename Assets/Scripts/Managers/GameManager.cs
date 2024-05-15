@@ -50,15 +50,13 @@ namespace Managers
 
         private IEnumerator UpdateLoop()
         {
-            print("SetUp");
             _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
             DisplayOrder();
-            print("SetUp Phase Ends");
+            print("SetUp Phase Finished");
             
             while(_gameLoop)
             {
                 yield return StartCoroutine(NextPlayer());
-                print($"Now its {_current.name}s Turn");
                 yield return WaitTillNextPhase();
             }
         }
@@ -108,11 +106,18 @@ namespace Managers
         private void OnEnable()
         {
             nextPhaseAction.action.performed += SetNextPhaseFlag;
+            CharController.OnPlayerDeath += RemoveDeadPlayer;
+        }
+
+        private void RemoveDeadPlayer(CharController c)
+        {
+            _playOrder.Remove(c);
         }
 
         private void OnDisable()
         {
             nextPhaseAction.action.performed -= SetNextPhaseFlag;
+            CharController.OnPlayerDeath -= RemoveDeadPlayer;
         }
 
         public void RefreshInitiative(CharController c)
@@ -120,7 +125,6 @@ namespace Managers
             InitiativeUIController.Instance.RefreshCharacter(c);
             
             if (c.Initiative < 10) return;
-            Debug.LogWarning("Overflow");
             SetNextPhaseFlag(new InputAction.CallbackContext());
         }
         
@@ -132,7 +136,6 @@ namespace Managers
         private void DisplayOrder()
         {
             OnOrderChanged.Invoke(_playOrder.ToArray());
-            //print(_playOrder.Aggregate("Current Order:\n",(current, c) => current + $"{c}\n"));
         }
     }
 }

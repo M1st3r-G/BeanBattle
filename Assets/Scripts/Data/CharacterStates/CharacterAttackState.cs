@@ -19,7 +19,6 @@ namespace Data.CharacterStates
             
             ActiveCharacter.PerformAttack(currentSelection);
             return true;
-
         }
 
         protected override void InternalStateSetUp()
@@ -34,8 +33,7 @@ namespace Data.CharacterStates
             //Filter Characters of opposing teams
             switch (charsInRange.Length)
             {
-                case 1: //Own Character is counted too
-                    Debug.LogError("There is no one in Range");
+                case 1:
                     break;
                 case 2:
                     SetSelection(charsInRange[0] == ActiveCharacter ? charsInRange[1] : charsInRange[0]);
@@ -44,6 +42,8 @@ namespace Data.CharacterStates
                     MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
                     break;
             }
+
+            CharController.OnPlayerDeath += RemoveDeadSelection;
         }
 
         private void SetSelection(CharController c)
@@ -59,11 +59,19 @@ namespace Data.CharacterStates
             if (hitCharacter != ActiveCharacter) SetSelection(hitCharacter);
         }
 
+        private void RemoveDeadSelection(CharController c)
+        {
+            if (currentSelection == c) currentSelection = null;
+        }
+        
         public override void StateDisassembly()
         {
+            CharController.OnPlayerDeath -= RemoveDeadSelection;
             acceptAction.action.Disable();
             
             if (currentSelection is not null) currentSelection.SetSelector(false);
+            currentSelection = null;
+            
             GridManager.Instance.ResetRange();
             MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;
         }

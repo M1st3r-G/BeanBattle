@@ -21,6 +21,9 @@ namespace Controller
         public GameObject Indicator { get; private set; }
         public int CurrentHealth { get; private set; }
         public int Initiative { get; set; }
+
+        public delegate void OnPlayerDeathEvent(CharController c);
+        public static OnPlayerDeathEvent OnPlayerDeath;
         
         #region Setup
         private void Awake()
@@ -87,7 +90,8 @@ namespace Controller
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
             
-            Debug.LogWarning("Death");
+            Debug.LogWarning($"{name} died!");
+            OnPlayerDeath?.Invoke(this);
             Destroy(gameObject);
         }
         #endregion

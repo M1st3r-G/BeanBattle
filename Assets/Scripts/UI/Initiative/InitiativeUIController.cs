@@ -51,15 +51,30 @@ namespace UI.Initiative
                 }
             }
         }
+
+        private void RemoveDeadPlayer(CharController player)
+        {
+            int counter = 0;
+            foreach (BannerController banner in _banner)
+            {
+                if (banner.DisplayedChar == player) banner.gameObject.SetActive(false);
+                if (banner.gameObject.activeSelf) counter++;
+            }
+            
+            AdjustBottomPadding(counter - 1);
+        }
         
         private void OnEnable()
         {
             GameManager.OnOrderChanged += UpdateUI;
+            CharController.OnPlayerDeath += RemoveDeadPlayer;
+            
         }
 
         private void OnDisable()
         {
             GameManager.OnOrderChanged -= UpdateUI;
+            CharController.OnPlayerDeath -= RemoveDeadPlayer;
         }
     }
 }
