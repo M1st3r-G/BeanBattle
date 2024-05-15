@@ -16,3 +16,7 @@ ToDo:
   - Pathfinding
 
 - AI
+
+
+Math:
+- [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)

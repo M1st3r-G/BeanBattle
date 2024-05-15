@@ -13,6 +13,8 @@ namespace Managers
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private InputActionReference nextPhaseAction;
+        [SerializeField] private CharData[] characterClasses;
+        [SerializeField] private GameObject characterPrefab;
         private List<CharController> _playOrder;
         private CharController _current;
         private bool _nextPhasePressed;
@@ -37,26 +39,27 @@ namespace Managers
             }
             DontDestroyOnLoad(gameObject);
             Instance = this;
-            
-            
-            _playOrder = new List<CharController>();
-            _playOrder = GameObject.FindGameObjectsWithTag("Character").Select(obj => obj.GetComponent<CharController>()).ToList();
-            //Dangerous
 
             _gameLoop = true;
         }
 
+        private void SetUp()
+        {
+            _playOrder = GenerateCharacters().ToList();
+            
+            _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
+            DisplayOrder();
+            print("SetUp Phase Finished");
+        }
+        
         private void Start()
         {
+            SetUp();
             StartCoroutine(UpdateLoop());
         }
 
         private IEnumerator UpdateLoop()
         {
-            _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-            DisplayOrder();
-            print("SetUp Phase Finished");
-            
             while(_gameLoop)
             {
                 yield return StartCoroutine(NextPlayer());
@@ -64,6 +67,25 @@ namespace Managers
             }
         }
 
+        private IEnumerable<CharController> GenerateCharacters()
+        {
+            var returnCollection = new List<CharController>();
+            
+            for (int team = 0; team < 2; team++)
+            {
+                for (var i = 0; i < characterClasses.Length; i++)
+                {
+                    var tmp = Instantiate(characterPrefab).GetComponent<CharController>();
+                    tmp.Init(characterClasses[i], team);
+
+                    GridManager.Instance.AddCharacter(tmp, new Vector2Int(12 * team + 1, 3 * i + 4));
+                    returnCollection.Add(tmp);
+                }
+            }
+
+            return returnCollection;
+        }
+        
         private IEnumerator WaitTillNextPhase()
         {
             _nextPhasePressed = false;

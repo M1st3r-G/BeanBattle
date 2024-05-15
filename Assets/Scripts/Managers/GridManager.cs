@@ -43,18 +43,17 @@ namespace Managers
             GenerateCells();
             FixPlaneTransform();
         }
-        
-        private void Start()
+
+        public void AddCharacter(CharController character, Vector2Int startCell, float startHeight = 1f)
         {
-            foreach (CharController charC in GameObject.FindGameObjectsWithTag("Character").Select(g => g.GetComponent<CharController>()))
-            {
-                Vector2Int position = (Vector2Int)Grid.WorldToCell(charC.transform.position);
-                _occupied[charC] = position;
-                Vector3 playerPosition = CellToCenterWorld(position);
-                playerPosition.y = charC.transform.position.y;
-                charC.transform.position = playerPosition; 
-            }
+            _occupied[character] = startCell;
+            
+            Vector3 playerPosition = CellToCenterWorld(startCell);
+            
+            playerPosition.y = startHeight;
+            character.transform.position = playerPosition; 
         }
+        
         
         private void FixPlaneTransform()
         {

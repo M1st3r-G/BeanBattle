@@ -1,3 +1,4 @@
+using System;
 using Data;
 using Managers;
 using UI;
@@ -10,17 +11,14 @@ namespace Controller
     [RequireComponent(typeof(CharStateController))]
     public class CharController : MonoBehaviour
     {
-        public CharData GetData => data;
-        [SerializeField] private CharData data;
-        
         [SerializeField] private GameObject shadow;
         [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
-
-        public int TeamID => teamId;
-        [SerializeField] [Range(0,1)] private int teamId;
         
+        public CharData GetData { get; private set; }
+        public int TeamID { get; private set; }
+
         public GameObject Indicator { get; private set; }
         public int CurrentHealth { get; private set; }
         public int Initiative { get; set; }
@@ -32,22 +30,27 @@ namespace Controller
         private void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
-            _renderer.material = data.Material(teamId);
-
-            Initiative = Random.Range(data.InitiativeStartRange.x, data.InitiativeStartRange.y);
-            
-            name = data.Name + $"(Team {TeamID})";
-            CurrentHealth = data.BaseHealth;
             _stateController = GetComponent<CharStateController>();
-            
-            Indicator = CreateIndicator();
             selector = transform.GetChild(0).gameObject;
         }
 
+        public void Init(CharData characterClass, int team)
+        {
+            GetData = characterClass;
+            TeamID = team;
+            
+            _renderer.material = GetData.Material(TeamID);
+            Initiative = Random.Range(GetData.InitiativeStartRange.x, GetData.InitiativeStartRange.y);
+            name = GetData.Name + $"(Team {TeamID})";
+            CurrentHealth = GetData.BaseHealth;
+            
+            Indicator = CreateIndicator();
+        }
+        
         private GameObject CreateIndicator()
         {
             GameObject ind = Instantiate(shadow, transform.position, Quaternion.identity, transform);
-            ind.GetComponent<MeshRenderer>().material = data.Shadow(teamId); // Maybe Own Script if more Complex
+            ind.GetComponent<MeshRenderer>().material = GetData.Shadow(TeamID); // Maybe Own Script if more Complex
             ind.name += "(shadow)";
             ind.SetActive(false);
             return ind;
@@ -84,7 +87,7 @@ namespace Controller
         
         public void PerformAttack(CharController other)
         {
-            other.TakeDamage(data.Damage);
+            other.TakeDamage(GetData.Damage);
             InitiativeUIController.Instance.RefreshCharacter(other);
         }
 
