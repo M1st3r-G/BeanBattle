@@ -8,11 +8,11 @@ namespace Managers
     public class GridManager : MonoBehaviour
     {
         //Components
-        public Grid Grid { get; private set; }
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private GameObject cellContainer;
-        private Camera _mainCamera;
         [SerializeField] private GameObject plane;
+        private Grid grid;
+        private Camera _mainCamera;
         
         //Params
         [SerializeField] private Vector2Int numberOfCells;
@@ -24,7 +24,8 @@ namespace Managers
         
         //Publics
         public static GridManager Instance { get; private set; }
-        
+
+        #region SetUp
         private void Awake()
         {
             if (Instance is not null)
@@ -38,30 +39,19 @@ namespace Managers
             allCells = new GameObject[numberOfCells.x, numberOfCells.y];
             activeCells = new List<GameObject>();
             _occupied = new Dictionary<CharController, Vector2Int>();
-            Grid = GetComponent<Grid>();
+            grid = GetComponent<Grid>();
             
             GenerateCells();
             FixPlaneTransform();
         }
-
-        public void AddCharacter(CharController character, Vector2Int startCell, float startHeight = 1f)
-        {
-            _occupied[character] = startCell;
-            
-            Vector3 playerPosition = CellToCenterWorld(startCell);
-            
-            playerPosition.y = startHeight;
-            character.transform.position = playerPosition; 
-        }
-        
         
         private void FixPlaneTransform()
         {
             Vector3 efficientSize = new Vector3
             {
-                x = (Grid.cellSize.x + Grid.cellGap.x) * numberOfCells.x,
-                y = Grid.cellSize.x * 10,
-                z = (Grid.cellSize.y + Grid.cellGap.y) * numberOfCells.y
+                x = (grid.cellSize.x + grid.cellGap.x) * numberOfCells.x,
+                y = grid.cellSize.x * 10,
+                z = (grid.cellSize.y + grid.cellGap.y) * numberOfCells.y
             };
             plane.transform.localScale = efficientSize* 0.1f;
             transform.position -= new Vector3(efficientSize.x / 2f, 0, efficientSize.z / 2f);
@@ -72,13 +62,13 @@ namespace Managers
         {
             GameObject reference = Instantiate(cellPrefab);
             reference.transform.localScale =
-                new Vector3(Grid.cellSize.x, reference.transform.localScale.y, Grid.cellSize.y);
+                new Vector3(grid.cellSize.x, reference.transform.localScale.y, grid.cellSize.y);
             
             for (int x = 0; x < numberOfCells.x; x++)
             {
                 for (int y = 0; y < numberOfCells.y; y++)
                 {
-                    Vector3 position = Grid.GetCellCenterWorld(new Vector3Int(x, y));
+                    Vector3 position = grid.GetCellCenterWorld(new Vector3Int(x, y));
                     position.y = 0;
                     allCells[x,y] = Instantiate(reference, position , Quaternion.identity, cellContainer.transform);
                     allCells[x,y].SetActive(false);
@@ -88,10 +78,34 @@ namespace Managers
             Destroy(reference);
         }
         
-        public void DisplayRange(CharController centerChar)
+        private void OnDestroy()
         {
-            DisplayRange(GetPosition(centerChar), centerChar.GetData.AttackRange);
+            if(Instance == this) Destroy(gameObject);
         }
+        
+        private void OnEnable() => CharController.OnPlayerDeath += RemoveDeadPlayer;
+        private void OnDisable() => CharController.OnPlayerDeath -= RemoveDeadPlayer;
+        #endregion
+
+        #region OtherMethods
+        public void AddCharacter(CharController character, Vector2Int startCell, float startHeight = 1f)
+        {
+            _occupied[character] = startCell;
+            
+            Vector3 playerPosition = CellToCenterWorld(startCell);
+            
+            playerPosition.y = startHeight;
+            character.transform.position = playerPosition; 
+        }
+        
+        public Vector3 CellToCenterWorld(Vector2Int cell) => grid.GetCellCenterWorld((Vector3Int)cell);
+        public Vector2Int WorldToCell(Vector3 position) => (Vector2Int)grid.WorldToCell(position);
+        private void RemoveDeadPlayer(CharController player) => _occupied.Remove(player);
+        #endregion
+
+        #region RangeManagement
+        public void DisplayRange(CharController centerChar) => 
+            DisplayRange(GetPosition(centerChar), centerChar.GetData.AttackRange);
 
         private void DisplayRange(Vector2Int position, int range)
         {
@@ -110,57 +124,28 @@ namespace Managers
             DisplayRange(position + Vector2Int.right, range - 1);
         }
 
-        public CharController[] CharactersInRange()
-        {
-            List<CharController> charList = new();
-            foreach (GameObject cell in activeCells)
-            {
-                Vector2Int coordinate = (Vector2Int)Grid.WorldToCell(cell.transform.position);
-                if (!IsOccupied(coordinate)) continue;
-                charList.Add(GetOccupier(coordinate));
-            }
-
-            return charList.ToArray();
-        }
-
-        private CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
+        public IEnumerable<CharController> CharactersInRange() =>
+            from cell in activeCells
+            select WorldToCell(cell.transform.position) into coordinate
+            where IsOccupied(coordinate) select GetOccupier(coordinate);
+        
 
         public void ResetRange()
         {
-            for (int i = activeCells.Count - 1; i >= 0; i--)
-            {
-                activeCells[i].gameObject.SetActive(false);
-                activeCells.RemoveAt(i);
-            }
+            foreach (GameObject cell in activeCells) cell.SetActive(false);
+            activeCells.Clear();
         }
-        
+        #endregion
+
+        #region OccupationManagement
         public void SetOccupied(CharController charController,Vector2Int cell)
         {
             if (!IsOccupied(cell)) _occupied[charController] = cell;
         }
+        
+        private CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
         public bool IsOccupied(Vector2Int cell) => _occupied.ContainsValue(cell);
         public Vector2Int GetPosition(CharController charController) => _occupied[charController];
-        public Vector3 CellToCenterWorld(Vector2Int cell) => Grid.GetCellCenterWorld((Vector3Int)cell);
-
-        private void RemoveDeadPlayer(CharController player)
-        {
-            _occupied.Remove(player);
-        }
-        
-
-        private void OnEnable()
-        {
-            CharController.OnPlayerDeath += RemoveDeadPlayer;
-        }
-
-        private void OnDisable()
-        {
-            CharController.OnPlayerDeath -= RemoveDeadPlayer;
-        }
-
-        private void OnDestroy()
-        {
-            if(Instance == this) Destroy(gameObject);
-        }
+        #endregion
     }
 }

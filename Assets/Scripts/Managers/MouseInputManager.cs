@@ -73,7 +73,7 @@ namespace Managers
 
             if (!target.CompareTag("Ground")) return false;
             
-            cell = (Vector2Int)GridManager.Instance.Grid.WorldToCell(hit.point);
+            cell = GridManager.Instance.WorldToCell(hit.point);
             return true;
         }
         #endregion
