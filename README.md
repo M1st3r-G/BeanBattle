@@ -6,6 +6,10 @@ ToDo:
   - Friendly Fire
 
 
+- Balancing
+  - First team Has lower Time Overflow? 
+
+
 - Animations
 
 
@@ -16,10 +20,10 @@ ToDo:
 - AI
 
 
-- Hover over Enemys to See their range while moving
+- Hover over Enemies to See their range while moving
 
 
 - Implement More Actions
-  - Evil/Help as Healing or Debuff
+  - Evil/Help as Healing or De-Buff
   - Hide/Cover
-  - Overwatch
+  - Over-watch

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using Managers;
 using UnityEngine;
@@ -29,14 +31,15 @@ namespace Data.CharacterStates
 
             acceptAction.action.Enable();
             
-            CharController[] charsInRange = GridManager.Instance.CharactersInRange();
-            //Filter Characters of opposing teams
-            switch (charsInRange.Length)
+            CharController[] enemiesInRange = GetEnemiesInRange(GridManager.Instance.CharactersInRange());
+
+            switch (enemiesInRange.Length)
             {
-                case 1:
+                case 0:
+                    Debug.LogWarning("No enemy in Range");
                     break;
-                case 2:
-                    SetSelection(charsInRange[0] == ActiveCharacter ? charsInRange[1] : charsInRange[0]);
+                case 1:
+                    SetSelection(enemiesInRange[0]);
                     break;
                 default:
                     MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
@@ -44,6 +47,11 @@ namespace Data.CharacterStates
             }
 
             CharController.OnPlayerDeath += RemoveDeadSelection;
+        }
+
+        private CharController[] GetEnemiesInRange(IEnumerable<CharController> charsInRange)
+        {
+            return charsInRange.Where(c => c.TeamID != ActiveCharacter.TeamID).ToArray();
         }
 
         private void SetSelection(CharController c)
@@ -56,7 +64,7 @@ namespace Data.CharacterStates
         
         private void SelectClickedCharacter(CharController hitCharacter)
         {
-            if (hitCharacter != ActiveCharacter) SetSelection(hitCharacter);
+            if (hitCharacter.TeamID != ActiveCharacter.TeamID) SetSelection(hitCharacter);
         }
 
         private void RemoveDeadSelection(CharController c)
