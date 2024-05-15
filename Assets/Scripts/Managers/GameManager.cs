@@ -109,9 +109,15 @@ namespace Managers
             CharController.OnPlayerDeath += RemoveDeadPlayer;
         }
 
-        private void RemoveDeadPlayer(CharController c)
+        private void RemoveDeadPlayer(CharController player)
         {
-            _playOrder.Remove(c);
+            _playOrder.Remove(player);
+            int membersLeft = _playOrder.Count(c => c.TeamID == player.TeamID);
+            if (membersLeft != 0) return;
+            
+            Debug.Log($"Game Over, team {1 - player.TeamID} won!");
+            _gameLoop = false;
+            SetNextPhaseFlag(new InputAction.CallbackContext());
         }
 
         private void OnDisable()

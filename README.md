@@ -1,11 +1,6 @@
 # BeanBattle
  
 ToDo:
-- Teams
-  - Win Condition
-  - Friendly Fire
-
-
 - Balancing
   - First team Has lower Time Overflow? 
 
