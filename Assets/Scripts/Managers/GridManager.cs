@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
@@ -49,11 +48,11 @@ namespace Managers
         {
             foreach (CharController charC in GameObject.FindGameObjectsWithTag("Character").Select(g => g.GetComponent<CharController>()))
             {
-                Vector2Int pos = (Vector2Int)Grid.WorldToCell(charC.transform.position);
-                _occupied[charC] = pos;
-                Vector3 playerPos = CellToCenterWorld(pos);
-                playerPos.y = charC.transform.position.y;
-                charC.transform.position = playerPos; 
+                Vector2Int position = (Vector2Int)Grid.WorldToCell(charC.transform.position);
+                _occupied[charC] = position;
+                Vector3 playerPosition = CellToCenterWorld(position);
+                playerPosition.y = charC.transform.position.y;
+                charC.transform.position = playerPosition; 
             }
         }
         

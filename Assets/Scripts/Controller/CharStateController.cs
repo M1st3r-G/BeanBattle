@@ -1,4 +1,3 @@
-using System;
 using Data;
 using UI.CurrentCharacter;
 using UnityEngine;

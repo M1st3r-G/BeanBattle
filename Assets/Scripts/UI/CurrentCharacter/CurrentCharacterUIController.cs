@@ -58,18 +58,18 @@ namespace UI.CurrentCharacter
         
         private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
         
-        private void SelectAction(int num)
+        private void SelectAction(int actionIndex)
         {
-            if (num > _current.Actions.Count)
+            if (actionIndex > _current.Actions.Count)
             {
-                Debug.Log($"Action{num} is not Available");
+                Debug.Log($"Action{actionIndex} is not Available");
                 return;
             }
 
-            if(num -1 == _actionController.CurrentSelection) DeselectCurrentAction();
-            else _actionController.Select(num - 1);
+            if(actionIndex -1 == _actionController.CurrentSelection) DeselectCurrentAction();
+            else _actionController.Select(actionIndex - 1);
             
-            GameManager.Instance.TriggerState(_current.Actions[num - 1].Type);
+            GameManager.Instance.TriggerState(_current.Actions[actionIndex - 1].Type);
         }
 
         public void DeselectCurrentAction() => _actionController.Deselect();
