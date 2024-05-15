@@ -2,8 +2,11 @@
  
 ToDo:
 - PlayerDeath
+
 - Terrain? 
   - Pathfinding
+
 - Implement More Actions
-  - Evil/Help
+  - Evil/Help as Healing or Debuff
   - Hide/Cover
+  - Overwatch
