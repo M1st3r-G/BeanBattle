@@ -1,9 +1,6 @@
 # BeanBattle
  
 ToDo:
-- PlayerDeath
-
-
 - Teams
 
 
@@ -12,6 +9,9 @@ ToDo:
 
 - Terrain? 
   - Pathfinding
+
+
+- AI
 
 
 - Hover over Enemys to See their range while moving
