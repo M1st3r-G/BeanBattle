@@ -78,8 +78,17 @@ namespace Controller
         
         public void PerformAttack(CharController other)
         {
-            other.CurrentHealth -= data.Damage;
+            other.TakeDamage(data.Damage);
             InitiativeUIController.Instance.RefreshCharacter(other);
+        }
+
+        private void TakeDamage(int amount)
+        {
+            CurrentHealth -= amount;
+            if (CurrentHealth > 0) return;
+            
+            Debug.LogWarning("Death");
+            Destroy(gameObject);
         }
         #endregion
     }
