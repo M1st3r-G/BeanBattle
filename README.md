@@ -9,7 +9,7 @@ Its more to be seen as a learning and testing Project than a finished game.
 ToDo:
 - Enhancements
   - Animations
-  - Hover over Enemies to See their range while moving
+  - Better Hover Zone/ Indicator
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
     - Hide/Cover

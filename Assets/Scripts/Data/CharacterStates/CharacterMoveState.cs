@@ -19,12 +19,17 @@ namespace Data.CharacterStates
             
             if (!GridManager.Instance.IsOccupied(hoveredCell))
             {
+                GridManager.Instance.ResetRange();
                 Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
                 newPosition.y = ActiveCharacter.transform.position.y;
                 ActiveCharacter.Indicator.transform.position = newPosition;
                         
                 int timeCost = GridManager.Instance.GetPosition(ActiveCharacter).ManhattanDistance(hoveredCell);
                 CurrentActionController.Instance.SetTimeCost(timeCost);
+            }
+            else
+            {
+                GridManager.Instance.DisplayRange(GridManager.Instance.GetOccupier(hoveredCell));
             }
 
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
