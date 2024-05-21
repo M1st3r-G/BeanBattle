@@ -7,6 +7,9 @@ Its more to be seen as a learning and testing Project than a finished game.
 ---
 
 ToDo:
+- Next
+  - Visualize Path
+
 - Enhancements
   - Animations
   - Better Hover Zone/ Indicator
@@ -17,8 +20,7 @@ ToDo:
 
 - Later:
   - AI
-  - Terrain? 
-    - Pathfinding
+  - Terrain?
   - Balancing
     - First team Has lower Time Overflow?
 
