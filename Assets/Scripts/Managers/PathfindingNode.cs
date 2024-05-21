@@ -8,15 +8,13 @@ namespace Managers
         [HideInInspector]
         public PathfindingNode parent;
         [HideInInspector]
-        public bool obstacle;
         public int FCost => GCost + HCost;
         [HideInInspector]
         public int GCost, HCost;
 
-        public void Initialize(Vector2Int position, bool isOb)
+        public void Initialize(Vector2Int position)
         {
             Position = position;
-            obstacle = isOb;
         }
     }
 }

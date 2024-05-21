@@ -26,9 +26,8 @@ namespace Managers
         
         //Public
         public static GridManager Instance { get; private set; }
-        public List<PathfindingNode> path;
 
-        
+
         #region SetUp
         private void Awake()
         {
@@ -76,7 +75,7 @@ namespace Managers
                     position.y = 0;
                     PathfindingNode newNode = Instantiate(reference, position , Quaternion.identity, cellContainer.transform).GetComponent<PathfindingNode>();
                     newNode.gameObject.SetActive(false);
-                    newNode.Initialize(new Vector2Int(x, y), false);
+                    newNode.Initialize(new Vector2Int(x, y));
                     allCells[x, y] = newNode;
                 }
             }
@@ -145,34 +144,11 @@ namespace Managers
         
         #region Path
 
-        //gets the neighboring nodes in the 4 cardinal directions. If you would like to enable diagonal pathfinding, uncomment out that portion of code
-        private List<PathfindingNode> GetNeighbors(PathfindingNode node)
+        private bool IsObstacle(PathfindingNode node)
         {
-            List<PathfindingNode> neighbors = new List<PathfindingNode>();
-
-            int gridX = node.Position.x;
-            int gridY = node.Position.y;
-            
-            //checks and adds top neighbor
-            if (gridX >= 0 && gridX < numberOfCells.x && gridY + 1 >= 0 && gridY + 1 < numberOfCells.y)
-                neighbors.Add(allCells[gridX, gridY + 1]);
-
-            //checks and adds bottom neighbor
-            if (gridX >= 0 && gridX < numberOfCells.x && gridY - 1 >= 0 && gridY - 1 < numberOfCells.y)
-                neighbors.Add(allCells[gridX, gridY - 1]);
-
-            //checks and adds right neighbor
-            if (gridX + 1 >= 0 && gridX + 1 < numberOfCells.x && gridY >= 0 && gridY < numberOfCells.y)
-                neighbors.Add(allCells[gridX + 1, gridY]);
-
-            //checks and adds left neighbor
-            if (gridX - 1 >= 0 && gridX - 1 < numberOfCells.x && gridY >= 0 && gridY < numberOfCells.y)
-                neighbors.Add(allCells[gridX - 1, gridY]);
-            
-            return neighbors;
+            return IsOccupied(node.Position);
         }
-
-
+        
         public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) => FindPath(allCells[start.x, start.y], allCells[end.x, end.y]).Select(node => node.Position).ToArray();
         
         private IEnumerable<PathfindingNode> FindPath(PathfindingNode startN, PathfindingNode targetN)
@@ -210,9 +186,9 @@ namespace Managers
                 }
             
                 //adds neighbor nodes to openSet
-                foreach (PathfindingNode neighbour in this.GetNeighbors(node))
+                foreach (PathfindingNode neighbour in GetNeighbors(node))
                 {
-                    if (neighbour.obstacle || closedSet.Contains(neighbour))
+                    if (IsObstacle(neighbour) || closedSet.Contains(neighbour))
                     {
                         continue;
                     }
@@ -249,6 +225,12 @@ namespace Managers
             return path;
         }
     
+        //gets the neighboring nodes in the 4 cardinal directions. If you would like to enable diagonal pathfinding, uncomment out that portion of code
+        private List<PathfindingNode> GetNeighbors(PathfindingNode node) =>
+            (from direction in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }
+                select node.Position + direction into c
+                where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
+                select allCells[c.x, c.y]).ToList();
 
         #endregion
         
