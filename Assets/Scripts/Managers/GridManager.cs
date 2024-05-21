@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using Misc;
 using UnityEngine;
 
 namespace Managers
@@ -13,18 +14,21 @@ namespace Managers
         [SerializeField] private GameObject plane;
         private Grid grid;
         private Camera _mainCamera;
-        
+
         //Params
         [SerializeField] private Vector2Int numberOfCells;
-        private GameObject[,] allCells;
+        private PathfindingNode[,] allCells;
         
         //Temps
         private Dictionary<CharController, Vector2Int> _occupied;
-        public List<GameObject> activeCells;
+        public List<PathfindingNode> activeCells;
+        private PathfindingNode seekerNode, targetNode;
         
-        //Publics
+        //Public
         public static GridManager Instance { get; private set; }
+        public List<PathfindingNode> path;
 
+        
         #region SetUp
         private void Awake()
         {
@@ -36,8 +40,8 @@ namespace Managers
             DontDestroyOnLoad(gameObject);
             Instance = this;
 
-            allCells = new GameObject[numberOfCells.x, numberOfCells.y];
-            activeCells = new List<GameObject>();
+            allCells = new PathfindingNode[numberOfCells.x, numberOfCells.y];
+            activeCells = new List<PathfindingNode>();
             _occupied = new Dictionary<CharController, Vector2Int>();
             grid = GetComponent<Grid>();
             
@@ -70,8 +74,10 @@ namespace Managers
                 {
                     Vector3 position = grid.GetCellCenterWorld(new Vector3Int(x, y));
                     position.y = 0;
-                    allCells[x,y] = Instantiate(reference, position , Quaternion.identity, cellContainer.transform);
-                    allCells[x,y].SetActive(false);
+                    PathfindingNode newNode = Instantiate(reference, position , Quaternion.identity, cellContainer.transform).GetComponent<PathfindingNode>();
+                    newNode.gameObject.SetActive(false);
+                    newNode.Initialize(new Vector2Int(x, y), false);
+                    allCells[x, y] = newNode;
                 }
             }
             
@@ -112,10 +118,10 @@ namespace Managers
             if (0 > position.x || position.x >= numberOfCells.x || 0 > position.y ||
                 position.y >= numberOfCells.y) return;
             
-            GameObject currentCell = allCells[position.x, position.y];
+            PathfindingNode currentCell = allCells[position.x, position.y];
             
-            if (!currentCell.activeSelf) activeCells.Add(currentCell);
-            currentCell.SetActive(true);
+            if (!currentCell.gameObject.activeSelf) activeCells.Add(currentCell);
+            currentCell.gameObject.SetActive(true);
             
             if (range <= 0) return;
             DisplayRange(position + Vector2Int.down, range - 1);
@@ -132,11 +138,120 @@ namespace Managers
 
         public void ResetRange()
         {
-            foreach (GameObject cell in activeCells) cell.SetActive(false);
+            foreach (PathfindingNode cell in activeCells) cell.gameObject.SetActive(false);
             activeCells.Clear();
         }
         #endregion
+        
+        #region Path
 
+        //gets the neighboring nodes in the 4 cardinal directions. If you would like to enable diagonal pathfinding, uncomment out that portion of code
+        private List<PathfindingNode> GetNeighbors(PathfindingNode node)
+        {
+            List<PathfindingNode> neighbors = new List<PathfindingNode>();
+
+            int gridX = node.Position.x;
+            int gridY = node.Position.y;
+            
+            //checks and adds top neighbor
+            if (gridX >= 0 && gridX < numberOfCells.x && gridY + 1 >= 0 && gridY + 1 < numberOfCells.y)
+                neighbors.Add(allCells[gridX, gridY + 1]);
+
+            //checks and adds bottom neighbor
+            if (gridX >= 0 && gridX < numberOfCells.x && gridY - 1 >= 0 && gridY - 1 < numberOfCells.y)
+                neighbors.Add(allCells[gridX, gridY - 1]);
+
+            //checks and adds right neighbor
+            if (gridX + 1 >= 0 && gridX + 1 < numberOfCells.x && gridY >= 0 && gridY < numberOfCells.y)
+                neighbors.Add(allCells[gridX + 1, gridY]);
+
+            //checks and adds left neighbor
+            if (gridX - 1 >= 0 && gridX - 1 < numberOfCells.x && gridY >= 0 && gridY < numberOfCells.y)
+                neighbors.Add(allCells[gridX - 1, gridY]);
+            
+            return neighbors;
+        }
+
+
+        public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) => FindPath(allCells[start.x, start.y], allCells[end.x, end.y]).Select(node => node.Position).ToArray();
+        
+        private IEnumerable<PathfindingNode> FindPath(PathfindingNode startN, PathfindingNode targetN)
+        {
+            //get player and target position in this coords
+            seekerNode = startN;
+            targetNode = targetN;
+
+            List<PathfindingNode> openSet = new List<PathfindingNode>();
+            HashSet<PathfindingNode> closedSet = new HashSet<PathfindingNode>();
+            openSet.Add(seekerNode);
+        
+            //calculates path for pathfinding
+            while (openSet.Count > 0)
+            {
+
+                //iterates through openSet and finds lowest FCost
+                PathfindingNode node = openSet[0];
+                for (int i = 1; i < openSet.Count; i++)
+                {
+                    if (openSet[i].FCost <= node.FCost)
+                    {
+                        if (openSet[i].HCost < node.HCost)
+                            node = openSet[i];
+                    }
+                }
+
+                openSet.Remove(node);
+                closedSet.Add(node);
+
+                //If target found, retrace path
+                if (node == targetNode)
+                {
+                    return RetracePath(seekerNode, targetNode);
+                }
+            
+                //adds neighbor nodes to openSet
+                foreach (PathfindingNode neighbour in this.GetNeighbors(node))
+                {
+                    if (neighbour.obstacle || closedSet.Contains(neighbour))
+                    {
+                        continue;
+                    }
+
+                    int newCostToNeighbour = node.GCost + node.Position.ManhattanDistance(neighbour.Position);
+                    if (newCostToNeighbour < neighbour.GCost || !openSet.Contains(neighbour))
+                    {
+                        neighbour.GCost = newCostToNeighbour;
+                        neighbour.HCost = neighbour.Position.ManhattanDistance(targetNode.Position);
+                        neighbour.parent = node;
+
+                        if (!openSet.Contains(neighbour))
+                            openSet.Add(neighbour);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        //reverses calculated path so first node is closest to seeker
+        private static IEnumerable<PathfindingNode> RetracePath(PathfindingNode startNode, PathfindingNode endNode)
+        {
+            List<PathfindingNode> path = new List<PathfindingNode>();
+            PathfindingNode currentNode = endNode;
+
+            while (currentNode != startNode)
+            {
+                path.Add(currentNode);
+                currentNode = currentNode.parent;
+            }
+            path.Reverse();
+
+            return path;
+        }
+    
+
+        #endregion
+        
         #region OccupationManagement
         public void SetOccupied(CharController charController,Vector2Int cell)
         {

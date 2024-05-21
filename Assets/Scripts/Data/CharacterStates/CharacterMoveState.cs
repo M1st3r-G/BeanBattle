@@ -34,6 +34,7 @@ namespace Data.CharacterStates
 
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
             
+            Debug.LogError(GridManager.Instance.GetPath(GridManager.Instance.WorldToCell(ActiveCharacter.transform.position), hoveredCell).CustomToString());
             ActiveCharacter.transform.position = ActiveCharacter.Indicator.transform.position;
             GridManager.Instance.SetOccupied(ActiveCharacter, hoveredCell);
             return true;
