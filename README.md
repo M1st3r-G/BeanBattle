@@ -1,9 +1,12 @@
 # BeanBattle
  
-ToDo:
-- Balancing
-  - First team Has lower Time Overflow? 
+This is Bean Battle, a **Very** simple (probably) unfinished X-Com like game, just to try out different styles and Mechanics. 
+Its more to be seen as a learning and testing Project than a finished game.
 
+
+---
+
+ToDo:
 - Enhancements
   - Animations
   - Hover over Enemies to See their range while moving
@@ -12,12 +15,12 @@ ToDo:
     - Hide/Cover
     - Over-watch
 
-- Terrain? 
-  - Pathfinding
-
-- AI
-
-GridManager
+- Later:
+  - AI
+  - Terrain? 
+    - Pathfinding
+  - Balancing
+    - First team Has lower Time Overflow?
 
 Math:
 - [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)
