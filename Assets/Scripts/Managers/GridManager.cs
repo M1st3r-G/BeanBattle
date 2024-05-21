@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
+using Data;
 using Misc;
 using UnityEngine;
 
@@ -142,7 +143,7 @@ namespace Managers
         }
         #endregion
         
-        #region Path
+        #region PathManagement
 
         private bool IsObstacle(PathfindingNode node)
         {
@@ -232,6 +233,14 @@ namespace Managers
                 where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
                 select allCells[c.x, c.y]).ToList();
 
+        public void RenderPath(Vector2Int[] path)
+        {
+            foreach (Vector2Int cell in path)
+            {
+                allCells[cell.x, cell.y].gameObject.SetActive(true);
+            }
+        }
+        
         #endregion
         
         #region OccupationManagement
