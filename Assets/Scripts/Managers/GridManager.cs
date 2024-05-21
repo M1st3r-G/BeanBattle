@@ -143,7 +143,7 @@ namespace Managers
             if (!IsOccupied(cell)) _occupied[charController] = cell;
         }
         
-        private CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
+        public CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
         public bool IsOccupied(Vector2Int cell) => _occupied.ContainsValue(cell);
         public Vector2Int GetPosition(CharController charController) => _occupied[charController];
         #endregion
