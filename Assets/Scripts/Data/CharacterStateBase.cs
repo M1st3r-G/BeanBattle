@@ -5,8 +5,8 @@ namespace Data
 {
     public abstract class CharacterStateBase: ScriptableObject
     {
-        public CharacterAction.ActionTypes Type => type;
-        [SerializeField] private CharacterAction.ActionTypes type;
+        public CharacterAction.ActionTypes ActionType => currentType;
+        [SerializeField] private CharacterAction.ActionTypes currentType;
 
         public abstract void OnPlayerDeath(CharStateController s, CharController deadPlayer);
         public abstract void StateSetUp(CharStateController s);

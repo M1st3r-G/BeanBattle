@@ -113,7 +113,7 @@ namespace Managers
             _nextPhasePressed = false;
             nextPhaseAction.action.Enable();
             yield return new WaitUntil(() => _nextPhasePressed);
-            CurrentCharacterUIController.Instance.SetNumberActions(false);
+            CurrentCharacterUIController.Instance.SetActionInput(false);
             nextPhaseAction.action.Disable();
             _nextPhasePressed = false;
         }
@@ -144,7 +144,7 @@ namespace Managers
             _playOrder.RemoveAt(0);
             
             OnCurrentChange.Invoke(CurrentPlayer);
-            CurrentCharacterUIController.Instance.SetNumberActions(true); // Enables number Shortcuts
+            CurrentCharacterUIController.Instance.SetActionInput(true); // Enables number Shortcuts
         }
         #endregion
 

@@ -18,7 +18,8 @@ namespace UI.CurrentCharacter
         
         //Temps
         private CharData _current;
-        
+        private bool _actionsActive;
+
         //Public
         public static CurrentCharacterUIController Instance { get; private set; }
 
@@ -38,13 +39,27 @@ namespace UI.CurrentCharacter
         {
             GameManager.OnCurrentChange += OnChangeEvent;
             GameManager.OnGameOver += OnGameOver;
+            CharController.OnPlayerStartedAction += OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAction += OnPlayerFinishedAction;
+            
+            numberAction.action.Enable();
+            numberAction.action.performed += NumberPressed;
         }
         
         private void OnDisable()
         {
             GameManager.OnCurrentChange -= OnChangeEvent;
             GameManager.OnGameOver -= OnGameOver;
+            CharController.OnPlayerStartedAction -= OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAction -= OnPlayerFinishedAction;
+            
+            numberAction.action.performed -= NumberPressed;
+            numberAction.action.Disable();
         }
+
+        private void OnPlayerFinishedAction(CharacterAction.ActionTypes type) => SetActionInput(true);
+        private void OnPlayerStartedAction(CharacterAction.ActionTypes type) => SetActionInput(false);
+
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
@@ -52,19 +67,10 @@ namespace UI.CurrentCharacter
         #endregion
 
         #region MainMethods
-        public void SetNumberActions(bool state)
-        {
-            if (state)
-            {
-                numberAction.action.Enable();
-                numberAction.action.performed += NumberPressed;
-            }
-            else
-            {
-                numberAction.action.performed -= NumberPressed;
-                numberAction.action.Disable();
-            }
-        }
+        public void SetActionInput(bool state) => _actionsActive = state;
+        
+        private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
+        public void ActionCellPressed(int index) => SelectAction(index);
         
         private void SelectAction(int actionIndex)
         {
@@ -74,15 +80,13 @@ namespace UI.CurrentCharacter
                 return;
             }
 
-            if(actionIndex -1 == _actionController.CurrentSelection) DeselectCurrentAction();
-            else _actionController.Select(actionIndex - 1);
+            if (actionIndex - 1 == _actionController.CurrentSelection) DeselectCurrentAction();
+            else if (_actionsActive) _actionController.Select(actionIndex - 1);
             
             GameManager.Instance.TriggerState(_current.Actions[actionIndex - 1].Type);
         }
 
-        private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
-        public void DeselectCurrentAction() => _actionController.Deselect();
-        public void ActionCellPressed(int index) => SelectAction(index);
+        private void DeselectCurrentAction() => _actionController.Deselect();
         #endregion
         
         #region EventHandling

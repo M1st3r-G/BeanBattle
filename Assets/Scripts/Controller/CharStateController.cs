@@ -56,24 +56,18 @@ namespace Controller
         {
             if (_currentState.ExecuteStateFrame(this))
             {
-                EndCurrentState();
-                //Animate
+                DisassembleCurrentState();
                 MyCharacter.AddInitiative();
             }
-            if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
+            if (stopAction.action.WasPerformedThisFrame()) DisassembleCurrentState();
         }
         #endregion
 
         #region StateManagement
         public void SwitchState(CharacterAction.ActionTypes targetState)
         {
-            if (_currentState.Type == targetState)
-            {
-                EndCurrentState();
-                return;
-            }
-            
             DisassembleCurrentState();
+            if (_currentState.ActionType == targetState) return;
 
             stopAction.action.Enable();
             _currentState = targetState switch
@@ -87,16 +81,16 @@ namespace Controller
         
         private void DisassembleCurrentState()
         {
+            stopAction.action.Disable();
             _currentState.StateDisassembly(this);
             _currentState = stateLibrary.EmptyState;
-            stopAction.action.Disable();
         }
         
-        private void EndCurrentState()
-        {
-            DisassembleCurrentState();
-            CurrentCharacterUIController.Instance.DeselectCurrentAction();
-        }
+        //private void EndCurrentState()
+        //{
+            //DisassembleCurrentState();
+            //CurrentCharacterUIController.Instance.DeselectCurrentAction();
+        //}
 
         private void PlayerDeath(CharController c) => _currentState.OnPlayerDeath(this, c);
         #endregion

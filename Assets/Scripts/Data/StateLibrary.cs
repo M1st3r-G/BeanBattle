@@ -12,6 +12,6 @@ namespace Data
         [SerializeField] private CharacterStateBase[] states;
 
         public CharacterStateBase GetState(CharacterAction.ActionTypes type) =>
-            states.Where(s => s.Type == type).ToArray()[0];
+            states.Where(s => s.ActionType == type).ToArray()[0];
     }
 }

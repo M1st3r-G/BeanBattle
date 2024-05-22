@@ -6,7 +6,7 @@ namespace Data
     [CreateAssetMenu(fileName = "CharacterAction")]
     public class CharacterAction : ScriptableObject
     {
-        // Publics
+        // Public
         public enum ActionTypes
         {
             None, Move, Attack, BeEvil, Help, Cover

@@ -14,7 +14,12 @@ namespace Data.CharacterStates
     {
         #region DefaultStateMethods
         
-        public override void StateSetUp(CharStateController s) => s.MyCharacter.Indicator.SetActive(true);
+        public override void StateSetUp(CharStateController s)
+        {
+            CharController.OnPlayerStartedAction?.Invoke(ActionType);
+            s.MyCharacter.Indicator.SetActive(true);
+        }
+
         public override void StateDisassembly(CharStateController s) => s.MyCharacter.Indicator.SetActive(false);
         
         public override bool ExecuteStateFrame(CharStateController s)
@@ -50,7 +55,7 @@ namespace Data.CharacterStates
 
         #region Animation
 
-        private static IEnumerator AnimateMovement(CharStateController s, IReadOnlyList<Vector2Int> path)
+        private IEnumerator AnimateMovement(CharStateController s, IReadOnlyList<Vector2Int> path)
         {
             int currentPathIndex = 0;
 
@@ -70,6 +75,8 @@ namespace Data.CharacterStates
 
                 currentPathIndex++;
             }
+
+            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
         }
         public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
         #endregion
