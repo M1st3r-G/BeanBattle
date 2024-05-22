@@ -4,9 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Initiative
+namespace UI.Inner.Initiative
 {
-    public class BannerController : MonoBehaviour
+    public class Banner : MonoBehaviour
     {
         // Components
         [SerializeField] private Image portrait;

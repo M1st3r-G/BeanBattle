@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Controller;
 using Data;
-using UI.CurrentCharacter;
-using UI.Initiative;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -113,7 +112,7 @@ namespace Managers
             _nextPhasePressed = false;
             nextPhaseAction.action.Enable();
             yield return new WaitUntil(() => _nextPhasePressed);
-            CurrentCharacterUIController.Instance.SetActionInput(false);
+            CustomInputManager.Instance.EnableInputAction(false);
             nextPhaseAction.action.Disable();
             _nextPhasePressed = false;
         }
@@ -144,7 +143,7 @@ namespace Managers
             _playOrder.RemoveAt(0);
             
             OnCurrentChange.Invoke(CurrentPlayer);
-            CurrentCharacterUIController.Instance.SetActionInput(true); // Enables number Shortcuts
+            CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
         }
         #endregion
 
@@ -154,7 +153,7 @@ namespace Managers
         
         public void RefreshInitiative(CharController c)
         {
-            InitiativeUIController.Instance.RefreshCharacter(c);
+            UIManager.Instance.RefreshCharacter(c);
             
             if (c.Initiative < 10) return;
             SetNextPhaseFlag(new InputAction.CallbackContext());

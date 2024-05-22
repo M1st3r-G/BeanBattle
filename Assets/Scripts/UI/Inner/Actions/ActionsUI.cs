@@ -3,21 +3,21 @@ using Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.CurrentCharacter
+namespace UI.Inner.Actions
 {
-    public class ActionsUIController : MonoBehaviour
+    public class ActionsUI : MonoBehaviour
     {
         // ComponentReferences
-        private ActionCellController[] _actionCells = new ActionCellController[7];
+        private ActionCell[] _actionCells = new ActionCell[7];
         private HorizontalLayoutGroup _group;
 
         // Temps
-        public int CurrentSelection { get; private set; } = -1;
+        private int CurrentSelection { get; set; } = -1;
 
         #region SetUp
         private void Awake()
         {
-            _actionCells = GetComponentsInChildren<ActionCellController>(true);
+            _actionCells = GetComponentsInChildren<ActionCell>(true);
             _group = GetComponent<HorizontalLayoutGroup>();
         }
         #endregion
@@ -52,6 +52,11 @@ namespace UI.CurrentCharacter
             }
 
             _group.padding.right = (7 - actions.Count) * 150;
+        }
+
+        public CharacterAction GetActionWithIndex(int index)
+        {
+            return _actionCells[index].Action;
         }
         #endregion
     }

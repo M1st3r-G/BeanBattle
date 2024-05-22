@@ -1,5 +1,4 @@
 using Data;
-using UI.CurrentCharacter;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

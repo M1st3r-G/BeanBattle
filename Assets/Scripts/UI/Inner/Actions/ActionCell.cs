@@ -1,26 +1,34 @@
 using Data;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.CurrentCharacter
+namespace UI.Inner.Actions
 {
-    public class ActionCellController : MonoBehaviour
+    public class ActionCell : MonoBehaviour
     {
         // ComponentReferences
         [SerializeField] private Image background;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
+        private CurrentActionController _parentActionController;
         
         // Temps
-        private int _index;
-        private CharacterAction _action;
-        
+        private int _parentIndex;
+
+        public CharacterAction Action { get; private set; }
+
+        private void Awake()
+        {
+            _parentActionController = GetComponentInParent<CurrentActionController>();
+        }
+
         public void SetTo(CharacterAction action, int index)
         {
             background.gameObject.SetActive(false);
-            _index = index;
-            _action = action;
+            _parentIndex = index;
+            Action = action;
             image.sprite = action.ActionImage;
             nameText.text = $"[{index}]\n{action.ActionName}";
         }
@@ -28,9 +36,9 @@ namespace UI.CurrentCharacter
         public void SetSelected(bool state)
         {
             background.gameObject.SetActive(state);
-            CurrentActionController.Instance.SetAction(state ? _action : null);
+            _parentActionController.SetAction(state ? Action : null);
         }
         
-        public void OnClicked() => CurrentCharacterUIController.Instance.ActionCellPressed(_index);
+        public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(_parentIndex, Action);
     }
 }

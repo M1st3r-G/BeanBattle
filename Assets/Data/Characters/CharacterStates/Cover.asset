@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e378a5467f2c4ea798f5b303c727f6c5, type: 3}
   m_Name: Cover
   m_EditorClassIdentifier: 
-  type: 5
+  currentType: 5

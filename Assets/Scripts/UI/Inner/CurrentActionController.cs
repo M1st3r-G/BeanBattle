@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Inner
 {
     public class CurrentActionController : MonoBehaviour
     {
@@ -13,26 +13,11 @@ namespace UI
         [SerializeField] private TextMeshProUGUI description;
         [SerializeField] private TextMeshProUGUI timeValue;
         //Public
-        public static CurrentActionController Instance { get; private set; }
 
-        #region SetUp
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            Instance = this;
-            
             gameObject.SetActive(false);
         }
-
-        private void OnDestroy()
-        {
-            if (Instance == this) Instance = null;
-        }
-        #endregion
 
         #region MainMethods
         public void SetAction(CharacterAction action)

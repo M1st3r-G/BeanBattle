@@ -39,7 +39,7 @@ namespace Data.CharacterStates
                 s.MyCharacter.Indicator.transform.position = newPosition;
                         
                 int timeCost = GridManager.Instance.GetPosition(s.MyCharacter).ManhattanDistance(hoveredCell);
-                CurrentActionController.Instance.SetTimeCost(timeCost);
+                UIManager.Instance.SetTimeCost(timeCost);
             }
             else
             {

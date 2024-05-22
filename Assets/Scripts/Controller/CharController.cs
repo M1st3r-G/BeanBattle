@@ -1,7 +1,6 @@
 using Data;
 using Managers;
 using UI;
-using UI.Initiative;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -66,14 +65,14 @@ namespace Controller
         #region Methods
         public void AddInitiative()
         {
-            Initiative += CurrentActionController.Instance.GetTimeCost();
+            Initiative += UIManager.Instance.GetTimeCost();
             GameManager.Instance.RefreshInitiative(this);
         }
         
         public void PerformAttack(CharController other)
         {
             other.TakeDamage(GetData.Damage);
-            InitiativeUIController.Instance.RefreshCharacter(other);
+            UIManager.Instance.RefreshCharacter(other);
         }
 
         private void TakeDamage(int amount)

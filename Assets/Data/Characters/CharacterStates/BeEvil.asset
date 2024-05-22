@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f727ad1fd85e40519f46ba81cc154889, type: 3}
   m_Name: BeEvil
   m_EditorClassIdentifier: 
-  type: 3
+  currentType: 3
