@@ -3,76 +3,82 @@ using System.Linq;
 using Controller;
 using Managers;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Data.CharacterStates
 {
     [CreateAssetMenu(fileName = "Attack", menuName = "States/Attack", order = 10)]
     public class CharacterAttackState : CharacterStateBase
     {
-        // ComponentReferences
-        [SerializeField] private InputActionReference acceptAction;
-        
-        // Temps
-        private CharController currentSelection;
-
         #region DefaultStateMethods
-        protected override void InternalStateSetUp()
-        {
-            currentSelection = null;
-            acceptAction.action.Enable();
-            CharController.OnPlayerDeath += RemoveDeadSelection;
-            
-            GridManager.Instance.DisplayRange(ActiveCharacter);
-            CharController[] enemiesInRange = GetEnemiesInRange(GridManager.Instance.CharactersInRange());
 
-            if (enemiesInRange.Length == 1) SetSelection(enemiesInRange[0]);
-            else MouseInputManager.OnCharacterClicked += SelectClickedCharacter;
+        public override void StateSetUp(CharStateController s)
+        {
+            s.CurrentSelection = null;
+            s.LookingForPlayer = false;
+            s.AcceptAction.action.Enable();
+            
+            GridManager.Instance.DisplayRange(s.MyCharacter);
+            CharController[] enemiesInRange = GetEnemiesInRange(s, GridManager.Instance.CharactersInRange());
+
+            if (enemiesInRange.Length == 1) SetSelection(s, enemiesInRange[0]);
+            else s.LookingForPlayer = true;
         }
         
-        public override void StateDisassembly()
+        public override void StateDisassembly(CharStateController s)
         {
-            acceptAction.action.Disable();
-            CharController.OnPlayerDeath -= RemoveDeadSelection;
-            MouseInputManager.OnCharacterClicked -= SelectClickedCharacter;
-            
+            s.AcceptAction.action.Disable();
             GridManager.Instance.ResetRange();
+            s.LookingForPlayer = false;
             
-            if (currentSelection is not null) currentSelection.SetSelector(false);
-            currentSelection = null;
+            if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
+            s.CurrentSelection = null;
         }
         
-        public override bool ExecuteStateFrame()
+        public override bool ExecuteStateFrame(CharStateController s)
         {
-            if(currentSelection is null) return false;
-            if (!acceptAction.action.WasPerformedThisFrame()) return false;
+            if (s.LookingForPlayer)
+            {
+                if (s.MouseClickAction.WasPerformedThisFrame())
+                {
+                    if (MouseInputManager.Instance.GetCharacterClicked(out CharController clickedChar))
+                    {
+                        SelectClickedCharacter(s, clickedChar);
+                    }
+                }
+            }
             
-            ActiveCharacter.PerformAttack(currentSelection);
+            if(s.CurrentSelection is null) return false;
+            if (!s.AcceptAction.action.WasPerformedThisFrame()) return false;
+            
+            s.MyCharacter.PerformAttack(s.CurrentSelection);
             return true;
         }
+        
+        public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) => RemoveDeadSelection(s, deadPlayer);
+
         #endregion
 
         #region StateMethods
-        private void SetSelection(CharController c)
+        private static void SetSelection(CharStateController s, CharController targetChar)
         {
-            if (currentSelection is not null) currentSelection.SetSelector(false);
+            if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
 
-            currentSelection = c;
-            c.SetSelector(true);
+            s.CurrentSelection = targetChar;
+            targetChar.SetSelector(true);
         }
         
-        private void SelectClickedCharacter(CharController hitCharacter)
+        private static void SelectClickedCharacter(CharStateController s, CharController hitCharacter)
         {
-            if (hitCharacter.TeamID != ActiveCharacter.TeamID) SetSelection(hitCharacter);
+            if (hitCharacter.TeamID != s.MyCharacter.TeamID) SetSelection(s, hitCharacter);
         }
         
-        private void RemoveDeadSelection(CharController c)
+        private static void RemoveDeadSelection(CharStateController s, CharController c)
         {
-            if (currentSelection == c) currentSelection = null;
+            if (s.CurrentSelection == c) s.CurrentSelection = null;
         }
         
-        private CharController[] GetEnemiesInRange(IEnumerable<CharController> charsInRange) =>
-            charsInRange.Where(c => c.TeamID != ActiveCharacter.TeamID).ToArray();
+        private static CharController[] GetEnemiesInRange(CharStateController s, IEnumerable<CharController> charsInRange) =>
+            charsInRange.Where(c => c.TeamID != s.MyCharacter.TeamID).ToArray();
         #endregion
     }
 }

@@ -18,8 +18,9 @@ namespace Managers
         [SerializeField] private GameObject characterPrefab;
         
         //Temps
+        public CharController CurrentPlayer { get; private set; }
+
         private List<CharController> _playOrder;
-        private CharController _current;
         private bool _nextPhasePressed;
         private bool _gameLoop;
         
@@ -121,10 +122,10 @@ namespace Managers
 
         private IEnumerator NextPlayer()
         {
-            if (_current is not null)
+            if (CurrentPlayer is not null)
             {
-                _current.EndState();
-                _playOrder.Add(_current);
+                CurrentPlayer.EndState();
+                _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
                 OnOrderChanged.Invoke(_playOrder.ToArray());
             }
@@ -139,17 +140,17 @@ namespace Managers
                 OnOrderChanged.Invoke(_playOrder.ToArray());
             }
             
-            _current = _playOrder[0];
+            CurrentPlayer = _playOrder[0];
             _playOrder.RemoveAt(0);
             
-            OnCurrentChange.Invoke(_current);
+            OnCurrentChange.Invoke(CurrentPlayer);
             CurrentCharacterUIController.Instance.SetNumberActions(true); // Enables number Shortcuts
         }
         #endregion
 
         #region OtherMethods
 
-        public void TriggerState(CharacterAction.ActionTypes type) => _current.TriggerState(type);
+        public void TriggerState(CharacterAction.ActionTypes type) => CurrentPlayer.TriggerState(type);
         
         public void RefreshInitiative(CharController c)
         {

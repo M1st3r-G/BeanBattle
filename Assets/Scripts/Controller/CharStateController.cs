@@ -10,27 +10,55 @@ namespace Controller
         // ComponentReferences
         [SerializeField] private InputActionReference stopAction;
         [SerializeField] private StateLibrary stateLibrary;
-        private CharController myCharacter;
         
         // Temps
-        private CharacterStateBase currentState;
+        private CharacterStateBase _currentState;
 
+        //State Variables
+        
+        //General
+        public CharController MyCharacter { get; private set; }
+        public InputAction MouseClickAction => mouseClick.action;
+        [SerializeField] private InputActionReference mouseClick;
+
+        //Movement
+        public float TimePerSpace => timePerSpace;
+        [SerializeField] private float timePerSpace;
+        
+        // Attacks
+        public InputActionReference AcceptAction => acceptAction;
+        [SerializeField] private InputActionReference acceptAction;
+        
+        public CharController CurrentSelection { get;  set; }
+        public bool LookingForPlayer { get;  set; }
+        
         #region SetUp
         private void Awake()
         {
-            myCharacter = GetComponent<CharController>();
-            currentState = stateLibrary.EmptyState;
+            MyCharacter = GetComponent<CharController>();
+            _currentState = stateLibrary.EmptyState;
         }
+
+        private void OnEnable()
+        {
+            CharController.OnPlayerDeath += PlayerDeath;
+        }
+
+        private void OnDisable()
+        {
+            CharController.OnPlayerDeath -= PlayerDeath;
+        }
+
         #endregion
 
         #region MainLoop
         private void Update()
         {
-            if (currentState.ExecuteStateFrame())
+            if (_currentState.ExecuteStateFrame(this))
             {
                 EndCurrentState();
                 //Animate
-                myCharacter.AddInitiative();
+                MyCharacter.AddInitiative();
             }
             if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
         }
@@ -39,7 +67,7 @@ namespace Controller
         #region StateManagement
         public void SwitchState(CharacterAction.ActionTypes targetState)
         {
-            if (currentState.Type == targetState)
+            if (_currentState.Type == targetState)
             {
                 EndCurrentState();
                 return;
@@ -48,19 +76,19 @@ namespace Controller
             DisassembleCurrentState();
 
             stopAction.action.Enable();
-            currentState = targetState switch
+            _currentState = targetState switch
             {
                 CharacterAction.ActionTypes.None => stateLibrary.EmptyState,
                 _ => stateLibrary.GetState(targetState)
             };
 
-            currentState.StateSetUp(myCharacter);
+            _currentState.StateSetUp(this);
         }
         
         private void DisassembleCurrentState()
         {
-            currentState.StateDisassembly();
-            currentState = stateLibrary.EmptyState;
+            _currentState.StateDisassembly(this);
+            _currentState = stateLibrary.EmptyState;
             stopAction.action.Disable();
         }
         
@@ -69,6 +97,8 @@ namespace Controller
             DisassembleCurrentState();
             CurrentCharacterUIController.Instance.DeselectCurrentAction();
         }
+
+        private void PlayerDeath(CharController c) => _currentState.OnPlayerDeath(this, c);
         #endregion
     }
 }

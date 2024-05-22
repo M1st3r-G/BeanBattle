@@ -1,3 +1,4 @@
+using Controller;
 using UnityEngine;
 
 namespace Data.CharacterStates
@@ -6,9 +7,11 @@ namespace Data.CharacterStates
     public class CharacterBeEvilState : CharacterStateBase
     {
         #region DefaultStateMethods
-        protected override void InternalStateSetUp() { }
-        public override void StateDisassembly(){ }
-        public override bool ExecuteStateFrame() => false;
+
+        public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
+        public override void StateSetUp(CharStateController s) { }
+        public override void StateDisassembly(CharStateController s){ }
+        public override bool ExecuteStateFrame(CharStateController s) => false;
         #endregion
     }
 }

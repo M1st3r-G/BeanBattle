@@ -7,17 +7,13 @@ namespace Managers
     public class MouseInputManager : MonoBehaviour
     {
         //ComponentReferences
-        [SerializeField] private InputActionReference mouseClickAction;
         private Camera _mainCamera;
 
         // Public
         public static MouseInputManager Instance { get; private set; }
 
-        // Events
-        public delegate void OnCharacterClickedDelegate(CharController clickedChar);
-        public static OnCharacterClickedDelegate OnCharacterClicked;
-
         #region SetUp
+        
         private void Awake()
         {
             if (Instance is not null)
@@ -30,39 +26,32 @@ namespace Managers
 
             _mainCamera = Camera.main;
         }
-        
-        private void OnEnable()
-        {
-            mouseClickAction.action.Enable();
-            mouseClickAction.action.performed += CustomOnMouseDown;
-        }
-        
-        private void OnDisable()
-        {
-            mouseClickAction.action.Disable();
-            mouseClickAction.action.performed -= CustomOnMouseDown;
-        }
 
         private void OnDestroy()
         {
             if(Instance == this) Destroy(gameObject);
         }
+        
         #endregion
 
         #region MainMethods
-        private void CustomOnMouseDown(InputAction.CallbackContext ctx)
+        public bool GetCharacterClicked(out CharController clickedChar)
         {
+            clickedChar = null;
             Ray ray = _mainCamera.ScreenPointToRay(Mouse.current.position.value);
 
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return false;
             GameObject target = hit.collider.gameObject;
 
-            if (!target.CompareTag("Character")) return;
+            if (!target.CompareTag("Character")) return false;
             
             CharController character = target.GetComponent<CharController>();
-            OnCharacterClicked?.Invoke(character);
+            clickedChar = character;
+            return true;
         }
 
+        
+        
         public bool GetCellFromMouse(out Vector2Int cell)
         {
             cell = new Vector2Int();

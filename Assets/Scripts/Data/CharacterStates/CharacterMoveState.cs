@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using Controller;
 using Managers;
 using Misc;
 using UI;
@@ -10,13 +12,12 @@ namespace Data.CharacterStates
     [CreateAssetMenu(fileName = "Move", menuName = "States/Move", order = 10)]
     public class CharacterMoveState : CharacterStateBase
     {
-        [SerializeField] private float timePerSpace;
-
         #region DefaultStateMethods
-        protected override void InternalStateSetUp() => ActiveCharacter.Indicator.SetActive(true);
-        public override void StateDisassembly() => ActiveCharacter.Indicator.SetActive(false);
         
-        public override bool ExecuteStateFrame()
+        public override void StateSetUp(CharStateController s) => s.MyCharacter.Indicator.SetActive(true);
+        public override void StateDisassembly(CharStateController s) => s.MyCharacter.Indicator.SetActive(false);
+        
+        public override bool ExecuteStateFrame(CharStateController s)
         {
             if (!MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell)) return false;
             
@@ -24,10 +25,10 @@ namespace Data.CharacterStates
             {
                 GridManager.Instance.ResetRange();
                 Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
-                newPosition.y = ActiveCharacter.transform.position.y;
-                ActiveCharacter.Indicator.transform.position = newPosition;
+                newPosition.y = s.MyCharacter.transform.position.y;
+                s.MyCharacter.Indicator.transform.position = newPosition;
                         
-                int timeCost = GridManager.Instance.GetPosition(ActiveCharacter).ManhattanDistance(hoveredCell);
+                int timeCost = GridManager.Instance.GetPosition(s.MyCharacter).ManhattanDistance(hoveredCell);
                 CurrentActionController.Instance.SetTimeCost(timeCost);
             }
             else
@@ -37,11 +38,11 @@ namespace Data.CharacterStates
 
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
             
-            ActiveCharacter.StartCoroutine(AnimateMovement(
-                GridManager.Instance.GetPath(GridManager.Instance.WorldToCell(ActiveCharacter.transform.position),
+            s.MyCharacter.StartCoroutine(AnimateMovement(s, 
+                GridManager.Instance.GetPath(GridManager.Instance.WorldToCell(s.MyCharacter.transform.position),
                     hoveredCell)));
             
-            GridManager.Instance.SetOccupied(ActiveCharacter, hoveredCell);
+            GridManager.Instance.SetOccupied(s.MyCharacter, hoveredCell);
             return true;
         }
         
@@ -49,20 +50,20 @@ namespace Data.CharacterStates
 
         #region Animation
 
-        private IEnumerator AnimateMovement(Vector2Int[] path)
+        private static IEnumerator AnimateMovement(CharStateController s, IReadOnlyList<Vector2Int> path)
         {
             int currentPathIndex = 0;
 
-            while (currentPathIndex < path.Length)
+            while (currentPathIndex < path.Count)
             {
-                var startPosition = ActiveCharacter.transform.position;
+                var startPosition = s.MyCharacter.transform.position;
                 var endPosition = GridManager.Instance.CellToCenterWorld(path[currentPathIndex]);
 
                 float t = 0f;
                 
-                while (t<timePerSpace)
+                while (t<s.TimePerSpace)
                 {
-                    ActiveCharacter.transform.position = Vector3.Lerp(startPosition, endPosition, t / timePerSpace);
+                    s.MyCharacter.transform.position = Vector3.Lerp(startPosition, endPosition, t / s.TimePerSpace);
                     t += Time.deltaTime;
                     yield return null;
                 }
@@ -70,7 +71,7 @@ namespace Data.CharacterStates
                 currentPathIndex++;
             }
         }
-
+        public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
         #endregion
     }
 }

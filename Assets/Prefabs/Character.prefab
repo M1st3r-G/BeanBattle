@@ -199,7 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c27b83347b6147b8bc42d22a8a2d7be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
   shadow: {fileID: 2189892774643359438, guid: d194ff323b19202408f438244a632462, type: 3}
   selector: {fileID: 1585634809104751575}
 --- !u!114 &4381252743588122697
@@ -216,6 +215,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAction: {fileID: -3043140693664414466, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
   stateLibrary: {fileID: 11400000, guid: dc933a5e80a2468479e5edd3d102b61f, type: 2}
+  mouseClick: {fileID: -8295211101789692694, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
+  timePerSpace: 0.5
+  acceptAction: {fileID: -864339171949513493, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
 --- !u!136 &8736791472317731659
 CapsuleCollider:
   m_ObjectHideFlags: 0
