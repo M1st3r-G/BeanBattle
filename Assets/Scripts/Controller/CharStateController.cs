@@ -29,6 +29,7 @@ namespace Controller
             if (currentState.ExecuteStateFrame())
             {
                 EndCurrentState();
+                //Animate
                 myCharacter.AddInitiative();
             }
             if (stopAction.action.WasPerformedThisFrame()) EndCurrentState();
