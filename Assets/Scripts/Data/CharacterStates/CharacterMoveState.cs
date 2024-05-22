@@ -16,12 +16,17 @@ namespace Data.CharacterStates
         
         public override void StateSetUp(CharStateController s)
         {
-            CharController.OnPlayerStartedAction?.Invoke(ActionType);
+            s.IsAnimating = false;
             s.MyCharacter.Indicator.SetActive(true);
         }
 
-        public override void StateDisassembly(CharStateController s) => s.MyCharacter.Indicator.SetActive(false);
-        
+        public override void StateDisassembly(CharStateController s)
+        {
+            if(!s.IsAnimating) CharController.OnPlayerFinishedAnimation?.Invoke(ActionType);
+
+            s.MyCharacter.Indicator.SetActive(false);
+        }
+
         public override bool ExecuteStateFrame(CharStateController s)
         {
             if (!MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell)) return false;
@@ -57,6 +62,8 @@ namespace Data.CharacterStates
 
         private IEnumerator AnimateMovement(CharStateController s, IReadOnlyList<Vector2Int> path)
         {
+            CharController.OnPlayerStartedAnimation?.Invoke(ActionType);
+            s.IsAnimating = true;
             int currentPathIndex = 0;
 
             while (currentPathIndex < path.Count)
@@ -76,7 +83,8 @@ namespace Data.CharacterStates
                 currentPathIndex++;
             }
 
-            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
+            s.IsAnimating = false;
+            CharController.OnPlayerFinishedAnimation?.Invoke(ActionType);
         }
         public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
         #endregion

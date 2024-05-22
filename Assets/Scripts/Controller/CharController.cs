@@ -28,9 +28,9 @@ namespace Controller
         public static OnPlayerDeathEvent OnPlayerDeath;
 
         public delegate void OnPlayerFinishedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerFinishedActionEvent OnPlayerFinishedAction;
+        public static OnPlayerFinishedActionEvent OnPlayerFinishedAnimation;
         public delegate void OnPlayerStartedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerStartedActionEvent OnPlayerStartedAction;
+        public static OnPlayerStartedActionEvent OnPlayerStartedAnimation;
         
         #region Setup
         private void Awake()

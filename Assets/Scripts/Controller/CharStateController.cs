@@ -20,6 +20,7 @@ namespace Controller
         public CharController MyCharacter { get; private set; }
         public InputAction MouseClickAction => mouseClick.action;
         [SerializeField] private InputActionReference mouseClick;
+        public bool IsAnimating { get; set; }
 
         //Movement
         public float TimePerSpace => timePerSpace;
@@ -85,12 +86,6 @@ namespace Controller
             _currentState.StateDisassembly(this);
             _currentState = stateLibrary.EmptyState;
         }
-        
-        //private void EndCurrentState()
-        //{
-            //DisassembleCurrentState();
-            //CurrentCharacterUIController.Instance.DeselectCurrentAction();
-        //}
 
         private void PlayerDeath(CharController c) => _currentState.OnPlayerDeath(this, c);
         #endregion

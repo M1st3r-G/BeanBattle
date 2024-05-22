@@ -13,8 +13,6 @@ namespace Data.CharacterStates
 
         public override void StateSetUp(CharStateController s)
         {
-            CharController.OnPlayerStartedAction?.Invoke(ActionType);
-            
             s.CurrentSelection = null;
             s.LookingForPlayer = false;
             s.AcceptAction.action.Enable();
@@ -28,7 +26,6 @@ namespace Data.CharacterStates
         
         public override void StateDisassembly(CharStateController s)
         {
-            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
             s.AcceptAction.action.Disable();
             GridManager.Instance.ResetRange();
             s.LookingForPlayer = false;

@@ -18,7 +18,7 @@ namespace UI.CurrentCharacter
         
         //Temps
         private CharData _current;
-        private bool _actionsActive;
+        private bool _isAnimating;
 
         //Public
         public static CurrentCharacterUIController Instance { get; private set; }
@@ -39,8 +39,8 @@ namespace UI.CurrentCharacter
         {
             GameManager.OnCurrentChange += OnChangeEvent;
             GameManager.OnGameOver += OnGameOver;
-            CharController.OnPlayerStartedAction += OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAction += OnPlayerFinishedAction;
+            CharController.OnPlayerStartedAnimation += OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAnimation += OnPlayerFinishedAction;
             
             numberAction.action.Enable();
             numberAction.action.performed += NumberPressed;
@@ -50,8 +50,8 @@ namespace UI.CurrentCharacter
         {
             GameManager.OnCurrentChange -= OnChangeEvent;
             GameManager.OnGameOver -= OnGameOver;
-            CharController.OnPlayerStartedAction -= OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAction -= OnPlayerFinishedAction;
+            CharController.OnPlayerStartedAnimation -= OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAnimation -= OnPlayerFinishedAction;
             
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
@@ -67,7 +67,7 @@ namespace UI.CurrentCharacter
         #endregion
 
         #region MainMethods
-        public void SetActionInput(bool state) => _actionsActive = state;
+        public void SetActionInput(bool state) => _isAnimating = !state;
         
         private void NumberPressed(InputAction.CallbackContext ctx) => SelectAction((int)ctx.ReadValue<float>());
         public void ActionCellPressed(int index) => SelectAction(index);
@@ -80,10 +80,19 @@ namespace UI.CurrentCharacter
                 return;
             }
 
-            if (actionIndex - 1 == _actionController.CurrentSelection) DeselectCurrentAction();
-            else if (_actionsActive) _actionController.Select(actionIndex - 1);
+            if (_isAnimating) return;
+
+            if (actionIndex - 1 == _actionController.CurrentSelection)
+            {
+                DeselectCurrentAction();
+                GameManager.Instance.TriggerState(CharacterAction.ActionTypes.None);
+            }
+            else
+            {
+                _actionController.Select(actionIndex - 1);
+                GameManager.Instance.TriggerState(_current.Actions[actionIndex - 1].Type);
+            }
             
-            GameManager.Instance.TriggerState(_current.Actions[actionIndex - 1].Type);
         }
 
         private void DeselectCurrentAction() => _actionController.Deselect();
