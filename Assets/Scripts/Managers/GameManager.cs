@@ -18,13 +18,13 @@ namespace Managers
         [SerializeField] private GameObject characterPrefab;
         
         //Temps
-        public CharController CurrentPlayer { get; private set; }
+        private CharController CurrentPlayer { get; set; }
 
         private List<CharController> _playOrder;
         private bool _nextPhasePressed;
         private bool _gameLoop;
         
-        //Publics
+        //Public
         public static GameManager Instance { get; private set;  }
         
         //Events

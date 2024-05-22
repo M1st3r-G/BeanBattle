@@ -13,17 +13,17 @@ namespace Managers
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private GameObject cellContainer;
         [SerializeField] private GameObject plane;
-        private Grid grid;
+        private Grid _grid;
         private Camera _mainCamera;
 
         //Params
         [SerializeField] private Vector2Int numberOfCells;
-        private PathfindingNode[,] allCells;
+        private PathfindingNode[,] _allCells;
         
         //Temps
         private Dictionary<CharController, Vector2Int> _occupied;
         public List<PathfindingNode> activeCells;
-        private PathfindingNode seekerNode, targetNode;
+        private PathfindingNode _seekerNode, _targetNode;
         
         //Public
         public static GridManager Instance { get; private set; }
@@ -40,10 +40,10 @@ namespace Managers
             DontDestroyOnLoad(gameObject);
             Instance = this;
 
-            allCells = new PathfindingNode[numberOfCells.x, numberOfCells.y];
+            _allCells = new PathfindingNode[numberOfCells.x, numberOfCells.y];
             activeCells = new List<PathfindingNode>();
             _occupied = new Dictionary<CharController, Vector2Int>();
-            grid = GetComponent<Grid>();
+            _grid = GetComponent<Grid>();
             
             GenerateCells();
             FixPlaneTransform();
@@ -53,9 +53,9 @@ namespace Managers
         {
             Vector3 efficientSize = new Vector3
             {
-                x = (grid.cellSize.x + grid.cellGap.x) * numberOfCells.x,
-                y = grid.cellSize.x * 10,
-                z = (grid.cellSize.y + grid.cellGap.y) * numberOfCells.y
+                x = (_grid.cellSize.x + _grid.cellGap.x) * numberOfCells.x,
+                y = _grid.cellSize.x * 10,
+                z = (_grid.cellSize.y + _grid.cellGap.y) * numberOfCells.y
             };
             plane.transform.localScale = efficientSize* 0.1f;
             transform.position -= new Vector3(efficientSize.x / 2f, 0, efficientSize.z / 2f);
@@ -66,18 +66,18 @@ namespace Managers
         {
             GameObject reference = Instantiate(cellPrefab);
             reference.transform.localScale =
-                new Vector3(grid.cellSize.x, reference.transform.localScale.y, grid.cellSize.y);
+                new Vector3(_grid.cellSize.x, reference.transform.localScale.y, _grid.cellSize.y);
             
             for (int x = 0; x < numberOfCells.x; x++)
             {
                 for (int y = 0; y < numberOfCells.y; y++)
                 {
-                    Vector3 position = grid.GetCellCenterWorld(new Vector3Int(x, y));
+                    Vector3 position = _grid.GetCellCenterWorld(new Vector3Int(x, y));
                     position.y = 0;
                     PathfindingNode newNode = Instantiate(reference, position , Quaternion.identity, cellContainer.transform).GetComponent<PathfindingNode>();
                     newNode.gameObject.SetActive(false);
                     newNode.Initialize(new Vector2Int(x, y));
-                    allCells[x, y] = newNode;
+                    _allCells[x, y] = newNode;
                 }
             }
             
@@ -104,8 +104,14 @@ namespace Managers
             character.transform.position = playerPosition; 
         }
         
-        public Vector3 CellToCenterWorld(Vector2Int cell) => grid.GetCellCenterWorld((Vector3Int)cell);
-        public Vector2Int WorldToCell(Vector3 position) => (Vector2Int)grid.WorldToCell(position);
+        public Vector3 CellToCenterWorld(Vector2Int cell)
+        {
+            Vector3 tmp = _grid.GetCellCenterWorld((Vector3Int)cell);
+            tmp.y = 1;
+            return tmp;
+        }
+
+        public Vector2Int WorldToCell(Vector3 position) => (Vector2Int)_grid.WorldToCell(position);
         private void RemoveDeadPlayer(CharController player) => _occupied.Remove(player);
         #endregion
 
@@ -118,7 +124,7 @@ namespace Managers
             if (0 > position.x || position.x >= numberOfCells.x || 0 > position.y ||
                 position.y >= numberOfCells.y) return;
             
-            PathfindingNode currentCell = allCells[position.x, position.y];
+            PathfindingNode currentCell = _allCells[position.x, position.y];
             
             if (!currentCell.gameObject.activeSelf) activeCells.Add(currentCell);
             currentCell.gameObject.SetActive(true);
@@ -150,17 +156,17 @@ namespace Managers
             return IsOccupied(node.Position);
         }
         
-        public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) => FindPath(allCells[start.x, start.y], allCells[end.x, end.y]).Select(node => node.Position).ToArray();
+        public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) => FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position).ToArray();
         
         private IEnumerable<PathfindingNode> FindPath(PathfindingNode startN, PathfindingNode targetN)
         {
             //get player and target position in this coords
-            seekerNode = startN;
-            targetNode = targetN;
+            _seekerNode = startN;
+            _targetNode = targetN;
 
             List<PathfindingNode> openSet = new List<PathfindingNode>();
             HashSet<PathfindingNode> closedSet = new HashSet<PathfindingNode>();
-            openSet.Add(seekerNode);
+            openSet.Add(_seekerNode);
         
             //calculates path for pathfinding
             while (openSet.Count > 0)
@@ -181,9 +187,9 @@ namespace Managers
                 closedSet.Add(node);
 
                 //If target found, retrace path
-                if (node == targetNode)
+                if (node == _targetNode)
                 {
-                    return RetracePath(seekerNode, targetNode);
+                    return RetracePath(_seekerNode, _targetNode);
                 }
             
                 //adds neighbor nodes to openSet
@@ -198,7 +204,7 @@ namespace Managers
                     if (newCostToNeighbour < neighbour.GCost || !openSet.Contains(neighbour))
                     {
                         neighbour.GCost = newCostToNeighbour;
-                        neighbour.HCost = neighbour.Position.ManhattanDistance(targetNode.Position);
+                        neighbour.HCost = neighbour.Position.ManhattanDistance(_targetNode.Position);
                         neighbour.parent = node;
 
                         if (!openSet.Contains(neighbour))
@@ -231,13 +237,13 @@ namespace Managers
             (from direction in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }
                 select node.Position + direction into c
                 where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
-                select allCells[c.x, c.y]).ToList();
+                select _allCells[c.x, c.y]).ToList();
 
         public void RenderPath(Vector2Int[] path)
         {
             foreach (Vector2Int cell in path)
             {
-                allCells[cell.x, cell.y].gameObject.SetActive(true);
+                _allCells[cell.x, cell.y].gameObject.SetActive(true);
             }
         }
         
