@@ -5,14 +5,14 @@ using Controller;
 using Data;
 using UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
+        #region Fields
+
         //ComponentReferences
-        [SerializeField] private InputActionReference nextPhaseAction;
         [SerializeField] private CharData[] characterClasses;
         [SerializeField] private GameObject characterPrefab;
         
@@ -28,6 +28,8 @@ namespace Managers
         //Events
         public delegate void OnGameOverDelegate(int winningTeam);
         public static OnGameOverDelegate OnGameOver;
+
+        #endregion
 
         #region SetUp
 
@@ -79,13 +81,11 @@ namespace Managers
 
         private void OnEnable()
         {
-            nextPhaseAction.action.performed += EndPhase;
             CharController.OnPlayerDeath += RemoveDeadPlayer;
         }
         
         private void OnDisable()
         {
-            nextPhaseAction.action.performed -= EndPhase;
             CharController.OnPlayerDeath -= RemoveDeadPlayer;
         }
         
@@ -93,7 +93,7 @@ namespace Managers
 
         #region EventMethods
         
-        private void EndPhase(InputAction.CallbackContext _) => TriggerNextRound();
+        public void EndPhase() => TriggerNextRound();
         
         private void RemoveDeadPlayer(CharController player)
         {
@@ -112,14 +112,12 @@ namespace Managers
             while(_gameLoop)
             {
                 CustomInputManager.Instance.EnableInputAction(false);
-                nextPhaseAction.action.Disable();
                 
                 yield return NextPlayer();
-                
+                Debug.Log("Selected new Player");
                 UIManager.Instance.ChangeActiveCharacter(CurrentPlayer);
                 
                 CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
-                nextPhaseAction.action.Enable();
                 _nextPhasePressed = false;
                 
                 yield return new WaitUntil(() => _nextPhasePressed);
@@ -159,12 +157,21 @@ namespace Managers
 
         #region OtherMethods
 
-        public void TriggerNextRound() => _nextPhasePressed = true;
-        
-        public void TriggerState(CharacterAction.ActionTypes type) => CurrentPlayer.TriggerCharacterState(type);
+        public void TriggerNextRound()
+        {
+            Debug.LogWarning("Next Round Was Triggered");
+            _nextPhasePressed = true;
+        }
+
+        public void TriggerState(CharacterAction.ActionTypes type)
+        {
+            Debug.Log($"GameManager wants to Trigger the {type} State");
+            CurrentPlayer.TriggerCharacterState(type);
+        }
 
         private void TriggerGameOver(int winningTeam)
         {
+            Debug.LogWarning("GameOver");
             _gameLoop = false;
             TriggerNextRound();
             OnGameOver?.Invoke(winningTeam);

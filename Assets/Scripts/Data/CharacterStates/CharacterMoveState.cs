@@ -93,7 +93,8 @@ namespace Data.CharacterStates
             
             // When Finished, enable Input
             s.IsAnimating = false;
-            s.EndOfStateReached(ActionType);
+            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
+
         }
         
         #endregion

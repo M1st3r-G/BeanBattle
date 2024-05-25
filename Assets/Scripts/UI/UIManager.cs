@@ -36,12 +36,14 @@ namespace UI
         {
             GameManager.OnGameOver += OnGameOver;
             CharController.OnPlayerDeath += OnPlayerDeath;
+            CharController.OnPlayerFinishedAction += DeselectCurrentActionWrapper;
         }
-        
+
         private void OnDisable()
         {
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
+            CharController.OnPlayerFinishedAction -= DeselectCurrentActionWrapper;
         }
 
         #endregion
@@ -55,7 +57,6 @@ namespace UI
 
         private void OnGameOver(int winningTeam)
         {
-            DeselectCurrentAction();
             gameObject.SetActive(false);
         }
 
@@ -75,21 +76,40 @@ namespace UI
 
         public void SelectAction(int actionIndex)
         {
-            if (actionIndex == CurrentSelection)
-            {
-                DeselectCurrentAction();
-                currentAction.SetAction(null);
-            }
-            else
-            {
-                CurrentSelection = actionIndex;
-                action.SetCellAtIndex(actionIndex, true, out CharacterAction actionInCell);
-                currentAction.SetAction(actionInCell);
-            }
+            if (actionIndex == CurrentSelection) DeselectCurrentAction();
+            else DisplayNewAction(actionIndex);
         }
 
-        private void DeselectCurrentAction() => action.SetCellAtIndex(CurrentSelection, false, out _);
+        private void DisplayNewAction(int actionIndex)
+        {
+            // Disable old ActionCell
+            if (CurrentSelection != -1) action.SetCellAtIndex(CurrentSelection, false, out _);
 
+            CurrentSelection = actionIndex;
+            action.SetCellAtIndex(actionIndex, true, out CharacterAction actionInCell);
+            currentAction.SetAction(actionInCell);
+                
+            Debug.Log($"Displayed the {actionInCell}Action Visuals");
+        }
+
+        private void DeselectCurrentAction()
+        {
+            action.SetCellAtIndex(CurrentSelection, false, out _);
+            currentAction.SetAction(null);
+            CurrentSelection = -1;
+                
+            Debug.Log("Hid the Current Action Visuals");
+        }
+        
+        private void DeselectCurrentActionWrapper(CharacterAction.ActionTypes disabledAction)
+        {
+            if (CurrentSelection == -1) return;
+            
+            // Deselect Action when Finished
+            if (disabledAction == action.GetActionWithIndex(CurrentSelection).Type) 
+                DeselectCurrentAction();
+        }
+        
         #endregion
 
         #region GetAndSet

@@ -38,6 +38,7 @@ namespace Controller
         #endregion
         
         #region SetUp
+        
         private void Awake()
         {
             MyCharacter = GetComponent<CharController>();
@@ -46,12 +47,12 @@ namespace Controller
 
         private void OnEnable()
         {
-            CharController.OnPlayerDeath += PlayerDeath;
+            CharController.OnPlayerDeath += OnPlayerDeath;
         }
 
         private void OnDisable()
         {
-            CharController.OnPlayerDeath -= PlayerDeath;
+            CharController.OnPlayerDeath -= OnPlayerDeath;
         }
 
         #endregion
@@ -63,6 +64,7 @@ namespace Controller
             if (_currentState.ExecuteStateFrame(this))
             {
                 //On Legal Exit
+                MyCharacter.AddInitiative(UIManager.Instance.GetTimeCost());
                 DisassembleCurrentState();
             }
             if (stopAction.action.WasPerformedThisFrame()) DisassembleCurrentState();
@@ -78,8 +80,9 @@ namespace Controller
         /// <param name="targetState">The type of the new State</param>
         public void SwitchState(CharacterAction.ActionTypes targetState)
         {
+            CharacterAction.ActionTypes previousState = _currentState.ActionType;
             DisassembleCurrentState();
-            if (_currentState.ActionType == targetState) return;
+            if (previousState == targetState) return;
 
             // Set up new State
             stopAction.action.Enable();
@@ -89,7 +92,8 @@ namespace Controller
                 CharacterAction.ActionTypes.None => stateLibrary.EmptyState,
                 _ => stateLibrary.GetState(targetState)
             };
-
+            
+            Debug.Log($"Setting Up the {_currentState} State");
             _currentState.StateSetUp(this);
         }
         
@@ -98,8 +102,10 @@ namespace Controller
         /// </summary>
         private void DisassembleCurrentState()
         {
+            Debug.Log($"Disabling the {_currentState.ActionType} State");
             stopAction.action.Disable();
             _currentState.StateDisassembly(this);
+            
             if(!IsAnimating) CharController.OnPlayerFinishedAction?.Invoke(_currentState.ActionType);
             _currentState = stateLibrary.EmptyState;
         }
@@ -108,21 +114,11 @@ namespace Controller
         /// Changes State Variables that could Lead to Errors
         /// </summary>
         /// <param name="c">The Dead Player</param>
-        private void PlayerDeath(CharController c)
+        private void OnPlayerDeath(CharController c)
         {
             if (CurrentSelection == c) CurrentSelection = null;
         }
 
-        /// <summary>
-        /// Triggered When a State Fully has Ended
-        /// </summary>
-        /// <param name="type"></param>
-        public void EndOfStateReached(CharacterAction.ActionTypes type)
-        {
-            CharController.OnPlayerFinishedAction?.Invoke(type);
-            MyCharacter.AddInitiative(UIManager.Instance.GetTimeCost());
-        }
-        
         #endregion
     }
 }

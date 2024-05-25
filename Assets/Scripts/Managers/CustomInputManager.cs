@@ -9,6 +9,7 @@ namespace Managers
     public class CustomInputManager : MonoBehaviour
     {
         [SerializeField] private InputActionReference numberAction;
+        [SerializeField] private InputActionReference nextPhaseAction;
         private bool _isListeningToInput;
 
         public static CustomInputManager Instance { get; private set; }
@@ -33,6 +34,8 @@ namespace Managers
             
             numberAction.action.Enable();
             numberAction.action.performed += NumberPressed;
+            nextPhaseAction.action.Enable();
+            nextPhaseAction.action.performed += EndPhase;
         }
 
         private void OnDisable()
@@ -42,8 +45,15 @@ namespace Managers
             
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
+            nextPhaseAction.action.performed -= EndPhase;
+            nextPhaseAction.action.Disable();
         }
-        
+
+        private void EndPhase(InputAction.CallbackContext obj)
+        {
+            if (_isListeningToInput) GameManager.Instance.EndPhase();
+        }
+
         private void NumberPressed(InputAction.CallbackContext ctx)
         {
             int index = (int)ctx.ReadValue<float>() - 1;
