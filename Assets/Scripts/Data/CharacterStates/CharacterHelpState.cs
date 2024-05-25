@@ -7,10 +7,11 @@ namespace Data.CharacterStates
     public class CharacterHelpState : CharacterStateBase
     {
         #region DefaultStateMethods
+        
         public override void StateSetUp(CharStateController s) { }
         public override void StateDisassembly(CharStateController s){ }
         public override bool ExecuteStateFrame(CharStateController s) => false;
-        public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
+        
         #endregion
     }
 }

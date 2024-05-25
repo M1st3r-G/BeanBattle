@@ -155,8 +155,9 @@ namespace Managers
             return IsOccupied(node.Position);
         }
         
-        public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) => FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position).ToArray();
-        
+        public IEnumerable<Vector2Int> GetPath(Vector2Int start, Vector2Int end) => 
+            FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position);
+
         private IEnumerable<PathfindingNode> FindPath(PathfindingNode startN, PathfindingNode targetN)
         {
             //get player and target position in this coords

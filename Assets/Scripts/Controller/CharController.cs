@@ -9,14 +9,16 @@ namespace Controller
     [RequireComponent(typeof(CharStateController))]
     public class CharController : MonoBehaviour
     {
+        #region Fields
+
         //ComponentReferences
         [SerializeField] private GameObject shadow;
         [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
+        //PublicComponentReferences
         public GameObject Indicator { get; private set; }
-        
-        // PubicTemps
+        // PublicTemps
         public int TeamID { get; private set; }
         public int CurrentHealth { get; private set; }
         public int Initiative { get; set; }
@@ -25,11 +27,12 @@ namespace Controller
         // Events
         public delegate void OnPlayerDeathEvent(CharController c);
         public static OnPlayerDeathEvent OnPlayerDeath;
-
         public delegate void OnPlayerFinishedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerFinishedActionEvent OnPlayerFinishedAnimation;
+        public static OnPlayerFinishedActionEvent OnPlayerFinishedAction;
         public delegate void OnPlayerStartedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerStartedActionEvent OnPlayerStartedAnimation;
+        public static OnPlayerStartedActionEvent OnPlayerStartedAction;
+
+        #endregion
         
         #region Setup
         private void Awake()
@@ -39,15 +42,20 @@ namespace Controller
             selector = transform.GetChild(0).gameObject;
         }
 
+        /// <summary>
+        /// Sets the Character Class and it's team after Object-generation
+        /// </summary>
+        /// <param name="characterClass">The Type of Character (Sets Stats)</param>
+        /// <param name="team">The Team (Set's the Color and Team)</param>
         public void Init(CharData characterClass, int team)
         {
             GetData = characterClass;
-            TeamID = team;
-            
-            _renderer.material = GetData.Material(TeamID);
             Initiative = Random.Range(GetData.InitiativeStartRange.x, GetData.InitiativeStartRange.y);
-            name = GetData.Name + $"(Team {TeamID})";
             CurrentHealth = GetData.BaseHealth;
+            name = GetData.Name + $"(Team {TeamID})";
+            
+            TeamID = team;
+            _renderer.material = GetData.Material(TeamID);
             
             Indicator = CreateIndicator();
         }
@@ -60,33 +68,34 @@ namespace Controller
             ind.SetActive(false);
             return ind;
         }
+        
         #endregion
 
         #region Methods
-        public void AddInitiative()
-        {
-            Initiative += UIManager.Instance.GetTimeCost();
-            UIManager.Instance.RefreshCharacter(this);
-            if (this.Initiative >= 10) GameManager.Instance.TriggerNextRound();
-        }
         
-        public void PerformAttack(CharController other)
+        public void AddInitiative(int amount)
         {
-            other.TakeDamage(GetData.Damage);
-            UIManager.Instance.RefreshCharacter(other);
+            //Add Initiative and Display
+            Initiative += amount;
+            UIManager.Instance.RefreshCharacter(this);
+            
+            //Trigger Overflow
+            if (Initiative >= 10) GameManager.Instance.TriggerNextRound();
         }
 
-        private void TakeDamage(int amount)
+        public void TakeDamage(int amount)
         {
+            //Take Damage and Display
             CurrentHealth -= amount;
-            if (CurrentHealth > 0) return;
+            UIManager.Instance.RefreshCharacter(this);
             
+            //On Death Trigger Event and Destroy
+            if (CurrentHealth > 0) return;
             OnPlayerDeath?.Invoke(this);
             Destroy(gameObject);
         }
 
-        public void TriggerState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);
-        public void EndState() => _stateController.SwitchState(CharacterAction.ActionTypes.None);
+        public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);
         public void SetSelector(bool state) => selector.SetActive(state);
         public override string ToString() => $"{name} ({CurrentHealth}): {Initiative}";
         #endregion

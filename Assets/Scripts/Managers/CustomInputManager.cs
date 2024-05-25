@@ -28,8 +28,8 @@ namespace Managers
 
         private void OnEnable()
         {
-            CharController.OnPlayerStartedAnimation += OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAnimation += OnPlayerFinishedAction;
+            CharController.OnPlayerStartedAction += OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAction += OnPlayerFinishedAction;
             
             numberAction.action.Enable();
             numberAction.action.performed += NumberPressed;
@@ -37,8 +37,8 @@ namespace Managers
 
         private void OnDisable()
         {
-            CharController.OnPlayerStartedAnimation -= OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAnimation -= OnPlayerFinishedAction;
+            CharController.OnPlayerStartedAction -= OnPlayerStartedAction;
+            CharController.OnPlayerFinishedAction -= OnPlayerFinishedAction;
             
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();

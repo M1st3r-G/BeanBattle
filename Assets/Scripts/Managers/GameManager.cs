@@ -130,7 +130,7 @@ namespace Managers
         {
             if (CurrentPlayer is not null)
             {
-                CurrentPlayer.EndState();
+                CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
                 _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
                 UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
@@ -162,7 +162,7 @@ namespace Managers
 
         public void TriggerNextRound() => _nextPhasePressed = true;
         
-        public void TriggerState(CharacterAction.ActionTypes type) => CurrentPlayer.TriggerState(type);
+        public void TriggerState(CharacterAction.ActionTypes type) => CurrentPlayer.TriggerCharacterState(type);
 
         private void TriggerGameOver(int winningTeam)
         {

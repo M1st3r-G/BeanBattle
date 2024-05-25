@@ -16,13 +16,15 @@ namespace Data.CharacterStates
         
         public override void StateSetUp(CharStateController s)
         {
+            // Set State Variables
             s.IsAnimating = false;
             s.MyCharacter.Indicator.SetActive(true);
         }
 
         public override void StateDisassembly(CharStateController s)
         {
-            if(!s.IsAnimating) CharController.OnPlayerFinishedAnimation?.Invoke(ActionType);
+            //Enables Input if State is switched Away
+            if(!s.IsAnimating) CharController.OnPlayerFinishedAction?.Invoke(ActionType);
 
             s.MyCharacter.Indicator.SetActive(false);
         }
@@ -33,26 +35,30 @@ namespace Data.CharacterStates
             
             if (!GridManager.Instance.IsOccupied(hoveredCell))
             {
+                // Stop showing Enemys Ranges
                 GridManager.Instance.ResetRange();
+                
+                // Display new Position with the Indicator
                 Vector3 newPosition = GridManager.Instance.CellToCenterWorld(hoveredCell);
                 newPosition.y = s.MyCharacter.transform.position.y;
                 s.MyCharacter.Indicator.transform.position = newPosition;
-                        
+                
+                // Adjusts the Action Cost
                 int timeCost = GridManager.Instance.GetPosition(s.MyCharacter).ManhattanDistance(hoveredCell);
                 UIManager.Instance.SetTimeCost(timeCost);
             }
             else
             {
+                // When hovering over Enemy (cells) it its range is displayed
                 GridManager.Instance.DisplayRange(GridManager.Instance.GetOccupier(hoveredCell));
             }
 
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
             
-            s.MyCharacter.StartCoroutine(AnimateMovement(s, 
-                GridManager.Instance.GetPath(GridManager.Instance.WorldToCell(s.MyCharacter.transform.position),
-                    hoveredCell)));
-            
-            GridManager.Instance.SetOccupied(s.MyCharacter, hoveredCell);
+            // When the Cell was Clicked, it starts the Animation
+            Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
+            IEnumerable<Vector2Int> path = GridManager.Instance.GetPath(startCell, hoveredCell);
+            s.MyCharacter.StartCoroutine(AnimateMovement(s, path));
             return true;
         }
         
@@ -60,16 +66,20 @@ namespace Data.CharacterStates
 
         #region Animation
 
-        private IEnumerator AnimateMovement(CharStateController s, IReadOnlyList<Vector2Int> path)
+        private IEnumerator AnimateMovement(CharStateController s, IEnumerable<Vector2Int> path)
         {
-            CharController.OnPlayerStartedAnimation?.Invoke(ActionType);
+            CharController.OnPlayerStartedAction?.Invoke(ActionType);
             s.IsAnimating = true;
-            int currentPathIndex = 0;
-
-            while (currentPathIndex < path.Count)
+            Vector2Int lastCell = new Vector2Int();
+            
+            // for each field in the Path
+            foreach (Vector2Int currentTargetCell in path)
             {
-                var startPosition = s.MyCharacter.transform.position;
-                var endPosition = GridManager.Instance.CellToCenterWorld(path[currentPathIndex]);
+                lastCell = currentTargetCell;
+                
+                // Lerp position
+                Vector3 startPosition = s.MyCharacter.transform.position;
+                Vector3 endPosition = GridManager.Instance.CellToCenterWorld(currentTargetCell);
 
                 float t = 0f;
                 
@@ -79,14 +89,15 @@ namespace Data.CharacterStates
                     t += Time.deltaTime;
                     yield return null;
                 }
-
-                currentPathIndex++;
             }
-
+            
+            GridManager.Instance.SetOccupied(s.MyCharacter, lastCell);
+            
+            // When Finished, enable Input
             s.IsAnimating = false;
-            CharController.OnPlayerFinishedAnimation?.Invoke(ActionType);
+            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
         }
-        public override void OnPlayerDeath(CharStateController s, CharController deadPlayer) { }
+        
         #endregion
     }
 }
