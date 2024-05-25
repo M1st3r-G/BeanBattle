@@ -18,7 +18,6 @@ namespace Managers
         
         //Temps
         private CharController CurrentPlayer { get; set; }
-
         private List<CharController> _playOrder;
         private bool _nextPhasePressed;
         private bool _gameLoop;
@@ -27,10 +26,6 @@ namespace Managers
         public static GameManager Instance { get; private set;  }
         
         //Events
-        public delegate void OnOrderChangeDelegate(CharController[] newOrder);
-        public static OnOrderChangeDelegate OnOrderChanged;
-        public delegate void OnCurrentChangeDelegate(CharController newChar);
-        public static OnCurrentChangeDelegate OnCurrentChange;
         public delegate void OnGameOverDelegate(int winningTeam);
         public static OnGameOverDelegate OnGameOver;
 
@@ -60,8 +55,7 @@ namespace Managers
             _playOrder = GenerateCharacters().ToList();
             
             _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-            OnOrderChanged.Invoke(_playOrder.ToArray());
-            print("SetUp Phase Finished");
+            UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
         }
         
         private IEnumerable<CharController> GenerateCharacters()
@@ -85,39 +79,52 @@ namespace Managers
 
         private void OnEnable()
         {
-            nextPhaseAction.action.performed += SetNextPhaseFlag;
+            nextPhaseAction.action.performed += EndPhase;
             CharController.OnPlayerDeath += RemoveDeadPlayer;
         }
         
         private void OnDisable()
         {
-            nextPhaseAction.action.performed -= SetNextPhaseFlag;
+            nextPhaseAction.action.performed -= EndPhase;
             CharController.OnPlayerDeath -= RemoveDeadPlayer;
         }
+        
         #endregion
 
+        #region EventMethods
+        
+        private void EndPhase(InputAction.CallbackContext _) => TriggerNextRound();
+        
+        private void RemoveDeadPlayer(CharController player)
+        {
+            _playOrder.Remove(player);
+            
+            if (_playOrder.Count(c => c.TeamID == player.TeamID) == 0) 
+                TriggerGameOver(1 - player.TeamID); // Team is Dead
+        }
+
+        #endregion
+        
         #region MainLoop
 
         private IEnumerator UpdateLoop()
         {
             while(_gameLoop)
             {
+                CustomInputManager.Instance.EnableInputAction(false);
+                nextPhaseAction.action.Disable();
+                
                 yield return NextPlayer();
-                yield return WaitTillNextPhase();
+                
+                UIManager.Instance.ChangeActiveCharacter(CurrentPlayer);
+                
+                CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
+                nextPhaseAction.action.Enable();
+                _nextPhasePressed = false;
+                
+                yield return new WaitUntil(() => _nextPhasePressed);
             }
         }
-        
-        private IEnumerator WaitTillNextPhase()
-        {
-            _nextPhasePressed = false;
-            nextPhaseAction.action.Enable();
-            yield return new WaitUntil(() => _nextPhasePressed);
-            CustomInputManager.Instance.EnableInputAction(false);
-            nextPhaseAction.action.Disable();
-            _nextPhasePressed = false;
-        }
-        
-        private void SetNextPhaseFlag(InputAction.CallbackContext _) => _nextPhasePressed = true;
 
         private IEnumerator NextPlayer()
         {
@@ -126,49 +133,44 @@ namespace Managers
                 CurrentPlayer.EndState();
                 _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
-                OnOrderChanged.Invoke(_playOrder.ToArray());
+                UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
             }
             
             //Count Time Down
             int min = _playOrder.Min(c => c.Initiative);
             if (min > 0)
             {
-                yield return new WaitForSeconds(2f);
+                foreach (CharController p in _playOrder) p.Initiative--;
+                int counter = 1;
+                while (counter >= min)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                    foreach (CharController p in _playOrder) p.Initiative--;
+                    counter++;
+                }
                 
-                foreach (CharController p in _playOrder) p.Initiative -= min;
-                OnOrderChanged.Invoke(_playOrder.ToArray());
+                UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
             }
             
             CurrentPlayer = _playOrder[0];
             _playOrder.RemoveAt(0);
-            
-            OnCurrentChange.Invoke(CurrentPlayer);
-            CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
         }
+        
         #endregion
 
         #region OtherMethods
 
+        public void TriggerNextRound() => _nextPhasePressed = true;
+        
         public void TriggerState(CharacterAction.ActionTypes type) => CurrentPlayer.TriggerState(type);
-        
-        public void RefreshInitiative(CharController c)
+
+        private void TriggerGameOver(int winningTeam)
         {
-            UIManager.Instance.RefreshCharacter(c);
-            
-            if (c.Initiative < 10) return;
-            SetNextPhaseFlag(new InputAction.CallbackContext());
-        }
-        
-        private void RemoveDeadPlayer(CharController player)
-        {
-            _playOrder.Remove(player);
-            
-            if (_playOrder.Count(c => c.TeamID == player.TeamID) != 0) return;
-            // Team is Dead
             _gameLoop = false;
-            SetNextPhaseFlag(new InputAction.CallbackContext());
-            OnGameOver?.Invoke(1 - player.TeamID);
+            TriggerNextRound();
+            OnGameOver?.Invoke(winningTeam);
         }
+        
         #endregion
     }
 }

@@ -19,6 +19,8 @@ namespace UI
         
         public static UIManager Instance { get; private set; }
 
+        #region SetUp
+
         private void Awake()
         {
             if (Instance is not null)
@@ -32,26 +34,20 @@ namespace UI
 
         private void OnEnable()
         {
-            GameManager.OnCurrentChange += OnActiveCharacterChangeEvent;
             GameManager.OnGameOver += OnGameOver;
             CharController.OnPlayerDeath += OnPlayerDeath;
-            GameManager.OnOrderChanged += UpdateUI;
-
         }
         
         private void OnDisable()
         {
-            GameManager.OnCurrentChange -= OnActiveCharacterChangeEvent;
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
-            GameManager.OnOrderChanged -= UpdateUI;
         }
 
-        private void UpdateUI(CharController[] currentOrder)
-        {
-            initiativeUI.UpdateUI(currentOrder);
-        }
-        
+        #endregion
+
+        #region EventMethods
+
         private void OnPlayerDeath(CharController c)
         {
             initiativeUI.RemoveDeadPlayer(c);
@@ -62,13 +58,21 @@ namespace UI
             DeselectCurrentAction();
             gameObject.SetActive(false);
         }
+
+        #endregion
         
-        private void OnActiveCharacterChangeEvent(CharController newChar)
+        public void ChangeInitiativeOrderTo(CharController[] newOrder) => initiativeUI.UpdateUI(newOrder);
+        
+        public void ChangeActiveCharacter(CharController newChar)
         {
             currentCharacter.SetCharacter(newChar);
             action.SetDisplay(newChar.GetData.Actions);
         }
         
+        public void RefreshCharacter(CharController c) => initiativeUI.RefreshCharacter(c);
+
+        #region ActionSelection
+
         public void SelectAction(int actionIndex)
         {
             if (actionIndex == CurrentSelection)
@@ -84,20 +88,17 @@ namespace UI
             }
         }
 
-        public void RefreshCharacter(CharController c)
-        {
-            initiativeUI.RefreshCharacter(c);
-        }
+        private void DeselectCurrentAction() => action.SetCellAtIndex(CurrentSelection, false, out _);
 
-        public void SetTimeCost(int timeCost)
-        {
-            currentAction.SetTimeCost(timeCost);
-        }
+        #endregion
+
+        #region GetAndSet
 
         public CharacterAction GetActionWithIndex(int index) => action.GetActionWithIndex(index);
-        
+        public void SetTimeCost(int timeCost) => currentAction.SetTimeCost(timeCost);
         public int GetTimeCost() => currentAction.GetTimeCost();
+
+        #endregion
         
-        private void DeselectCurrentAction() => action.SetCellAtIndex(CurrentSelection, false, out _);
     }
 }

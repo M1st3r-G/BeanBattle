@@ -66,7 +66,8 @@ namespace Controller
         public void AddInitiative()
         {
             Initiative += UIManager.Instance.GetTimeCost();
-            GameManager.Instance.RefreshInitiative(this);
+            UIManager.Instance.RefreshCharacter(this);
+            if (this.Initiative >= 10) GameManager.Instance.TriggerNextRound();
         }
         
         public void PerformAttack(CharController other)
