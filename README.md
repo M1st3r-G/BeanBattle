@@ -7,7 +7,8 @@ It's more to be seen as a learning and testing Project than a finished game.
 ToDo:
 - Next
   - Sound
-  - Menu
+  - Better Game Over
+  - Tutorial
 
 - Enhancements
   - Animations
