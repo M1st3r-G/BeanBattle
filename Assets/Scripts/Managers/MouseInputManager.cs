@@ -8,7 +8,6 @@ namespace Managers
     {
         //ComponentReferences
         private Camera _mainCamera;
-
         // Public
         public static MouseInputManager Instance { get; private set; }
 
@@ -35,6 +34,13 @@ namespace Managers
         #endregion
 
         #region MainMethods
+        
+        /// <summary>
+        /// When Triggered it RayTraces for the First Character it Sees at Mouse Position
+        /// Should Only be Called after A Click
+        /// </summary>
+        /// <param name="clickedChar">The Character Clicked on or null</param>
+        /// <returns>True if a Character was Clicked</returns>
         public bool GetCharacterClicked(out CharController clickedChar)
         {
             clickedChar = null;
@@ -45,13 +51,15 @@ namespace Managers
 
             if (!target.CompareTag("Character")) return false;
             
-            CharController character = target.GetComponent<CharController>();
-            clickedChar = character;
+            clickedChar = target.GetComponent<CharController>();
             return true;
         }
-
         
-        
+        /// <summary>
+        /// When Triggered, it RayTraces (in the Ground Layer) for the Cell at the Mouse Position
+        /// </summary>
+        /// <param name="cell">The cell the Mouse is over</param>
+        /// <returns>True if the Mouse is over a cell</returns>
         public bool GetCellFromMouse(out Vector2Int cell)
         {
             cell = new Vector2Int();
@@ -65,6 +73,7 @@ namespace Managers
             cell = GridManager.Instance.WorldToCell(hit.point);
             return true;
         }
+        
         #endregion
     }
 }

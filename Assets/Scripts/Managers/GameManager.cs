@@ -54,13 +54,17 @@ namespace Managers
         
         private void SetUp()
         {
-            _playOrder = GenerateCharacters().ToList();
+            _playOrder = GenerateCharacters();
             
             _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
             UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
         }
         
-        private IEnumerable<CharController> GenerateCharacters()
+        /// <summary>
+        /// Generates a Character for each team and of each Type
+        /// </summary>
+        /// <returns>A List of the <see cref="CharController"/> belonging to the Characters</returns>
+        private List<CharController> GenerateCharacters()
         {
             List<CharController> returnCollection = new List<CharController>();
             
@@ -70,7 +74,8 @@ namespace Managers
                 {
                     CharController tmp = Instantiate(characterPrefab).GetComponent<CharController>();
                     tmp.Init(characterClasses[i], team);
-
+                    
+                    // Notify the Grid to set the StartCell Occupied
                     GridManager.Instance.AddCharacter(tmp, new Vector2Int(12 * team + 1, 3 * i + 4));
                     returnCollection.Add(tmp);
                 }
@@ -107,41 +112,52 @@ namespace Managers
         
         #region MainLoop
 
+        /// <summary>
+        /// This Coroutine Replaces the UpdateLoop
+        /// </summary>
+        /// <returns>Irrelevant, as this is a Coroutine</returns>
         private IEnumerator UpdateLoop()
         {
             while(_gameLoop)
             {
                 CustomInputManager.Instance.EnableInputAction(false);
-                
+                //Select and Display the next Player
                 yield return NextPlayer();
                 Debug.Log("Selected new Player");
                 UIManager.Instance.ChangeActiveCharacter(CurrentPlayer);
                 
                 CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
+
+                // Wait for EndOfPhase
                 _nextPhasePressed = false;
-                
                 yield return new WaitUntil(() => _nextPhasePressed);
             }
         }
 
+        /// <summary>
+        /// This Coroutine Updates the <see cref="_playOrder"/> and Sets <see cref="CurrentPlayer"/> to the next Player.
+        /// Note that the Player is Removed from the playOrder
+        /// </summary>
+        /// <returns>Irrelevant, as this is a Coroutine</returns>
         private IEnumerator NextPlayer()
         {
             if (CurrentPlayer is not null)
             {
                 CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
+                //Add him to the Order and Reorders, then Displays the List
                 _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
                 UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
             }
             
-            //Count Time Down
+            //Count Time Down (step by Step)
             int min = _playOrder.Min(c => c.Initiative);
             if (min > 0)
             {
                 int counter = 0;
                 while (counter < min)
                 {
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(0.5f);
                     foreach (CharController p in _playOrder) p.Initiative--;
                     UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
                     counter++;
@@ -149,6 +165,7 @@ namespace Managers
                 
             }
             
+            // Set and Remove the Next Player
             CurrentPlayer = _playOrder[0];
             _playOrder.RemoveAt(0);
         }
@@ -157,12 +174,19 @@ namespace Managers
 
         #region OtherMethods
 
+        /// <summary>
+        /// Triggers the Next Round
+        /// </summary>
         public void TriggerNextRound()
         {
             Debug.LogWarning("Next Round Was Triggered");
             _nextPhasePressed = true;
         }
 
+        /// <summary>
+        /// Trigger a given State in the <see cref="CurrentPlayer"/> Player
+        /// </summary>
+        /// <param name="type">The Type of the State to Trigger</param>
         public void TriggerState(CharacterAction.ActionTypes type)
         {
             Debug.Log($"GameManager wants to Trigger the {type} State");

@@ -24,6 +24,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 13378372088104d4b9b7bc5f869835d6, type: 2}
   charName: Trick
   startHealth: 10
-  iniRange: {x: 3, y: 8}
+  iniRange: {x: 3, y: 5}
   attackRange: 2
   baseDamage: 5

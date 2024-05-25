@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace UI.Inner
 {
+    /// <summary>
+    /// Internally used by the <see cref="UIManager"/> to Display the Current Action
+    /// </summary>
     public class CurrentActionController : MonoBehaviour
     {
         //ComponentReferences

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace UI.Inner.Actions
 {
+    /// <summary>
+    /// Internally used by the <see cref="ActionsUI"/> to store Data, Display Selection and Listen to Clicks (Which are given to the <see cref="CustomInputManager"/>
+    /// </summary>
     public class ActionCell : MonoBehaviour
     {
         // ComponentReferences
@@ -15,7 +18,7 @@ namespace UI.Inner.Actions
         // Temps
         private int _indexInParent;
         public CharacterAction Action { get; private set; }
-
+        
         public void SetToAction(CharacterAction action, int index)
         {
             background.gameObject.SetActive(false);
@@ -25,7 +28,11 @@ namespace UI.Inner.Actions
             nameText.text = $"[{index + 1}]\n{action.ActionName}";
         }
         
-        public void SetSelected(bool state) => background.gameObject.SetActive(state);
+        public void SetSelectionState(bool state) => background.gameObject.SetActive(state);
+        
+        /// <summary>
+        /// When a Cell is Clicked, its Action is Triggered
+        /// </summary>
         public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(_indexInParent, Action);
     }
 }

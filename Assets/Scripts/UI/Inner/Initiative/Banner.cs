@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace UI.Inner.Initiative
 {
+    /// <summary>
+    /// Internally used by the <see cref="InitiativeUI"/> to store Data, and Display the Characters.
+    /// </summary>
     public class Banner : MonoBehaviour
     {
         // Components

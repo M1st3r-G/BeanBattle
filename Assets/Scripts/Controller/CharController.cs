@@ -99,6 +99,7 @@ namespace Controller
             if (CurrentHealth > 0) return;
             OnPlayerDeath?.Invoke(this);
             Destroy(gameObject);
+            Debug.Log($"{name} has Died");
         }
 
         public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);

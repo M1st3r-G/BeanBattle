@@ -9,6 +9,8 @@ namespace Managers
 {
     public class GridManager : MonoBehaviour
     {
+        #region Fields
+
         //Components
         [SerializeField] private GameObject cellPrefab;
         [SerializeField] private GameObject cellContainer;
@@ -28,6 +30,7 @@ namespace Managers
         //Public
         public static GridManager Instance { get; private set; }
 
+        #endregion
 
         #region SetUp
         private void Awake()
@@ -48,21 +51,31 @@ namespace Managers
             FixPlaneTransform();
         }
         
+        /// <summary>
+        /// Adjusts the Size of the Plane and Moves it so that the Plane is centered in the actual Grid GO.
+        /// </summary>
         private void FixPlaneTransform()
         {
-            Vector3 efficientSize = new Vector3
+            Vector3 effectiveSize = new Vector3
             {
                 x = (_grid.cellSize.x + _grid.cellGap.x) * numberOfCells.x,
                 y = _grid.cellSize.x * 10,
                 z = (_grid.cellSize.y + _grid.cellGap.y) * numberOfCells.y
             };
-            plane.transform.localScale = efficientSize* 0.1f;
-            transform.position -= new Vector3(efficientSize.x / 2f, 0, efficientSize.z / 2f);
-            plane.transform.position += new Vector3(efficientSize.x / 2f, 0, efficientSize.z / 2f);
+            
+            plane.transform.localScale = effectiveSize* 0.1f;
+            transform.position -= new Vector3(effectiveSize.x / 2f, 0, effectiveSize.z / 2f);
+            plane.transform.position += new Vector3(effectiveSize.x / 2f, 0, effectiveSize.z / 2f);
         }
         
+        /// <summary>
+        /// Generates the Cells, used to Display the Range
+        /// The Cells are saved as <see cref="PathfindingNode"/> Components
+        /// </summary>
+        /// <seealso cref="DisplayRange"/>
         private void GenerateCells()
         {
+            // Crate a reference with fitting size
             GameObject reference = Instantiate(cellPrefab);
             reference.transform.localScale =
                 new Vector3(_grid.cellSize.x, reference.transform.localScale.y, _grid.cellSize.y);
@@ -90,19 +103,32 @@ namespace Managers
         
         private void OnEnable() => CharController.OnPlayerDeath += RemoveDeadPlayer;
         private void OnDisable() => CharController.OnPlayerDeath -= RemoveDeadPlayer;
+        
         #endregion
 
         #region OtherMethods
+        
+        /// <summary>
+        /// Sets the Starting Cell of a Player as Occupied. Also set the Characters position to that cell
+        /// </summary>
+        /// <param name="character">The <see cref="CharController"/> of the Character</param>
+        /// <param name="startCell">The starting Cell x and y as a <see cref="Vector2Int"/></param>
+        /// <param name="startHeight">The start height of the Character (Default = 1.0)</param>
         public void AddCharacter(CharController character, Vector2Int startCell, float startHeight = 1f)
         {
             _occupied[character] = startCell;
             
             Vector3 playerPosition = CellToCenterWorld(startCell);
-            
             playerPosition.y = startHeight;
             character.transform.position = playerPosition; 
         }
         
+        /// <summary>
+        /// Convert a <see cref="Vector2Int"/> Cell Coordinate to the World Position
+        /// </summary>
+        /// <param name="cell">The Cell Coordinates</param>
+        /// <returns>The <see cref="Vector3"/> World Position belonging (above) the Cell</returns>
+        /// <seealso cref="WorldToCell"/>
         public Vector3 CellToCenterWorld(Vector2Int cell)
         {
             Vector3 tmp = _grid.GetCellCenterWorld((Vector3Int)cell);
@@ -110,24 +136,46 @@ namespace Managers
             return tmp;
         }
 
+        /// <summary>
+        /// Convert a <see cref="Vector3"/> World Position to the Cell Coordinate (ignores the y Value)
+        /// </summary>
+        /// <param name="position">The World Position</param>
+        /// <returns>The x, y Coordinates as a <see cref="Vector3"/></returns>
         public Vector2Int WorldToCell(Vector3 position) => (Vector2Int)_grid.WorldToCell(position);
+        
         private void RemoveDeadPlayer(CharController player) => _occupied.Remove(player);
+        
         #endregion
 
         #region RangeManagement
+        
+        /// <summary>
+        /// Wrapper to be Easier Called by a Character
+        /// </summary>
+        /// <param name="centerChar">The Character whose Range should be displayed</param>
+        /// <seealso cref="DisplayRange(Vector2Int, int)"/>
         public void DisplayRange(CharController centerChar) => 
             DisplayRange(GetPosition(centerChar), centerChar.GetData.AttackRange);
 
+        /// <summary>
+        /// Displays a Range using Cells (with the <see cref="PathfindingNode"/> Component
+        /// </summary>
+        /// <param name="position">The center position of the Range</param>
+        /// <param name="range">The Maximum Distance a cell can be from the <paramref name="position"/> to be in the Range</param>
+        /// <seealso cref="DisplayRange(CharController)"/>
         private void DisplayRange(Vector2Int position, int range)
         {
+            // If Cell out of Grid
             if (0 > position.x || position.x >= numberOfCells.x || 0 > position.y ||
                 position.y >= numberOfCells.y) return;
             
             PathfindingNode currentCell = _allCells[position.x, position.y];
             
+            // If unvisited add to Active Cells
             if (!currentCell.gameObject.activeSelf) activeCells.Add(currentCell);
             currentCell.gameObject.SetActive(true);
             
+            // If Range allows, continue in each Direction
             if (range <= 0) return;
             DisplayRange(position + Vector2Int.down, range - 1);
             DisplayRange(position + Vector2Int.up, range - 1);
@@ -135,6 +183,10 @@ namespace Managers
             DisplayRange(position + Vector2Int.right, range - 1);
         }
 
+        /// <summary>
+        /// Selects the Characters on activeCells given by the <see cref="DisplayRange(CharController)"/>
+        /// </summary>
+        /// <returns>An Enumerable containing the Characters</returns>
         public IEnumerable<CharController> CharactersInRange() =>
             from cell in activeCells
             select WorldToCell(cell.transform.position) into coordinate
@@ -146,18 +198,39 @@ namespace Managers
             foreach (PathfindingNode cell in activeCells) cell.gameObject.SetActive(false);
             activeCells.Clear();
         }
+        
         #endregion
         
         #region PathManagement
 
+        /// <summary>
+        /// Used by the A* Algorithm to Determine if a Cell is Walkable
+        /// </summary>
+        /// <param name="node">The Node in Question</param>
+        /// <returns>True if the Cell is not Walkable</returns>
         private bool IsObstacle(PathfindingNode node)
         {
+            //ToDo Extend with Terrain
             return IsOccupied(node.Position);
         }
         
+        /// <summary>
+        /// Wrapper Method for easier use of the A* Algorithm
+        /// </summary>
+        /// <param name="start">The starting x, y coordinates</param>
+        /// <param name="end">The ending x, y coordinates</param>
+        /// <returns>An Enumerable containing alls Cells of the Path (Excluding the start, Including the End)</returns>
+        /// <seealso cref="FindPath"/>
         public IEnumerable<Vector2Int> GetPath(Vector2Int start, Vector2Int end) => 
             FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position);
 
+        /// <summary>
+        /// The Main A* Algorithm using <see cref="PathfindingNode"/>
+        /// </summary>
+        /// <param name="startN">The starting Node</param>
+        /// <param name="targetN">The target Node</param>
+        /// <returns>An Enumerable containing the Nodes in the Path (Excluding Start, Including End)</returns>
+        /// <seealso cref="GetPath"/>
         private IEnumerable<PathfindingNode> FindPath(PathfindingNode startN, PathfindingNode targetN)
         {
             //get player and target position in this coords
@@ -216,7 +289,13 @@ namespace Managers
             return null;
         }
 
-        //reverses calculated path so first node is closest to seeker
+        /// <summary>
+        /// Used internally by the A* Algorithm Reverses the calculated Path using the <see cref="PathfindingNode.Parent"/> Node
+        /// </summary>
+        /// <param name="startNode">The startNode</param>
+        /// <param name="endNode">The EndNode</param>
+        /// <returns>An Enumerable Containing the Path (Exclude Start, Include End)</returns>
+        /// <seealso cref="FindPath"/>
         private static IEnumerable<PathfindingNode> RetracePath(PathfindingNode startNode, PathfindingNode endNode)
         {
             List<PathfindingNode> path = new List<PathfindingNode>();
@@ -232,13 +311,21 @@ namespace Managers
             return path;
         }
     
-        //gets the neighboring nodes in the 4 cardinal directions. If you would like to enable diagonal pathfinding, uncomment out that portion of code
-        private List<PathfindingNode> GetNeighbors(PathfindingNode node) =>
-            (from direction in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }
-                select node.Position + direction into c
-                where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
-                select _allCells[c.x, c.y]).ToList();
+        /// <summary>
+        /// Gets the (legal) neighboring nodes in the 4 cardinal directions.
+        /// </summary>
+        /// <param name="node">The Node to find the neighbours of</param>
+        /// <returns> An Enumerable with the Nodes</returns>
+        private IEnumerable<PathfindingNode> GetNeighbors(PathfindingNode node) =>
+            from direction in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }
+            select node.Position + direction into c
+            where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
+            select _allCells[c.x, c.y];
 
+        /// <summary>
+        /// TODO Currently Unused
+        /// </summary>
+        /// <param name="path">The Path to Display</param>
         public void RenderPath(Vector2Int[] path)
         {
             foreach (Vector2Int cell in path)
@@ -250,6 +337,7 @@ namespace Managers
         #endregion
         
         #region OccupationManagement
+        
         public void SetOccupied(CharController charController,Vector2Int cell)
         {
             if (!IsOccupied(cell)) _occupied[charController] = cell;
@@ -258,6 +346,7 @@ namespace Managers
         public CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
         public bool IsOccupied(Vector2Int cell) => _occupied.ContainsValue(cell);
         public Vector2Int GetPosition(CharController charController) => _occupied[charController];
+        
         #endregion
     }
 }

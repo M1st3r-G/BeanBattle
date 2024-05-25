@@ -24,6 +24,6 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 55ffac8b3f0d5394e8c5eeb1ca38f7b1, type: 2}
   charName: Boris Backbreaker
   startHealth: 30
-  iniRange: {x: 0, y: 0}
+  iniRange: {x: 5, y: 15}
   attackRange: 2
   baseDamage: 10

@@ -5,13 +5,14 @@ using UnityEngine.UI;
 
 namespace UI.Inner
 {
+    /// <summary>
+    /// Internally used by the <see cref="UIManager"/> to Display the Name and Picture of the CurrentCharacter
+    /// </summary>
     public class CurrentCharacterUI : MonoBehaviour
     {
         //ComponentReferences
         [SerializeField] private Image portrait;
         [SerializeField] private TextMeshProUGUI nameText; 
-        //Temps
-        //Public
         
         public void SetCharacter(CharController newChar)
         {
