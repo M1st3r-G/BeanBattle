@@ -17,6 +17,7 @@ ToDo:
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
     - Over-watch
+  - Controller Input
 
 - Later:
   - AI
