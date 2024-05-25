@@ -10,15 +10,12 @@ namespace UI.Inner.Initiative
         private Banner[] _banner = new Banner[12];
         private VerticalLayoutGroup _layoutGroup;
 
-        // Public
-
         private void Awake()
         {
             _layoutGroup = GetComponent<VerticalLayoutGroup>();
             _banner = GetComponentsInChildren<Banner>(true);
         }
 
-        #region MainMethods
         public void UpdateUI(CharController[] currentOrder)
         {
             for (int i = 0; i < currentOrder.Length; i++)
@@ -53,6 +50,5 @@ namespace UI.Inner.Initiative
         }
         
         private void AdjustBottomPadding(int numberOfActives) => _layoutGroup.padding.bottom = Mathf.Max(15, -150 * numberOfActives + 1065);
-        #endregion
     }
 }

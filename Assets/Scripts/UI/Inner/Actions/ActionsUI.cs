@@ -11,31 +11,10 @@ namespace UI.Inner.Actions
         private ActionCell[] _actionCells = new ActionCell[7];
         private HorizontalLayoutGroup _group;
 
-        // Temps
-        private int CurrentSelection { get; set; } = -1;
-
-        #region SetUp
         private void Awake()
         {
             _actionCells = GetComponentsInChildren<ActionCell>(true);
             _group = GetComponent<HorizontalLayoutGroup>();
-        }
-        #endregion
-
-        #region MainMethods
-        public void Select(int idx)
-        {
-            if(CurrentSelection != -1) _actionCells[CurrentSelection].SetSelected(false);
-            CurrentSelection = idx;
-            _actionCells[CurrentSelection].SetSelected(true);
-        }
-
-        public void Deselect()
-        {
-            if (CurrentSelection == -1) return;
-            
-            _actionCells[CurrentSelection].SetSelected(false);
-            CurrentSelection = -1;
         }
         
         public void SetDisplay(List<CharacterAction> actions)
@@ -43,7 +22,7 @@ namespace UI.Inner.Actions
             for (int i = 0; i < actions.Count; i++)
             {
                 _actionCells[i].gameObject.SetActive(true);
-                _actionCells[i].SetTo(actions[i], i + 1);
+                _actionCells[i].SetToAction(actions[i], i);
             }
 
             for (int i = actions.Count; i < 7; i++)
@@ -54,10 +33,12 @@ namespace UI.Inner.Actions
             _group.padding.right = (7 - actions.Count) * 150;
         }
 
-        public CharacterAction GetActionWithIndex(int index)
+        public void SetCellAtIndex(int idx, bool state, out CharacterAction actionInCell)
         {
-            return _actionCells[index].Action;
+            actionInCell = _actionCells[idx].Action;
+            _actionCells[idx].SetSelected(state);
         }
-        #endregion
+
+        public CharacterAction GetActionWithIndex(int index) => _actionCells[index].Action;
     }
 }

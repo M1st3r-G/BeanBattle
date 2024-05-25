@@ -15,6 +15,8 @@ namespace UI
         [SerializeField] private InitiativeUI initiativeUI;
         [SerializeField] private ActionsUI action;
 
+        private int CurrentSelection { get; set; } = -1;
+        
         public static UIManager Instance { get; private set; }
 
         private void Awake()
@@ -26,7 +28,6 @@ namespace UI
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         private void OnEnable()
@@ -70,7 +71,17 @@ namespace UI
         
         public void SelectAction(int actionIndex)
         {
-            action.Select(actionIndex - 1);
+            if (actionIndex == CurrentSelection)
+            {
+                DeselectCurrentAction();
+                currentAction.SetAction(null);
+            }
+            else
+            {
+                CurrentSelection = actionIndex;
+                action.SetCellAtIndex(actionIndex, true, out CharacterAction actionInCell);
+                currentAction.SetAction(actionInCell);
+            }
         }
 
         public void RefreshCharacter(CharController c)
@@ -87,6 +98,6 @@ namespace UI
         
         public int GetTimeCost() => currentAction.GetTimeCost();
         
-        private void DeselectCurrentAction() => action.Deselect();
+        private void DeselectCurrentAction() => action.SetCellAtIndex(CurrentSelection, false, out _);
     }
 }

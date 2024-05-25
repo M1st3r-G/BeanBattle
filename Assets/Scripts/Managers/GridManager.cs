@@ -37,7 +37,6 @@ namespace Managers
                 Destroy(gameObject);
                 return;
             }
-            DontDestroyOnLoad(gameObject);
             Instance = this;
 
             _allCells = new PathfindingNode[numberOfCells.x, numberOfCells.y];

@@ -12,14 +12,9 @@ namespace UI.Inner
         [SerializeField] private TextMeshProUGUI title;
         [SerializeField] private TextMeshProUGUI description;
         [SerializeField] private TextMeshProUGUI timeValue;
-        //Public
 
-        private void Awake()
-        {
-            gameObject.SetActive(false);
-        }
+        private void Awake() => gameObject.SetActive(false);
 
-        #region MainMethods
         public void SetAction(CharacterAction action)
         {
             if (action is null)
@@ -37,6 +32,5 @@ namespace UI.Inner
 
         public int GetTimeCost() => int.Parse(timeValue.text);
         public void SetTimeCost(int value) => timeValue.text = value.ToString();
-        #endregion
     }
 }

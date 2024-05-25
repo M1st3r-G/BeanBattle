@@ -12,33 +12,20 @@ namespace UI.Inner.Actions
         [SerializeField] private Image background;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
-        private CurrentActionController _parentActionController;
-        
         // Temps
-        private int _parentIndex;
-
+        private int _indexInParent;
         public CharacterAction Action { get; private set; }
 
-        private void Awake()
-        {
-            _parentActionController = GetComponentInParent<CurrentActionController>();
-        }
-
-        public void SetTo(CharacterAction action, int index)
+        public void SetToAction(CharacterAction action, int index)
         {
             background.gameObject.SetActive(false);
-            _parentIndex = index;
+            _indexInParent = index;
             Action = action;
             image.sprite = action.ActionImage;
-            nameText.text = $"[{index}]\n{action.ActionName}";
-        }
-
-        public void SetSelected(bool state)
-        {
-            background.gameObject.SetActive(state);
-            _parentActionController.SetAction(state ? Action : null);
+            nameText.text = $"[{index + 1}]\n{action.ActionName}";
         }
         
-        public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(_parentIndex, Action);
+        public void SetSelected(bool state) => background.gameObject.SetActive(state);
+        public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(_indexInParent, Action);
     }
 }
