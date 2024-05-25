@@ -213,7 +213,7 @@ namespace Managers
             //ToDo Extend with Terrain
             return IsOccupied(node.Position);
         }
-        
+
         /// <summary>
         /// Wrapper Method for easier use of the A* Algorithm
         /// </summary>
@@ -221,8 +221,8 @@ namespace Managers
         /// <param name="end">The ending x, y coordinates</param>
         /// <returns>An Enumerable containing alls Cells of the Path (Excluding the start, Including the End)</returns>
         /// <seealso cref="FindPath"/>
-        public IEnumerable<Vector2Int> GetPath(Vector2Int start, Vector2Int end) => 
-            FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position);
+        public Vector2Int[] GetPath(Vector2Int start, Vector2Int end) =>
+            FindPath(_allCells[start.x, start.y], _allCells[end.x, end.y]).Select(node => node.Position).ToArray();
 
         /// <summary>
         /// The Main A* Algorithm using <see cref="PathfindingNode"/>
@@ -240,7 +240,9 @@ namespace Managers
             List<PathfindingNode> openSet = new List<PathfindingNode>();
             HashSet<PathfindingNode> closedSet = new HashSet<PathfindingNode>();
             openSet.Add(_seekerNode);
-        
+
+            // Makes it Visually more Appealing
+            bool alternate = false;
             //calculates path for pathfinding
             while (openSet.Count > 0)
             {
@@ -266,7 +268,7 @@ namespace Managers
                 }
             
                 //adds neighbor nodes to openSet
-                foreach (PathfindingNode neighbour in GetNeighbors(node))
+                foreach (PathfindingNode neighbour in GetNeighbors(node, alternate))
                 {
                     if (IsObstacle(neighbour) || closedSet.Contains(neighbour))
                     {
@@ -283,6 +285,8 @@ namespace Managers
                         if (!openSet.Contains(neighbour))
                             openSet.Add(neighbour);
                     }
+
+                    alternate = !alternate;
                 }
             }
 
@@ -310,28 +314,43 @@ namespace Managers
 
             return path;
         }
-    
-        /// <summary>
-        /// Gets the (legal) neighboring nodes in the 4 cardinal directions.
-        /// </summary>
-        /// <param name="node">The Node to find the neighbours of</param>
-        /// <returns> An Enumerable with the Nodes</returns>
-        private IEnumerable<PathfindingNode> GetNeighbors(PathfindingNode node) =>
-            from direction in new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right }
-            select node.Position + direction into c
-            where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
-            select _allCells[c.x, c.y];
 
         /// <summary>
-        /// TODO Currently Unused
+        /// Gets the (legal) neighboring nodes in the 4 cardinal directions.
+        /// Optionally uses the <paramref name="alternate"/> parameter to make it visually more interesting
+        /// </summary>
+        /// <param name="node">The Node to find the neighbours of</param>
+        /// <param name="alternate">Wheter to Reverse the Directions or not</param>
+        /// <returns> An Enumerable with the Nodes</returns>
+        private IEnumerable<PathfindingNode> GetNeighbors(PathfindingNode node, bool alternate = false)
+        {
+            Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+            if (alternate) directions = directions.Reverse().ToArray();
+            
+            return from direction in directions
+                   select node.Position + direction into c
+                   where c.x >= 0 && c.x < numberOfCells.x && c.y >= 0 && c.y < numberOfCells.y
+                   select _allCells[c.x, c.y];
+        }
+
+        /// <summary>
+        /// Displays The Path
         /// </summary>
         /// <param name="path">The Path to Display</param>
-        public void RenderPath(Vector2Int[] path)
+        public void RenderPath(IEnumerable<Vector2Int> path)
         {
             foreach (Vector2Int cell in path)
             {
+                activeCells.Add(_allCells[cell.x, cell.y]);
                 _allCells[cell.x, cell.y].gameObject.SetActive(true);
             }
+        }
+
+        public void HideNextPathCell()
+        {
+            PathfindingNode cell = activeCells[0];
+            activeCells.RemoveAt(0);
+            cell.gameObject.SetActive(false);
         }
         
         #endregion

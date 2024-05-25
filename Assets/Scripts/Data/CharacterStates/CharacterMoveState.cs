@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Controller;
 using Managers;
 using Misc;
@@ -55,7 +56,7 @@ namespace Data.CharacterStates
             
             // When the Cell was Clicked, it starts the Animation
             Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
-            IEnumerable<Vector2Int> path = GridManager.Instance.GetPath(startCell, hoveredCell);
+            Vector2Int[] path = GridManager.Instance.GetPath(startCell, hoveredCell);
             s.MyCharacter.StartCoroutine(AnimateMovement(s, path));
             return true;
         }
@@ -64,11 +65,13 @@ namespace Data.CharacterStates
 
         #region Animation
 
-        private IEnumerator AnimateMovement(CharStateController s, IEnumerable<Vector2Int> path)
+        private IEnumerator AnimateMovement(CharStateController s, Vector2Int[]  path)
         {
             CharController.OnPlayerStartedAction?.Invoke(ActionType);
             s.IsAnimating = true;
             Vector2Int lastCell = new Vector2Int();
+            
+            GridManager.Instance.RenderPath(path);
             
             // for each field in the Path
             foreach (Vector2Int currentTargetCell in path)
@@ -87,6 +90,8 @@ namespace Data.CharacterStates
                     t += Time.deltaTime;
                     yield return null;
                 }
+
+                GridManager.Instance.HideNextPathCell();
             }
             
             GridManager.Instance.SetOccupied(s.MyCharacter, lastCell);
