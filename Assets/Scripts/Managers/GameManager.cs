@@ -140,16 +140,15 @@ namespace Managers
             int min = _playOrder.Min(c => c.Initiative);
             if (min > 0)
             {
-                foreach (CharController p in _playOrder) p.Initiative--;
-                int counter = 1;
-                while (counter >= min)
+                int counter = 0;
+                while (counter < min)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(1f);
                     foreach (CharController p in _playOrder) p.Initiative--;
+                    UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
                     counter++;
                 }
                 
-                UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
             }
             
             CurrentPlayer = _playOrder[0];
