@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Data
 {
+    /// <summary>
+    /// Manages all Information regarding a Character Action
+    /// </summary>
     [CreateAssetMenu(fileName = "CharacterAction")]
     public class CharacterAction : ScriptableObject
     {
@@ -13,6 +16,7 @@ namespace Data
         }
 
         #region Fields
+        
         public Sprite ActionImage => actionImage;
         [SerializeField] private Sprite actionImage;
 
@@ -22,11 +26,10 @@ namespace Data
 
         public string ActionDescription => actionDescription;
         [SerializeField] private string actionDescription;
+        
         #endregion
 
-        #region Methods
         private static string AddSpacesToSentence(string text) =>
             text.Aggregate("", (current, t) => current + (char.IsUpper(t) ? $" {t}" : t))[1..];
-        #endregion
     }
 }

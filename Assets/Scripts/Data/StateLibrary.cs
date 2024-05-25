@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Data
 {
+    /// <summary>
+    /// This Class Saves the State Assest and Organizes them
+    /// </summary>
     [CreateAssetMenu(fileName = "Library", menuName = "States/Library", order = 0)]
     public class StateLibrary : ScriptableObject
     {

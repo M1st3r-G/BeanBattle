@@ -205,7 +205,7 @@ namespace Managers
                     {
                         neighbour.GCost = newCostToNeighbour;
                         neighbour.HCost = neighbour.Position.ManhattanDistance(_targetNode.Position);
-                        neighbour.parent = node;
+                        neighbour.Parent = node;
 
                         if (!openSet.Contains(neighbour))
                             openSet.Add(neighbour);
@@ -225,7 +225,7 @@ namespace Managers
             while (currentNode != startNode)
             {
                 path.Add(currentNode);
-                currentNode = currentNode.parent;
+                currentNode = currentNode.Parent;
             }
             path.Reverse();
 

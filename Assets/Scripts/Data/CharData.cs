@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Data
 {
+    /// <summary>
+    /// Saves all Information regarding a Character
+    /// </summary>
     [CreateAssetMenu(fileName = "Character")]
     public class CharData : ScriptableObject
     {
