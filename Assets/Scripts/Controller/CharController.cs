@@ -1,3 +1,4 @@
+using System;
 using Data;
 using Managers;
 using UI;
@@ -80,9 +81,15 @@ namespace Controller
             UIManager.Instance.RefreshCharacter(this);
             
             //Trigger Overflow
-            if (Initiative >= 10) GameManager.Instance.TriggerNextRound();
+            if (Initiative >= 10) OnPlayerFinishedAction += OverflowWrapperFunction;
         }
 
+        private static void OverflowWrapperFunction(CharacterAction.ActionTypes _)
+        {
+            OnPlayerFinishedAction -= OverflowWrapperFunction;
+            GameManager.Instance.TriggerNextRound();
+        }
+        
         public void TakeDamage(int amount)
         {
             //Take Damage and Display

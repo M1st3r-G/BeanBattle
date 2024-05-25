@@ -64,7 +64,6 @@ namespace Controller
             {
                 //On Legal Exit
                 DisassembleCurrentState();
-                MyCharacter.AddInitiative(UIManager.Instance.GetTimeCost());
             }
             if (stopAction.action.WasPerformedThisFrame()) DisassembleCurrentState();
         }
@@ -94,18 +93,36 @@ namespace Controller
             _currentState.StateSetUp(this);
         }
         
+        /// <summary>
+        /// Changes to The EmptyState safely
+        /// </summary>
         private void DisassembleCurrentState()
         {
             stopAction.action.Disable();
             _currentState.StateDisassembly(this);
+            if(!IsAnimating) CharController.OnPlayerFinishedAction?.Invoke(_currentState.ActionType);
             _currentState = stateLibrary.EmptyState;
         }
 
+        /// <summary>
+        /// Changes State Variables that could Lead to Errors
+        /// </summary>
+        /// <param name="c">The Dead Player</param>
         private void PlayerDeath(CharController c)
         {
             if (CurrentSelection == c) CurrentSelection = null;
         }
 
+        /// <summary>
+        /// Triggered When a State Fully has Ended
+        /// </summary>
+        /// <param name="type"></param>
+        public void EndOfStateReached(CharacterAction.ActionTypes type)
+        {
+            CharController.OnPlayerFinishedAction?.Invoke(type);
+            MyCharacter.AddInitiative(UIManager.Instance.GetTimeCost());
+        }
+        
         #endregion
     }
 }

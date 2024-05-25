@@ -24,8 +24,6 @@ namespace Data.CharacterStates
         public override void StateDisassembly(CharStateController s)
         {
             //Enables Input if State is switched Away
-            if(!s.IsAnimating) CharController.OnPlayerFinishedAction?.Invoke(ActionType);
-
             s.MyCharacter.Indicator.SetActive(false);
         }
 
@@ -95,7 +93,7 @@ namespace Data.CharacterStates
             
             // When Finished, enable Input
             s.IsAnimating = false;
-            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
+            s.EndOfStateReached(ActionType);
         }
         
         #endregion

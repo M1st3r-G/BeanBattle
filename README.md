@@ -4,10 +4,6 @@ This is Bean Battle, a **Very** simple (probably) unfinished X-Com like game, ju
 It's more to be seen as a learning and testing Project than a finished game.
 
 ---
-Bugs:
-- Change Turn after Animation
-
-
 ToDo:
 - Next
   - Comment
