@@ -85,10 +85,11 @@ namespace Data.CharacterStates
                 Vector3 endPosition = GridManager.Instance.CellToCenterWorld(currentTargetCell);
 
                 float t = 0f;
+                float timeForSpace = AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Steps);
                 
-                while (t<s.TimePerSpace)
+                while (t<timeForSpace)
                 {
-                    s.MyCharacter.transform.position = Vector3.Lerp(startPosition, endPosition, t / s.TimePerSpace);
+                    s.MyCharacter.transform.position = Vector3.Lerp(startPosition, endPosition, t / timeForSpace);
                     t += Time.deltaTime;
                     yield return null;
                 }

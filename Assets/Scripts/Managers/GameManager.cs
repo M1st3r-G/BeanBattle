@@ -157,7 +157,8 @@ namespace Managers
                 int counter = 0;
                 while (counter < min)
                 {
-                    yield return new WaitForSeconds(0.5f);
+                    float length = AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Ticking);
+                    yield return new WaitForSeconds(length);
                     foreach (CharController p in _playOrder) p.Initiative--;
                     UIManager.Instance.ChangeInitiativeOrderTo(_playOrder.ToArray());
                     counter++;
@@ -196,6 +197,7 @@ namespace Managers
         private void TriggerGameOver(int winningTeam)
         {
             Debug.LogWarning("GameOver");
+            AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Victory);
             _gameLoop = false;
             TriggerNextRound();
             OnGameOver?.Invoke(winningTeam);

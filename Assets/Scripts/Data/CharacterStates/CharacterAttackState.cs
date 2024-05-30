@@ -15,7 +15,7 @@ namespace Data.CharacterStates
         {
             // Set state Variables
             s.CurrentSelection = null;
-            s.LookingForPlayer = false;
+            s.LookingForSelection = false;
             s.AcceptAction.action.Enable();
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Attack);
@@ -24,13 +24,13 @@ namespace Data.CharacterStates
             // Selects the only enemy in range or enables the player selection if more in range
             CharController[] enemiesInRange = GetEnemiesInRange(s, GridManager.Instance.CharactersInRange());
             if (enemiesInRange.Length == 1) SetSelection(s, enemiesInRange[0]);
-            else s.LookingForPlayer = true;
+            else s.LookingForSelection = true;
         }
         
         public override void StateDisassembly(CharStateController s)
         {
             //Reset State Variables
-            s.LookingForPlayer = false;
+            s.LookingForSelection = false;
             s.AcceptAction.action.Disable();
             if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
             s.CurrentSelection = null;
@@ -41,7 +41,7 @@ namespace Data.CharacterStates
         public override bool ExecuteStateFrame(CharStateController s)
         {
             // Target Selection
-            if (s.LookingForPlayer)
+            if (s.LookingForSelection)
             {
                 if (s.MouseClickAction.WasPerformedThisFrame())
                 {

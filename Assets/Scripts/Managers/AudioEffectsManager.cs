@@ -14,7 +14,7 @@ namespace Managers
         
         public enum AudioEffect
         {
-            Click, Attack, Move, Hit, Death, Evil, Heal
+            Click, Attack, Move, Evil, Heal, Hit, Death, Ticking, Steps, Victory
         }
         
         private void Awake()
@@ -28,21 +28,26 @@ namespace Managers
             
             src = GetComponent<AudioSource>();
         }
-
-        public void PlayEffect(AudioEffect effect)
+        
+        /// <summary>
+        /// Plays a Clip of the given SoundEffect and returns its length in seconds
+        /// </summary>
+        /// <param name="effect">The ClipType to Play</param>
+        /// <returns>The length of the played Clip</returns>
+        public float PlayEffect(AudioEffect effect)
         {
             foreach (AudioClipsContainer cnt in clips)
             {
-                if (cnt.Type == effect)
-                {
-                    src.PlayOneShot(cnt.GetClip());
-                    return;
-                }
+                if (cnt.Type != effect) continue;
+                var clip = cnt.GetClip();
+                src.PlayOneShot(clip);
+                return clip.length;
             }
             
             Debug.LogError($"Sound with {effect} Identifier not found");
+            return -1f;
         }
-
+        
         [Serializable]
         private struct AudioClipsContainer
         {

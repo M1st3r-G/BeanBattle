@@ -8,12 +8,12 @@ It's more to be seen as a learning and testing Project than a finished game.
 ---
 ToDo:
 - Next
-  - Sound Effects:
-    - Time Change (TickTack)
-    - Movement (Steps)
-    - Win (Fanfare)
-  - Better Game Over
+  - Game Over Screen
   - Tutorial
+
+- Bugs:
+  - Player are not Selectable
+  - PathTime is not dependent on length
 
 - Enhancements
   - Animations
@@ -47,4 +47,5 @@ Credits:
   - [Core Loop](https://opengameart.org/content/the-gears-of-progress)
 - Effects:
   - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83775">Pixabay</a>
-    Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=82807">Pixabay</a>
+  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=82807">Pixabay</a>
+  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=104276">Pixabay</a>

@@ -25,15 +25,11 @@ namespace Controller
         [SerializeField] private InputActionReference mouseClick;
         public bool IsAnimating { get; set; }
 
-        //MovementStateVariables
-        public float TimePerSpace => timePerSpace;
-        [SerializeField] private float timePerSpace;
-        
         // AttackStateVariables
         public InputActionReference AcceptAction => acceptAction;
         [SerializeField] private InputActionReference acceptAction;
         public CharController CurrentSelection { get;  set; }
-        public bool LookingForPlayer { get;  set; }
+        public bool LookingForSelection { get;  set; }
 
         #endregion
         

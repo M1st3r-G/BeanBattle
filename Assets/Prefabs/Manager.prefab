@@ -109,27 +109,41 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 06b81e623b28daa4c9bf5be65a8da226, type: 3}
     - {fileID: 8300000, guid: 168261a062e6b5d44ae95792a50f62f6, type: 3}
     - {fileID: 8300000, guid: c16d6270d9827ee48b047083edb3da84, type: 3}
-  - name: Hit
+  - name: Evil
     type: 3
+    clips:
+    - {fileID: 8300000, guid: 755798ee15c5a4342a8c90b12f3d1f6a, type: 3}
+  - name: Heal
+    type: 4
+    clips:
+    - {fileID: 8300000, guid: 396a5beffcf06224ea8bd822a58ffe1a, type: 3}
+  - name: Hit
+    type: 5
     clips:
     - {fileID: 8300000, guid: c256a307f9765b24d99aebb7a4f0ff46, type: 3}
     - {fileID: 8300000, guid: f44634f143ca0fb4caeda51b5dd3fa72, type: 3}
     - {fileID: 8300000, guid: 22ba34c742efdae43935432582b412e3, type: 3}
   - name: Death
-    type: 4
+    type: 6
     clips:
     - {fileID: 8300000, guid: 511a6167b01c9f64484ab7b44a952a9b, type: 3}
     - {fileID: 8300000, guid: 2480e7be3c5a4bd4b94932f807d80670, type: 3}
     - {fileID: 8300000, guid: 619e7ee0e2818114ca23cfd4be619e93, type: 3}
     - {fileID: 8300000, guid: 94ec8f5243f613749851be300a61ce78, type: 3}
-  - name: Evil
-    type: 5
+  - name: Ticking
+    type: 7
     clips:
-    - {fileID: 8300000, guid: 755798ee15c5a4342a8c90b12f3d1f6a, type: 3}
-  - name: Heal
-    type: 6
+    - {fileID: 8300000, guid: 1b445eb13fe0d7b4eabe9e2c03389ec1, type: 3}
+  - name: Steps
+    type: 8
     clips:
-    - {fileID: 8300000, guid: 396a5beffcf06224ea8bd822a58ffe1a, type: 3}
+    - {fileID: 8300000, guid: 9751ca113273ed147bce68919afbb374, type: 3}
+    - {fileID: 8300000, guid: 45f9d4d2c5f9e74438cc38167c5b68b6, type: 3}
+    - {fileID: 8300000, guid: f27b2d46f3723eb4e897a6a8dbfb33ca, type: 3}
+  - name: Victory
+    type: 9
+    clips:
+    - {fileID: 8300000, guid: baec50b5945b60f47bd6aae8e567052e, type: 3}
 --- !u!82 &797749876556960851
 AudioSource:
   m_ObjectHideFlags: 0
