@@ -1,0 +1,89 @@
+using UnityEngine;
+
+public class StateController : MonoBehaviour
+{
+    [SerializeField] private State initialState;
+    private State currentState;
+    #NOTRIM#
+    private void Start()
+    {
+        currentState = initialState;
+    }
+    #NOTRIM#
+    private void Update()
+    {
+        currentState.RunStateUpdate(this);
+    }
+    #NOTRIM#
+    public void TransitionToState(State targetState)
+    {
+        if (targetState == currentState|| targetState is null) return;
+        // State Cleanup?
+        currentState = targetState;
+    }
+}
+#NOTRIM#
+#NOTRIM#
+//Extract this to new File
+[CreateAssetMenu(menuName = "AI/State")]
+public class State : ScriptableObject
+{
+    [SerializeField] private Action[] actions;
+    [SerializeField] private Transition[] transitions;
+    #NOTRIM#
+    public void RunStateUpdate(StateController controller)
+    {
+        ExecuteActions(controller);
+        CheckTransitions(controller);
+    }
+    #NOTRIM#
+    private void ExecuteActions(StateController controller)
+    {
+        foreach (Action action in actions)
+        {
+            action.Execute(controller);
+        }
+    }
+    #NOTRIM#
+    private void CheckTransitions(StateController controller)
+    {
+        List<State> possibleNextStates = new List<State>(); 
+        foreach (Transition transition in transitions)
+        {
+            if (transition.ChangeTransition(controller, out State newState))
+            {
+                possibleNextStates.Add(newState);
+            }
+        }
+        #NOTRIM#
+        //Custom Logic
+        controller.TransitionToState(possibleNextStates[0]);
+    }
+    #NOTRIM#
+    #NOTRIM#
+    [System.Serializable]
+    private class Transition
+    {
+        public Decision decision;
+        #NOTRIM#
+        public State targetState;
+        public State mainState;
+        #NOTRIM#
+        public bool ChangeTransition(StateController controller, out State newState)
+        {
+            bool change = decision.Decide(controller);
+            newState = change ? targetState : mainState;
+            return change;
+        }
+    }
+}
+#NOTRIM#
+public abstract class Action : ScriptableObject
+{
+    public abstract void Execute(StateController controller);
+}
+#NOTRIM#
+public abstract class Decision : ScriptableObject
+{
+    public abstract bool Decide(StateController controller);
+}
