@@ -1,9 +1,10 @@
 using Data;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inner
+namespace UIContent
 {
     /// <summary>
     /// Internally used by the <see cref="UIManager"/> to Display the Current Action

@@ -1,5 +1,5 @@
 using Data;
-using UI;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

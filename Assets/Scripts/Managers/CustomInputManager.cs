@@ -1,6 +1,6 @@
 using Controller;
 using Data;
-using UI;
+using UIContent.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -80,7 +80,7 @@ namespace Managers
         /// <summary>
         /// Triggered either by Clicking on the Cell (<see cref="ActionCellPressed"/>) or the number buttons on the Keyboard (<see cref="NumberPressed"/>))
         /// </summary>
-        /// <param name="actionIndex">The Index (Zero Based) of the Action in the <see cref="UI.Inner.Actions.ActionsUI"/> list</param>
+        /// <param name="actionIndex">The Index (Zero Based) of the Action in the <see cref="ActionsUI"/> list</param>
         /// <param name="action">The <see cref="CharacterAction"/> action triggered</param>
         private void SelectAction(int actionIndex, CharacterAction action)
         {

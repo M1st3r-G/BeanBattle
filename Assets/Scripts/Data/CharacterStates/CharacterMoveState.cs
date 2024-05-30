@@ -1,7 +1,6 @@
 using System.Collections;
 using Controller;
 using Managers;
-using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

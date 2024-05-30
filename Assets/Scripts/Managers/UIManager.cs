@@ -1,12 +1,11 @@
 using Controller;
 using Data;
-using Managers;
-using UI.Inner;
-using UI.Inner.Actions;
-using UI.Inner.Initiative;
+using UIContent;
+using UIContent.Actions;
+using UIContent.Initiative;
 using UnityEngine;
 
-namespace UI
+namespace Managers
 {
     public class UIManager : MonoBehaviour
     {
@@ -85,10 +84,10 @@ namespace UI
         #region ActionSelection
 
         /// <summary>
-        /// Triggered by the <see cref="CustomInputManager"/> Visually Selects the Action at the given Index. It refers to the <see cref="Inner.Actions.ActionsUI._actionCells"/> Order
+        /// Triggered by the <see cref="CustomInputManager"/> Visually Selects the Action at the given Index. It refers to the <see cref="ActionsUI._actionCells"/> Order
         /// </summary>
         /// <param name="actionIndex">The (Zero Based) Index of the Action</param>
-        /// <seealso cref="Inner.Actions.ActionsUI"/>
+        /// <seealso cref="ActionsUI"/>
         public void SelectAction(int actionIndex)
         {
             // When the Selected Action is Selected Again, it should be only deselected instead   
@@ -100,7 +99,7 @@ namespace UI
         /// Internally used to set the <see cref="ActionsUI"/> Cell at the Index Active and Adjust the <see cref="CurrentActionController"/>
         /// </summary>
         /// <param name="actionIndex">The (Zero Based) Index of the Action Cell</param>
-        /// <seealso cref="Inner.Actions.ActionsUI"/>
+        /// <seealso cref="ActionsUI"/>
         private void DisplayNewAction(int actionIndex)
         {
             // Disable old ActionCell

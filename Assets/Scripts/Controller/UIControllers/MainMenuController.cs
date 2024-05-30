@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Controller
+namespace Controller.UIControllers
 {
     [RequireComponent(typeof(AudioSource))]
     public class MainMenuController : MonoBehaviour

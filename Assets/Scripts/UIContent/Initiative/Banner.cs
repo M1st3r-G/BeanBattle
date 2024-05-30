@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inner.Initiative
+namespace UIContent.Initiative
 {
     /// <summary>
     /// Internally used by the <see cref="InitiativeUI"/> to store Data, and Display the Characters.

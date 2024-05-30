@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Controller
+namespace Controller.UIControllers
 {
     [RequireComponent(typeof(CanvasGroup))]
     public class GameOverController : MonoBehaviour

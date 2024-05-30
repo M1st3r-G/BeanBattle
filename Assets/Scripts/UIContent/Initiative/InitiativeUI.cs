@@ -1,8 +1,9 @@
 using Controller;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inner.Initiative
+namespace UIContent.Initiative
 {
     /// <summary>
     /// Internally used by the <see cref="UIManager"/>. Uses <see cref="Banner"/> internally to Display and Manage the Characters

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inner.Actions
+namespace UIContent.Actions
 {
     /// <summary>
     /// Internally used by the <see cref="ActionsUI"/> to store Data, Display Selection and Listen to Clicks (Which are given to the <see cref="CustomInputManager"/>

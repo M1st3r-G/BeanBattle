@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Data;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Inner.Actions
+namespace UIContent.Actions
 {
     /// <summary>
     /// Internally used by the <see cref="UIManager"/>. Uses <see cref="ActionCell"/> internally to Display and Manage Actions
