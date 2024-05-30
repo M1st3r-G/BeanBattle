@@ -1,4 +1,5 @@
 using Controller;
+using Controller.UIControllers;
 using Data;
 using UIContent;
 using UIContent.Actions;
@@ -15,7 +16,8 @@ namespace Managers
         [SerializeField] private CurrentActionController currentAction;
         [SerializeField] private InitiativeUI initiativeUI;
         [SerializeField] private ActionsUI action;
-
+        [SerializeField] private GameOverController gameOver;
+        
         private int CurrentSelection { get; set; } = -1;
         
         public static UIManager Instance { get; private set; }
@@ -27,6 +29,7 @@ namespace Managers
         private void Awake()
         {
             Instance = this;
+            gameOver.gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -60,7 +63,13 @@ namespace Managers
         private void OnGameOver(int winningTeam)
         {
             // Hides all UI
-            gameObject.SetActive(false);
+            currentCharacter.gameObject.SetActive(false); 
+            currentAction.gameObject.SetActive(false);
+            initiativeUI.gameObject.SetActive(false);
+            action.gameObject.SetActive(false);
+                
+            // Shows Game Over
+            gameOver.gameObject.SetActive(true);
         }
 
         #endregion

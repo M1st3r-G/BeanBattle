@@ -6,31 +6,24 @@ using UnityEngine.SceneManagement;
 
 namespace Controller.UIControllers
 {
-    [RequireComponent(typeof(CanvasGroup))]
     public class GameOverController : MonoBehaviour
     {
-        private CanvasGroup _cg;
-        
         [SerializeField] private TextMeshProUGUI teamText;
         [SerializeField] private TextMeshProUGUI turnsText;
         [SerializeField] private TextMeshProUGUI stepsText;
-        private void Awake()
-        {
-            _cg = GetComponent<CanvasGroup>();
-            _cg.alpha = 0f;
-            _cg.blocksRaycasts = _cg.interactable = false;
-        }
 
         private void OnEnable()
         {
             GameManager.OnGameOver += OnGameOverEvent;
         }
 
+        
+        /// <summary>
+        /// Refreshes the Text. The Display is Carried by the <see cref="UIManager"/>
+        /// </summary>
+        /// <param name="winningTeam"></param>
         private void OnGameOverEvent(int winningTeam)
         {
-            _cg.alpha = 1f;
-            _cg.blocksRaycasts = _cg.interactable = true;
-
             teamText.text = $"Team {winningTeam} is the winning Team!";
             
             Tuple<int, int> stats = GameManager.Instance.GetGameStats();

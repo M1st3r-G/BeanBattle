@@ -1139,7 +1139,6 @@ GameObject:
   - component: {fileID: 7649862794398391300}
   - component: {fileID: 6176187557855303871}
   - component: {fileID: 3087763382992112960}
-  - component: {fileID: 5406094472791761291}
   - component: {fileID: 5208897975495799695}
   m_Layer: 0
   m_Name: GameOverPanel
@@ -1208,18 +1207,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &5406094472791761291
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8467136999390624224}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!114 &5208897975495799695
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -202,6 +202,7 @@ MonoBehaviour:
   currentAction: {fileID: 4259312000316953943}
   initiativeUI: {fileID: 6831481453156917527}
   action: {fileID: 2109719994638773684}
+  gameOver: {fileID: 4672461937246341220}
 --- !u!1001 &621024491433606123
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -299,6 +300,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d458695f1c31d3f4ca761d644a6902fe, type: 3}
+--- !u!114 &4672461937246341220 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5208897975495799695, guid: d458695f1c31d3f4ca761d644a6902fe, type: 3}
+  m_PrefabInstance: {fileID: 621024491433606123}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efaf35e54384128a4c0288ef5a037d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7113321066132432879 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7649862794398391300, guid: d458695f1c31d3f4ca761d644a6902fe, type: 3}
