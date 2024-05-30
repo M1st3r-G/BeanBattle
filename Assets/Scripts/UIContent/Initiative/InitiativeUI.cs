@@ -57,7 +57,7 @@ namespace UIContent.Initiative
                 if (banner.gameObject.activeSelf) counter++;
             }
             
-            AdjustBottomPadding(counter - 1);
+            AdjustBottomPadding(counter);
         }
         
         /// <summary>
