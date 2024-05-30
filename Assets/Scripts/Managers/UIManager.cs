@@ -70,6 +70,7 @@ namespace Managers
                 
             // Shows Game Over
             gameOver.gameObject.SetActive(true);
+            gameOver.OnGameOverEvent(winningTeam);
         }
 
         #endregion

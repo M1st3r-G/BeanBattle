@@ -11,18 +11,12 @@ namespace Controller.UIControllers
         [SerializeField] private TextMeshProUGUI teamText;
         [SerializeField] private TextMeshProUGUI turnsText;
         [SerializeField] private TextMeshProUGUI stepsText;
-
-        private void OnEnable()
-        {
-            GameManager.OnGameOver += OnGameOverEvent;
-        }
-
         
         /// <summary>
         /// Refreshes the Text. The Display is Carried by the <see cref="UIManager"/>
         /// </summary>
         /// <param name="winningTeam"></param>
-        private void OnGameOverEvent(int winningTeam)
+        public void OnGameOverEvent(int winningTeam)
         {
             teamText.text = $"Team {winningTeam} is the winning Team!";
             
