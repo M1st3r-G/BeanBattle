@@ -9,7 +9,9 @@ namespace Managers
     {
         [SerializeField] private AudioClipsContainer[] clips;
         private AudioSource src;
-
+        
+        public static AudioEffectsManager Instance { get; private set; }
+        
         public enum AudioEffect
         {
             Click, Attack, Move, Hit, Death, Evil, Heal
@@ -17,6 +19,13 @@ namespace Managers
         
         private void Awake()
         {
+            if (Instance is not null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            
             src = GetComponent<AudioSource>();
         }
 
@@ -47,6 +56,11 @@ namespace Managers
             {
                 return clips[Random.Range(0, clips.Length)];
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
     }
 }

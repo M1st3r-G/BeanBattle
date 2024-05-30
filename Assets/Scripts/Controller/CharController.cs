@@ -1,6 +1,7 @@
 using Data;
 using Managers;
 using UI;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -96,10 +97,14 @@ namespace Controller
             UIManager.Instance.RefreshCharacter(this);
             
             //On Death Trigger Event and Destroy
-            if (CurrentHealth > 0) return;
-            OnPlayerDeath?.Invoke(this);
-            Destroy(gameObject);
-            Debug.Log($"{name} has Died");
+            if (CurrentHealth > 0) AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Hit);
+            else
+            {
+                OnPlayerDeath?.Invoke(this);
+                Destroy(gameObject);
+                Debug.Log($"{name} has Died");
+                AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Death);
+            }
         }
 
         public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);

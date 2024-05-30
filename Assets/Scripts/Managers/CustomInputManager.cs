@@ -86,6 +86,8 @@ namespace Managers
         {
             //If Input is Enabled, it Selects Actions. The Methods handle disabling when the Same Action is Triggered again
             if (!_isListeningToInput) return;
+            
+            AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Click);
             UIManager.Instance.SelectAction(actionIndex);
             GameManager.Instance.TriggerState(action.Type);
         }

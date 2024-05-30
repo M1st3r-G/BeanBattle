@@ -9,12 +9,9 @@ It's more to be seen as a learning and testing Project than a finished game.
 ToDo:
 - Next
   - Sound Effects:
-    - Attack (Self, HUEH)
-    - Move (Self, Haha)
-    - Select (Dump/Klack)
     - Time Change (TickTack)
-    - Hurt (Self, OOOF)
-    - Death (Self, OOOOHHH)
+    - Movement (Steps)
+    - Win (Fanfare)
   - Better Game Over
   - Tutorial
 
@@ -48,3 +45,6 @@ Credits:
   - Icons licensed under [CC3](https://creativecommons.org/licenses/by/3.0/)
 - Music:
   - [Core Loop](https://opengameart.org/content/the-gears-of-progress)
+- Effects:
+  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83775">Pixabay</a>
+    Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=82807">Pixabay</a>

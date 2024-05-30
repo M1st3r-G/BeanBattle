@@ -20,6 +20,8 @@ namespace Data.CharacterStates
             // Set State Variables
             s.IsAnimating = false;
             s.MyCharacter.Indicator.SetActive(true);
+            
+            AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Move);
         }
 
         public override void StateDisassembly(CharStateController s)
