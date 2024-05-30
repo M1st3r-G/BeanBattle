@@ -45,10 +45,14 @@ namespace Data.CharacterStates
                 Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
                 s.path = GridManager.Instance.GetPath(startCell, hoveredCell);
                 UIManager.Instance.SetTimeCost(s.path.Length);
+                
+                // Renders the Path
+                GridManager.Instance.RenderPath(s.path);
             }
             else
             {
                 // When hovering over Enemy (cells) it its range is displayed
+                GridManager.Instance.ResetRange();
                 GridManager.Instance.DisplayRange(GridManager.Instance.GetOccupier(hoveredCell));
             }
 
@@ -68,8 +72,6 @@ namespace Data.CharacterStates
             CharController.OnPlayerStartedAction?.Invoke(ActionType);
             s.IsAnimating = true;
             Vector2Int lastCell = new Vector2Int();
-            
-            GridManager.Instance.RenderPath(s.path);
             
             // for each field in the Path
             foreach (Vector2Int currentTargetCell in s.path)

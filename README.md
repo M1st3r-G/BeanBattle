@@ -18,7 +18,6 @@ ToDo:
 
   
 - Enhancements
-  - Visualize Path
   - Better Song (Not that annoying)
   - Animations
     - Attack
@@ -26,6 +25,8 @@ ToDo:
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
+  - Optimisation
+    - MovementState only on Cell Change
   - Better Hover Zone/ Indicator
   - Balancing
     - First team Has lower Time Overflow?
