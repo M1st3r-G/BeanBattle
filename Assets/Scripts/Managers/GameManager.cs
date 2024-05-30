@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,10 @@ namespace Managers
         public delegate void OnGameOverDelegate(int winningTeam);
         public static OnGameOverDelegate OnGameOver;
 
+        //Data
+        private int totalSteps;
+        private int totalTurns;
+        
         #endregion
 
         #region SetUp
@@ -44,6 +49,8 @@ namespace Managers
             Instance = this;
 
             _gameLoop = true;
+
+            totalSteps = totalTurns = 0;
         }
         
         private void Start()
@@ -169,6 +176,8 @@ namespace Managers
             // Set and Remove the Next Player
             CurrentPlayer = _playOrder[0];
             _playOrder.RemoveAt(0);
+
+            totalTurns++;
         }
         
         #endregion
@@ -201,6 +210,20 @@ namespace Managers
             _gameLoop = false;
             TriggerNextRound();
             OnGameOver?.Invoke(winningTeam);
+        }
+
+        /// <summary>
+        /// Returns the Number of Turns, and the Number of Steps
+        /// </summary>
+        /// <returns></returns>
+        public Tuple<int, int> GetGameStats()
+        {
+            return new Tuple<int, int>(totalTurns, totalSteps);
+        }
+        
+        public void CountSteps(int amount)
+        {
+            totalSteps += amount;
         }
         
         #endregion

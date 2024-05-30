@@ -8,13 +8,12 @@ It's more to be seen as a learning and testing Project than a finished game.
 ---
 ToDo:
 - Next
-  - Game Over Screen
   - Tutorial
   - Settings
 
 - Bugs:
   - Player are not Selectable
-  - Input is not disbled when ending an attack action
+  - Input is not disabled when ending an attack action
 
 - Enhancements
   - Animations
