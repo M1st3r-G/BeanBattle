@@ -14,6 +14,7 @@ ToDo:
   - Bugs:
     - Player are not Selectable
     - Input is not disabled when ending an attack action
+    - Materials are loaded Weirldy when coming from Menu
 
   
 - Enhancements
