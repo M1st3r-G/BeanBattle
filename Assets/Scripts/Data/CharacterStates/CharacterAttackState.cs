@@ -16,7 +16,6 @@ namespace Data.CharacterStates
             // Set state Variables
             s.CurrentSelection = null;
             s.LookingForSelection = false;
-            s.AcceptAction.action.Enable();
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Attack);
             GridManager.Instance.ResetRange();
@@ -25,19 +24,13 @@ namespace Data.CharacterStates
             // Selects the only enemy in range or enables the player selection if more in range
             CharController[] enemiesInRange = GetEnemiesInRange(s, GridManager.Instance.CharactersInRange());
             if (enemiesInRange.Length == 1) SetSelection(s, enemiesInRange[0]);
-            else
-            {
-                s.LookingForSelection = true;
-                s.MouseClickAction.Enable();
-            }
+            else s.LookingForSelection = true;
         }
         
         public override void StateDisassembly(CharStateController s)
         {
             //Reset State Variables
             s.LookingForSelection = false;
-            s.AcceptAction.action.Disable();
-            s.MouseClickAction.Disable();
             if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
             s.CurrentSelection = null;
             
@@ -49,7 +42,7 @@ namespace Data.CharacterStates
             // Target Selection
             if (s.LookingForSelection)
             {
-                if (s.MouseClickAction.WasPerformedThisFrame())
+                if (CustomInputManager.Instance.MouseClickedThisFrame())
                 {
                     Debug.LogError("Noticed Click");
                     if (MouseInputManager.Instance.GetCharacterClicked(out CharController clickedChar))
@@ -61,12 +54,12 @@ namespace Data.CharacterStates
             }
             
             if(s.CurrentSelection is null) return false;
-            if (!s.AcceptAction.action.WasPerformedThisFrame()) return false;
+            if (!CustomInputManager.Instance.AcceptedThisFrame()) return false;
 
             // Target is accepted
             s.CurrentSelection.TakeDamage(s.MyCharacter.GetData.Damage);
 
-            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
+            CustomInputManager.EnableInputEvent?.Invoke(ActionType);
             return true;
         }
         

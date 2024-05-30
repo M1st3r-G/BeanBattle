@@ -124,13 +124,13 @@ namespace Managers
         {
             while(_gameLoop)
             {
-                CustomInputManager.Instance.EnableInputAction(false);
+                CustomInputManager.DisableInputEvent?.Invoke(CharacterAction.ActionTypes.None);
                 //Select and Display the next Player
                 yield return NextPlayer();
                 Debug.Log("Selected new Player");
                 UIManager.Instance.ChangeActiveCharacter(CurrentPlayer);
                 
-                CustomInputManager.Instance.EnableInputAction(true); // Enables number Shortcuts
+                CustomInputManager.EnableInputEvent?.Invoke(CharacterAction.ActionTypes.None); // Enables number Shortcuts
 
                 // Wait for EndOfPhase
                 _nextPhasePressed = false;

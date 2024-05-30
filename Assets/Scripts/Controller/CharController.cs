@@ -26,10 +26,6 @@ namespace Controller
         // Events
         public delegate void OnPlayerDeathEvent(CharController c);
         public static OnPlayerDeathEvent OnPlayerDeath;
-        public delegate void OnPlayerFinishedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerFinishedActionEvent OnPlayerFinishedAction;
-        public delegate void OnPlayerStartedActionEvent(CharacterAction.ActionTypes type);
-        public static OnPlayerStartedActionEvent OnPlayerStartedAction;
 
         #endregion
         
@@ -79,12 +75,12 @@ namespace Controller
             UIManager.Instance.RefreshCharacter(this);
             
             //Trigger Overflow
-            if (Initiative >= 10) OnPlayerFinishedAction += OverflowWrapperFunction;
+            if (Initiative >= 10) CustomInputManager.EnableInputEvent += OverflowWrapperFunction;
         }
 
         private static void OverflowWrapperFunction(CharacterAction.ActionTypes _)
         {
-            OnPlayerFinishedAction -= OverflowWrapperFunction;
+            CustomInputManager.EnableInputEvent -= OverflowWrapperFunction;
             GameManager.Instance.TriggerNextRound();
         }
         

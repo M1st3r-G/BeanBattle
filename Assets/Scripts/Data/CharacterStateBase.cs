@@ -20,7 +20,7 @@ namespace Data
         
         /// <summary>
         /// The State Disassembly should be called everytime the State is changed or exit. It reverses the Variables set in the SetUp
-        /// A True end (With animation) should manually be triggered with by setting the <see cref="CharStateController.IsAnimating"/> bool during Animation and relasing it when finished. Also Call a <see cref="CharController.OnPlayerFinishedAction"/> Event
+        /// A True end (With animation) should manually be triggered with by setting the <see cref="CharStateController.IsAnimating"/> bool during Animation and relasing it when finished. Also Call a <see cref="CharController.EnableInputEvent"/> Event
         /// </summary>
         /// <param name="s">The StateController running the State, where all Variables are Stored</param>
         /// <seealso cref="StateSetUp"/>
@@ -28,8 +28,8 @@ namespace Data
         
         /// <summary>
         /// Executes A frame of the State. It is used for Input Only. A Animation shouled be Carried out by the Animation Coroutine.
-        /// Which should setting the <see cref="CharStateController.IsAnimating"/> bool during Animation and call a <see cref="CharController.OnPlayerStartedAction"/> Event.
-        /// When the Animation ends, reset the bool and call a <see cref="CharController.OnPlayerFinishedAction"/> Event.
+        /// Which should setting the <see cref="CharStateController.IsAnimating"/> bool during Animation and call a <see cref="CharController.DisableInputEvent"/> Event.
+        /// When the Animation ends, reset the bool and call a <see cref="CharController.EnableInputEvent"/> Event.
         /// </summary>
         /// <param name="s">The StateController running the State, where all Variables are Stored</param>
         /// <returns> True, when the State is over (Input Wise, not Animation wise)</returns>

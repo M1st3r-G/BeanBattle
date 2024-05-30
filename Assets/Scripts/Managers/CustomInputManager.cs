@@ -9,13 +9,23 @@ namespace Managers
     public class CustomInputManager : MonoBehaviour
     {
         #region Fields
-
+        // Component References
         [SerializeField] private InputActionReference numberAction;
         [SerializeField] private InputActionReference nextPhaseAction;
+        [SerializeField] private InputActionReference mouseClick;
+        [SerializeField] private InputActionReference acceptAction;
+        [SerializeField] private InputActionReference stopAction;
+        // Temps
         private bool _isListeningToInput;
 
+        // Publics
         public static CustomInputManager Instance { get; private set; }
 
+        public delegate void EnableInputDelegate(CharacterAction.ActionTypes type);
+        public static EnableInputDelegate EnableInputEvent;
+        public delegate void DisableInputDelegate(CharacterAction.ActionTypes type);
+        public static DisableInputDelegate DisableInputEvent;
+        
         #endregion
 
         #region SetUp
@@ -32,24 +42,30 @@ namespace Managers
 
         private void OnEnable()
         {
-            CharController.OnPlayerStartedAction += OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAction += OnPlayerFinishedAction;
+            DisableInputEvent += DisableInputAction;
+            EnableInputEvent += EnableInputAction;
             
             numberAction.action.Enable();
             numberAction.action.performed += NumberPressed;
             nextPhaseAction.action.Enable();
             nextPhaseAction.action.performed += EndPhase;
+            
+            mouseClick.action.Enable();
+            acceptAction.action.Enable();
         }
 
         private void OnDisable()
         {
-            CharController.OnPlayerStartedAction -= OnPlayerStartedAction;
-            CharController.OnPlayerFinishedAction -= OnPlayerFinishedAction;
+            DisableInputEvent -= DisableInputAction;
+            EnableInputEvent -= EnableInputAction;
             
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
             nextPhaseAction.action.performed -= EndPhase;
             nextPhaseAction.action.Disable();
+            
+            mouseClick.action.Disable();
+            acceptAction.action.Disable();
         }
 
         #endregion
@@ -90,14 +106,17 @@ namespace Managers
             GameManager.Instance.TriggerState(action.Type);
         }
 
+        public bool AcceptedThisFrame() => acceptAction.action.WasPerformedThisFrame() && _isListeningToInput;
+        public bool MouseClickedThisFrame() => mouseClick.action.WasPerformedThisFrame() && _isListeningToInput;
+        public bool StoppedThisFrame() => stopAction.action.WasPerformedThisFrame() && _isListeningToInput;
         #endregion
 
         #region EnablingAndDisablingInput
 
-        private void OnPlayerFinishedAction(CharacterAction.ActionTypes type) => EnableInputAction(true);
-        private void OnPlayerStartedAction(CharacterAction.ActionTypes type) => EnableInputAction(false);
+        private void EnableInputAction(CharacterAction.ActionTypes type) => SetInputAction(true);
+        private void DisableInputAction(CharacterAction.ActionTypes type) => SetInputAction(false);
         
-        public void EnableInputAction(bool state) => _isListeningToInput = state;
+        private void SetInputAction(bool state) => _isListeningToInput = state;
 
         #endregion
     }

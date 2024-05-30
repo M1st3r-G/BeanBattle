@@ -1,7 +1,6 @@
 using Data;
 using Managers;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Controller
 {
@@ -10,7 +9,6 @@ namespace Controller
         #region Fields
 
         // ComponentReferences
-        [SerializeField] private InputActionReference stopAction;
         [SerializeField] private StateLibrary stateLibrary;
         // Temps
         private CharacterStateBase _currentState;
@@ -21,16 +19,11 @@ namespace Controller
 
         //GeneralStateVariables
         public CharController MyCharacter { get; private set; }
-        public InputAction MouseClickAction => mouseClick.action;
-        [SerializeField] private InputActionReference mouseClick;
-        public bool IsAnimating { get; set; }
 
         // MovementStateVariables
         public Vector2Int[] path;
         
         // AttackStateVariables
-        public InputActionReference AcceptAction => acceptAction;
-        [SerializeField] private InputActionReference acceptAction;
         public CharController CurrentSelection { get;  set; }
         public bool LookingForSelection { get;  set; }
 
@@ -66,7 +59,7 @@ namespace Controller
                 MyCharacter.AddInitiative(UIManager.Instance.GetTimeCost());
                 DisassembleCurrentState();
             }
-            if (stopAction.action.WasPerformedThisFrame()) DisassembleCurrentState();
+            if (CustomInputManager.Instance.StoppedThisFrame()) DisassembleCurrentState();
         }
         
         #endregion
@@ -84,8 +77,6 @@ namespace Controller
             if (previousState == targetState) return;
 
             // Set up new State
-            stopAction.action.Enable();
-            
             _currentState = targetState switch
             {
                 CharacterAction.ActionTypes.None => stateLibrary.EmptyState,
@@ -102,17 +93,10 @@ namespace Controller
         private void DisassembleCurrentState()
         {
             Debug.Log($"Disabling the {_currentState.ActionType} State");
-            stopAction.action.Disable();
             _currentState.StateDisassembly(this);
-            
-            if(!IsAnimating) CharController.OnPlayerFinishedAction?.Invoke(_currentState.ActionType);
             _currentState = stateLibrary.EmptyState;
         }
 
-        /// <summary>
-        /// Changes State Variables that could Lead to Errors
-        /// </summary>
-        /// <param name="c">The Dead Player</param>
         private void OnPlayerDeath(CharController c)
         {
             if (CurrentSelection == c) CurrentSelection = null;

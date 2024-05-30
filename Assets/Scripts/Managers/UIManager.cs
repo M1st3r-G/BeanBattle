@@ -36,14 +36,14 @@ namespace Managers
         {
             GameManager.OnGameOver += OnGameOver;
             CharController.OnPlayerDeath += OnPlayerDeath;
-            CharController.OnPlayerFinishedAction += DeselectCurrentActionWrapper;
+            CustomInputManager.EnableInputEvent += DeselectCurrentActionWrapper;
         }
 
         private void OnDisable()
         {
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
-            CharController.OnPlayerFinishedAction -= DeselectCurrentActionWrapper;
+            CustomInputManager.EnableInputEvent -= DeselectCurrentActionWrapper;
         }
 
         private void OnDestroy()
@@ -135,7 +135,7 @@ namespace Managers
         }
         
         /// <summary>
-        /// Wrapper to Disable the Current Action when a Player Action end, i.e. the <see cref="CharStateController"/> full ends with a <see cref="CharController.OnPlayerFinishedAction"/> Event
+        /// Wrapper to Disable the Current Action when a Player Action end, i.e. the <see cref="CharStateController"/> full ends with a <see cref="CustomInputManager.EnableInputEvent"/> Event
         /// </summary>
         /// <param name="disabledAction">The Action that was Disabled</param>
         private void DeselectCurrentActionWrapper(CharacterAction.ActionTypes disabledAction)

@@ -14,7 +14,6 @@ namespace Data.CharacterStates
         public override void StateSetUp(CharStateController s)
         {
             // Set State Variables
-            s.IsAnimating = false;
             s.MyCharacter.Indicator.SetActive(true);
             s.path = null;
             
@@ -69,8 +68,7 @@ namespace Data.CharacterStates
 
         private IEnumerator AnimateMovement(CharStateController s)
         {
-            CharController.OnPlayerStartedAction?.Invoke(ActionType);
-            s.IsAnimating = true;
+            CustomInputManager.DisableInputEvent?.Invoke(ActionType);
             Vector2Int lastCell = new Vector2Int();
             
             // for each field in the Path
@@ -98,9 +96,8 @@ namespace Data.CharacterStates
             GridManager.Instance.SetOccupied(s.MyCharacter, lastCell);
             
             // When Finished, enable Input
-            s.IsAnimating = false;
             GameManager.Instance.CountSteps(s.path.Length);
-            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
+            CustomInputManager.EnableInputEvent?.Invoke(ActionType);
         }
         
         #endregion
