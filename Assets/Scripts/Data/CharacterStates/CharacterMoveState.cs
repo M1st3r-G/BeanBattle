@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Controller;
 using Managers;
-using Misc;
 using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,6 +17,7 @@ namespace Data.CharacterStates
             // Set State Variables
             s.IsAnimating = false;
             s.MyCharacter.Indicator.SetActive(true);
+            s.path = null;
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Move);
         }
@@ -45,8 +43,9 @@ namespace Data.CharacterStates
                 s.MyCharacter.Indicator.transform.position = newPosition;
                 
                 // Adjusts the Action Cost
-                int timeCost = GridManager.Instance.GetPosition(s.MyCharacter).ManhattanDistance(hoveredCell);
-                UIManager.Instance.SetTimeCost(timeCost);
+                Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
+                s.path = GridManager.Instance.GetPath(startCell, hoveredCell);
+                UIManager.Instance.SetTimeCost(s.path.Length);
             }
             else
             {
@@ -57,9 +56,7 @@ namespace Data.CharacterStates
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
             
             // When the Cell was Clicked, it starts the Animation
-            Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
-            Vector2Int[] path = GridManager.Instance.GetPath(startCell, hoveredCell);
-            s.MyCharacter.StartCoroutine(AnimateMovement(s, path));
+            s.MyCharacter.StartCoroutine(AnimateMovement(s));
             return true;
         }
         
@@ -67,16 +64,16 @@ namespace Data.CharacterStates
 
         #region Animation
 
-        private IEnumerator AnimateMovement(CharStateController s, Vector2Int[]  path)
+        private IEnumerator AnimateMovement(CharStateController s)
         {
             CharController.OnPlayerStartedAction?.Invoke(ActionType);
             s.IsAnimating = true;
             Vector2Int lastCell = new Vector2Int();
             
-            GridManager.Instance.RenderPath(path);
+            GridManager.Instance.RenderPath(s.path);
             
             // for each field in the Path
-            foreach (Vector2Int currentTargetCell in path)
+            foreach (Vector2Int currentTargetCell in s.path)
             {
                 lastCell = currentTargetCell;
                 
@@ -101,6 +98,7 @@ namespace Data.CharacterStates
             
             // When Finished, enable Input
             s.IsAnimating = false;
+            GameManager.Instance.CountSteps(s.path.Length);
             CharController.OnPlayerFinishedAction?.Invoke(ActionType);
         }
         

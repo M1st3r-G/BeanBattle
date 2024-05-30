@@ -12,7 +12,7 @@ namespace Data
         [SerializeField] private CharacterAction.ActionTypes currentType;
         
         /// <summary>
-        /// The State SetUp should be called Once before any Frame Update. It should set State Variables 
+        /// The State SetUp should be called Once before any Frame Update. It should set State Variables and play Inital Sounds. 
         /// </summary>
         /// <param name="s">The StateController running the State, where all Variables are Stored</param>
         /// <seealso cref="StateDisassembly"/>

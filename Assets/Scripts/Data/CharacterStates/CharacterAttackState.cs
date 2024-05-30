@@ -19,6 +19,7 @@ namespace Data.CharacterStates
             s.AcceptAction.action.Enable();
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Attack);
+            GridManager.Instance.ResetRange();
             GridManager.Instance.DisplayRange(s.MyCharacter);
             
             // Selects the only enemy in range or enables the player selection if more in range

@@ -10,10 +10,11 @@ ToDo:
 - Next
   - Game Over Screen
   - Tutorial
+  - Settings
 
 - Bugs:
   - Player are not Selectable
-  - PathTime is not dependent on length
+  - Input is not disbled when ending an attack action
 
 - Enhancements
   - Animations

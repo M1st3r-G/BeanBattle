@@ -25,6 +25,9 @@ namespace Controller
         [SerializeField] private InputActionReference mouseClick;
         public bool IsAnimating { get; set; }
 
+        // MovementStateVariables
+        public Vector2Int[] path;
+        
         // AttackStateVariables
         public InputActionReference AcceptAction => acceptAction;
         [SerializeField] private InputActionReference acceptAction;
