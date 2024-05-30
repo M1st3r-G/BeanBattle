@@ -15,12 +15,6 @@ namespace Managers
         
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            DontDestroyOnLoad(gameObject);
             Instance = this;
 
             _mainCamera = Camera.main;

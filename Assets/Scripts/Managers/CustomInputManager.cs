@@ -22,14 +22,12 @@ namespace Managers
 
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         private void OnEnable()

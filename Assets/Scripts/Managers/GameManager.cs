@@ -39,19 +39,17 @@ namespace Managers
 
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            DontDestroyOnLoad(gameObject);
             Instance = this;
 
             _gameLoop = true;
-
             totalSteps = totalTurns = 0;
         }
-        
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
+
         private void Start()
         {
             SetUp();

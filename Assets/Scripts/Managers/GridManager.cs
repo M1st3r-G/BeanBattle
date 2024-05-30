@@ -35,11 +35,6 @@ namespace Managers
         #region SetUp
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
             Instance = this;
 
             _allCells = new PathfindingNode[numberOfCells.x, numberOfCells.y];

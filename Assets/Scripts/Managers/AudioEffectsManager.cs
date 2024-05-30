@@ -19,13 +19,7 @@ namespace Managers
         
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
             Instance = this;
-            
             src = GetComponent<AudioSource>();
         }
         

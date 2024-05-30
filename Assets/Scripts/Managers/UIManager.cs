@@ -26,12 +26,6 @@ namespace Managers
 
         private void Awake()
         {
-            if (Instance is not null)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             Instance = this;
         }
 
@@ -47,6 +41,11 @@ namespace Managers
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
             CharController.OnPlayerFinishedAction -= DeselectCurrentActionWrapper;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
         }
 
         #endregion
