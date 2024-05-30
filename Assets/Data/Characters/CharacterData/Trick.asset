@@ -15,7 +15,6 @@ MonoBehaviour:
   action:
   - {fileID: 11400000, guid: 18a9ef9b33b87824b8125f7a0cc97c6f, type: 2}
   - {fileID: 11400000, guid: 1eb753c5ec2650a45a5bbf6ca069b880, type: 2}
-  - {fileID: 11400000, guid: 40873d4334f75b342847066035984709, type: 2}
   coloredMaterial:
   - {fileID: 2100000, guid: d34e031fa0de7954d82a33d1155378f2, type: 2}
   - {fileID: 2100000, guid: a4ebee4c8ead92f499925acec687f5bb, type: 2}

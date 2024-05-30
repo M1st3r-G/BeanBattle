@@ -15,7 +15,4 @@ MonoBehaviour:
   emptyState: {fileID: 11400000, guid: 36db7507a01a633468984f4c4812730d, type: 2}
   states:
   - {fileID: 11400000, guid: dd3f487b3ffa67545a4aad884c12547e, type: 2}
-  - {fileID: 11400000, guid: 309c2c37cb4d8bb4cba1ce504c92e23a, type: 2}
-  - {fileID: 11400000, guid: 6f2bf22a431c8b845bae7093464e12d0, type: 2}
   - {fileID: 11400000, guid: 7493a583e011ed74a83e1c0dca8c7185, type: 2}
-  - {fileID: 11400000, guid: 5a1290f7216c65f4292ce109f08f4b0c, type: 2}

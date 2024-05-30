@@ -19,7 +19,6 @@ ToDo:
   - Better Song (Not that annoying)
   - Animations
     - Attack
-  - Remove Unused Actions
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
