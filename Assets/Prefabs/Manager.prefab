@@ -92,7 +92,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: b1774a5d46c6e104b80944049f7a7d98, type: 3}
+  - name: Click
+    type: 0
+    clips:
+    - {fileID: 8300000, guid: e9dd9fc32e8e2654a81bc85b99e10d16, type: 3}
+  - name: Attack
+    type: 1
+    clips:
+    - {fileID: 8300000, guid: 70504b703c80a29418fd309b0e3477b7, type: 3}
+    - {fileID: 8300000, guid: 60d37cdb0d11d8b41a547baf49f9aeea, type: 3}
+    - {fileID: 8300000, guid: ce43d8f4d7ce68042ae9854b0384aea5, type: 3}
+  - name: Move
+    type: 2
+    clips:
+    - {fileID: 8300000, guid: 50ce166a77c6ed0459b2c1c70d4dc9f7, type: 3}
+    - {fileID: 8300000, guid: 06b81e623b28daa4c9bf5be65a8da226, type: 3}
+    - {fileID: 8300000, guid: 168261a062e6b5d44ae95792a50f62f6, type: 3}
+    - {fileID: 8300000, guid: c16d6270d9827ee48b047083edb3da84, type: 3}
+  - name: Hit
+    type: 3
+    clips:
+    - {fileID: 8300000, guid: c256a307f9765b24d99aebb7a4f0ff46, type: 3}
+    - {fileID: 8300000, guid: f44634f143ca0fb4caeda51b5dd3fa72, type: 3}
+    - {fileID: 8300000, guid: 22ba34c742efdae43935432582b412e3, type: 3}
+  - name: Death
+    type: 4
+    clips:
+    - {fileID: 8300000, guid: 511a6167b01c9f64484ab7b44a952a9b, type: 3}
+    - {fileID: 8300000, guid: 2480e7be3c5a4bd4b94932f807d80670, type: 3}
+    - {fileID: 8300000, guid: 619e7ee0e2818114ca23cfd4be619e93, type: 3}
+    - {fileID: 8300000, guid: 94ec8f5243f613749851be300a61ce78, type: 3}
+  - name: Evil
+    type: 5
+    clips:
+    - {fileID: 8300000, guid: 755798ee15c5a4342a8c90b12f3d1f6a, type: 3}
+  - name: Heal
+    type: 6
+    clips:
+    - {fileID: 8300000, guid: 396a5beffcf06224ea8bd822a58ffe1a, type: 3}
 --- !u!82 &797749876556960851
 AudioSource:
   m_ObjectHideFlags: 0
