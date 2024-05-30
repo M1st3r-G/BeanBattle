@@ -12,9 +12,7 @@ ToDo:
   - Settings
   - Pause Menu
   - Bugs:
-    - Player are not Selectable
     - Input is not disabled when ending an attack action
-    - Game Over wasn't Triggered (DevBuild, probably timing issue)
 
   
 - Enhancements
@@ -26,6 +24,7 @@ ToDo:
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
   - Optimisation
+    - Check round end for time > 0
     - MovementState only on Cell Change
   - Better Hover Zone/ Indicator
   - Balancing

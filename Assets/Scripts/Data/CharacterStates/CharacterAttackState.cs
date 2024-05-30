@@ -25,7 +25,11 @@ namespace Data.CharacterStates
             // Selects the only enemy in range or enables the player selection if more in range
             CharController[] enemiesInRange = GetEnemiesInRange(s, GridManager.Instance.CharactersInRange());
             if (enemiesInRange.Length == 1) SetSelection(s, enemiesInRange[0]);
-            else s.LookingForSelection = true;
+            else
+            {
+                s.LookingForSelection = true;
+                s.MouseClickAction.Enable();
+            }
         }
         
         public override void StateDisassembly(CharStateController s)
@@ -33,6 +37,7 @@ namespace Data.CharacterStates
             //Reset State Variables
             s.LookingForSelection = false;
             s.AcceptAction.action.Disable();
+            s.MouseClickAction.Disable();
             if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
             s.CurrentSelection = null;
             
@@ -46,9 +51,11 @@ namespace Data.CharacterStates
             {
                 if (s.MouseClickAction.WasPerformedThisFrame())
                 {
+                    Debug.LogError("Noticed Click");
                     if (MouseInputManager.Instance.GetCharacterClicked(out CharController clickedChar))
                     {
                         if (clickedChar.TeamID != s.MyCharacter.TeamID) SetSelection(s, clickedChar);
+                        Debug.LogError($"Clicked Character{clickedChar.name}");
                     }
                 }
             }
@@ -58,6 +65,8 @@ namespace Data.CharacterStates
 
             // Target is accepted
             s.CurrentSelection.TakeDamage(s.MyCharacter.GetData.Damage);
+
+            CharController.OnPlayerFinishedAction?.Invoke(ActionType);
             return true;
         }
         
