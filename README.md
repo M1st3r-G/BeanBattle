@@ -10,26 +10,29 @@ ToDo:
 - Next
   - Tutorial
   - Settings
+  - Bugs:
+    - Player are not Selectable
+    - Input is not disabled when ending an attack action
 
-- Bugs:
-  - Player are not Selectable
-  - Input is not disabled when ending an attack action
-
+  
 - Enhancements
   - Animations
     - Attack
-  - Better Hover Zone/ Indicator
+  - Remove Unused Actions
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
-    - Over-watch
-  - Controller Input
+  - Better Hover Zone/ Indicator
+  - Balancing
+    - First team Has lower Time Overflow?
+
 
 - Later:
   - AI
   - Terrain?
-  - Balancing
-    - First team Has lower Time Overflow?
+  - Controller Input
+  - Other Actions
+    - Over-watch
 
 Math:
 - [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)
@@ -45,7 +48,5 @@ Credits:
   - Icons licensed under [CC3](https://creativecommons.org/licenses/by/3.0/)
 - Music:
   - [Core Loop](https://opengameart.org/content/the-gears-of-progress)
-- Effects:
-  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83775">Pixabay</a>
-  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=82807">Pixabay</a>
-  - Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=104276">Pixabay</a>
+- Effects:<br>
+  Ticking, Steps, and Victory Sound Effects taken from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=83775">Pixabay</a>
