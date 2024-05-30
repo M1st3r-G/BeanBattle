@@ -24,6 +24,7 @@ namespace Controller.UIControllers
         /// <param name="winningTeam"></param>
         private void OnGameOverEvent(int winningTeam)
         {
+            Debug.LogError("Noticed Game Over");
             teamText.text = $"Team {winningTeam} is the winning Team!";
             
             Tuple<int, int> stats = GameManager.Instance.GetGameStats();
