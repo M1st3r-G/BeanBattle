@@ -10,10 +10,10 @@ ToDo:
 - Next
   - Tutorial
   - Settings
+  - Pause Menu
   - Bugs:
     - Player are not Selectable
     - Input is not disabled when ending an attack action
-    - Victory Sound too Loud
 
   
 - Enhancements
