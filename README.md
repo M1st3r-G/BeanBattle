@@ -14,10 +14,12 @@ ToDo:
   - Bugs:
     - Player are not Selectable
     - Input is not disabled when ending an attack action
-    - Materials are loaded Weirldy when coming from Menu
+    - Game Over wasn't Triggered
 
   
 - Enhancements
+  - Visualize Path
+  - Better Song (Not that annoying)
   - Animations
     - Attack
   - Remove Unused Actions
