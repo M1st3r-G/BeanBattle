@@ -12,7 +12,7 @@ namespace Data
         // Public
         public enum ActionTypes
         {
-            None, Move, Attack, BeEvil, Help, Cover
+            None, Move, Attack
         }
 
         #region Fields

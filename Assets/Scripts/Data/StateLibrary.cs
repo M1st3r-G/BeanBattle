@@ -1,4 +1,5 @@
 using System.Linq;
+using Data.CharacterStates;
 using UnityEngine;
 
 namespace Data

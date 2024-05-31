@@ -9,30 +9,28 @@ namespace Data.CharacterStates
     [CreateAssetMenu(fileName = "Move", menuName = "States/Move", order = 10)]
     public class CharacterMoveState : CharacterStateBase
     {
-        #region DefaultStateMethods
-        
         public override void StateSetUp(CharStateController s)
         {
             // Set State Variables
             s.MyCharacter.Indicator.SetActive(true);
             s.path = null;
             
+            // Play Audio
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Move);
         }
 
         public override void StateDisassembly(CharStateController s)
         {
-            //Enables Input if State is switched Away
             s.MyCharacter.Indicator.SetActive(false);
         }
 
         public override bool ExecuteStateFrame(CharStateController s)
         {
+            // If(Input) ChangeState
             if (!MouseInputManager.Instance.GetCellFromMouse(out Vector2Int hoveredCell)) return false;
-            
             if (!GridManager.Instance.IsOccupied(hoveredCell))
             {
-                // Stop showing Enemys Ranges
+                // Stop showing Enemy's Ranges
                 GridManager.Instance.ResetRange();
                 
                 // Display new Position with the Indicator
@@ -40,13 +38,13 @@ namespace Data.CharacterStates
                 newPosition.y = s.MyCharacter.transform.position.y;
                 s.MyCharacter.Indicator.transform.position = newPosition;
                 
-                // Adjusts the Action Cost
+                // Calculates and Renders Path
                 Vector2Int startCell = GridManager.Instance.WorldToCell(s.MyCharacter.transform.position);
                 s.path = GridManager.Instance.GetPath(startCell, hoveredCell);
-                UIManager.Instance.SetTimeCost(s.path.Length);
-                
-                // Renders the Path
                 GridManager.Instance.RenderPath(s.path);
+                
+                // Adjusts the Action Cost
+                UIManager.Instance.SetTimeCost(s.path.Length);
             }
             else
             {
@@ -55,27 +53,19 @@ namespace Data.CharacterStates
                 GridManager.Instance.DisplayRange(GridManager.Instance.GetOccupier(hoveredCell));
             }
 
+            // If(Accept)
             if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
-            
-            // When the Cell was Clicked, it starts the Animation
-            s.MyCharacter.StartCoroutine(AnimateMovement(s));
+            s.MyCharacter.StartCoroutine(ExecuteStateAndAnimate(s));
             return true;
         }
-        
-        #endregion
 
-        #region Animation
-
-        private IEnumerator AnimateMovement(CharStateController s)
+        protected override IEnumerator ExecuteStateAndAnimate(CharStateController s)
         {
-            CustomInputManager.DisableInputEvent?.Invoke(ActionType);
-            Vector2Int lastCell = new Vector2Int();
+            CustomInputManager.Instance.DisableInput();
             
             // for each field in the Path
             foreach (Vector2Int currentTargetCell in s.path)
             {
-                lastCell = currentTargetCell;
-                
                 // Lerp position
                 Vector3 startPosition = s.MyCharacter.transform.position;
                 Vector3 endPosition = GridManager.Instance.CellToCenterWorld(currentTargetCell);
@@ -93,13 +83,12 @@ namespace Data.CharacterStates
                 GridManager.Instance.HideNextPathCell();
             }
             
-            GridManager.Instance.SetOccupied(s.MyCharacter, lastCell);
+            GridManager.Instance.SetOccupied(s.MyCharacter,  s.path[^1]);
             
-            // When Finished, enable Input
             GameManager.Instance.CountSteps(s.path.Length);
-            CustomInputManager.EnableInputEvent?.Invoke(ActionType);
+            
+            // When Finished, Call Method
+            GameManager.Instance.FullActionEnd();
         }
-        
-        #endregion
     }
 }

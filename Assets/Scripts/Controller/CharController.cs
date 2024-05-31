@@ -73,17 +73,8 @@ namespace Controller
             //Add Initiative and Display
             Initiative += amount;
             UIManager.Instance.RefreshCharacter(this);
-            
-            //Trigger Overflow
-            if (Initiative >= 10) CustomInputManager.EnableInputEvent += OverflowWrapperFunction;
         }
 
-        private static void OverflowWrapperFunction(CharacterAction.ActionTypes _)
-        {
-            CustomInputManager.EnableInputEvent -= OverflowWrapperFunction;
-            GameManager.Instance.TriggerNextRound();
-        }
-        
         public void TakeDamage(int amount)
         {
             //Take Damage and Display
@@ -101,7 +92,7 @@ namespace Controller
             }
         }
 
-        public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.SwitchState(type);
+        public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.TriggerState(type);
         public void SetSelector(bool state) => selector.SetActive(state);
         public override string ToString() => $"{name} ({CurrentHealth}): {Initiative}";
         #endregion

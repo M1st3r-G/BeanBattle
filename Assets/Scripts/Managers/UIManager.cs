@@ -36,14 +36,12 @@ namespace Managers
         {
             GameManager.OnGameOver += OnGameOver;
             CharController.OnPlayerDeath += OnPlayerDeath;
-            CustomInputManager.EnableInputEvent += DeselectCurrentActionWrapper;
         }
 
         private void OnDisable()
         {
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
-            CustomInputManager.EnableInputEvent -= DeselectCurrentActionWrapper;
         }
 
         private void OnDestroy()
@@ -125,27 +123,13 @@ namespace Managers
         /// <summary>
         /// Deselect the current Action in the <see cref="CurrentActionController"/> and the <see cref="ActionCell"/> in the <see cref="ActionsUI"/>
         /// </summary>
-        private void DeselectCurrentAction()
+        public void DeselectCurrentAction()
         {
             action.SetCellStateAtIndex(CurrentSelection, false, out _);
             currentAction.SetAction(null);
             CurrentSelection = -1;
                 
             Debug.Log("Hid the Current Action Visuals");
-        }
-        
-        /// <summary>
-        /// Wrapper to Disable the Current Action when a Player Action end, i.e. the <see cref="CharStateController"/> full ends with a <see cref="CustomInputManager.EnableInputEvent"/> Event
-        /// </summary>
-        /// <param name="disabledAction">The Action that was Disabled</param>
-        private void DeselectCurrentActionWrapper(CharacterAction.ActionTypes disabledAction)
-        {
-            // If nothing is Selected Ignore
-            if (CurrentSelection == -1) return;
-            
-            // Deselect Action when Finished, i.e. only if the Type is the Current type 
-            if (disabledAction == action.GetActionWithIndex(CurrentSelection).Type) 
-                DeselectCurrentAction();
         }
         
         #endregion

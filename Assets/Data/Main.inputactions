@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "EndAction",
+                    "name": "StopAction",
                     "type": "Button",
                     "id": "af547fe0-b10e-4c25-8b21-a67a4c59dea6",
                     "expectedControlType": "Button",
@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ConfirmAction",
+                    "name": "AcceptAction",
                     "type": "Button",
                     "id": "fcfaf9fe-2905-4106-9c3c-fd00308eedca",
                     "expectedControlType": "Button",
@@ -147,7 +147,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "EndAction",
+                    "action": "StopAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -169,7 +169,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ConfirmAction",
+                    "action": "AcceptAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

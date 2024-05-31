@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Controller;
@@ -18,6 +19,7 @@ namespace Data.CharacterStates
             s.LookingForSelection = false;
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Attack);
+            
             GridManager.Instance.ResetRange();
             GridManager.Instance.DisplayRange(s.MyCharacter);
             
@@ -40,38 +42,36 @@ namespace Data.CharacterStates
         public override bool ExecuteStateFrame(CharStateController s)
         {
             // Target Selection
-            if (s.LookingForSelection)
+            if (s.LookingForSelection && CustomInputManager.Instance.MouseClickedThisFrame())
             {
-                if (CustomInputManager.Instance.MouseClickedThisFrame())
+                Debug.Log("AttackState Noticed Click");
+                if (MouseInputManager.Instance.GetCharacterClicked(out CharController clickedChar))
                 {
-                    Debug.LogError("Noticed Click");
-                    if (MouseInputManager.Instance.GetCharacterClicked(out CharController clickedChar))
-                    {
-                        if (clickedChar.TeamID != s.MyCharacter.TeamID) SetSelection(s, clickedChar);
-                        Debug.LogError($"Clicked Character{clickedChar.name}");
-                    }
+                    if (clickedChar.TeamID != s.MyCharacter.TeamID) SetSelection(s, clickedChar);
+                    Debug.LogError($"Clicked Character{clickedChar.name}");
                 }
             }
             
             if(s.CurrentSelection is null) return false;
             if (!CustomInputManager.Instance.AcceptedThisFrame()) return false;
-
             // Target is accepted
-            s.CurrentSelection.TakeDamage(s.MyCharacter.GetData.Damage);
 
-            CustomInputManager.EnableInputEvent?.Invoke(ActionType);
+            s.MyCharacter.StartCoroutine(ExecuteStateAndAnimate(s));
             return true;
         }
-        
+
+        protected override IEnumerator ExecuteStateAndAnimate(CharStateController s)
+        {
+            CustomInputManager.Instance.DisableInput();
+            s.CurrentSelection.TakeDamage(s.MyCharacter.GetData.Damage);
+            yield return null;
+            GameManager.Instance.FullActionEnd();
+        }
+
         #endregion
 
         #region StateMethods
         
-        /// <summary>
-        /// Target the given CharController and marks him
-        /// </summary>
-        /// <param name="s">The State Controller running the this State</param>
-        /// <param name="targetChar">The targeted CharController</param>
         private static void SetSelection(CharStateController s, CharController targetChar)
         {
             if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
