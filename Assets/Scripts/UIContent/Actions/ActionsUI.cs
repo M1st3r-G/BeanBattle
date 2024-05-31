@@ -49,18 +49,28 @@ namespace UIContent.Actions
         /// </summary>
         /// <param name="idx">The Index (Zero Based) of the Cell</param>
         /// <param name="state">Set the Cell Active (True) or Inactive (False)</param>
-        /// <param name="actionInCell">The <see cref="CharacterAction"/> the Cell is Managing</param>
-        public void SetCellStateAtIndex(int idx, bool state, out CharacterAction actionInCell)
-        {
-            actionInCell = _actionCells[idx].Action;
-            _actionCells[idx].SetSelectionState(state);
-        }
+        public void SetCellStateAtIndex(int idx, bool state)
+            => _actionCells[idx].SetSelectionState(state);
 
-        /// <summary>
-        /// Returns the Action at the given Index
-        /// </summary>
-        /// <param name="index">The (Zero Based) Index</param>
-        /// <returns>The <see cref="CharacterAction"/> of the Cell at the Index</returns>
         public CharacterAction GetActionWithIndex(int index) => _actionCells[index].Action;
+        
+        /// <summary>
+        /// Returns the Index of the Cell with the given type
+        /// Return -1 if not found
+        /// </summary>
+        /// <param name="type">The type to search for</param>
+        /// <param name="action">The ActionAssest</param>
+        /// <returns>The Index of the Cell (zero Based)</returns>
+        public int GetIndexWithType(CharacterAction.ActionTypes type, out CharacterAction action)
+        {
+            for (var index = 0; index < _actionCells.Length; index++)
+            { 
+                action = _actionCells[index].Action;
+                if (action.Type == type) return index;
+            }
+
+            action = null;
+            return -1;
+        }
     }
 }

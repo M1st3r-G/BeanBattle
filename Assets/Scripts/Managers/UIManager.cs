@@ -36,14 +36,12 @@ namespace Managers
         {
             GameManager.OnGameOver += OnGameOver;
             CharController.OnPlayerDeath += OnPlayerDeath;
-            CustomInputManager.EnableInputEvent += DeselectCurrentActionWrapper;
         }
 
         private void OnDisable()
         {
             GameManager.OnGameOver -= OnGameOver;
             CharController.OnPlayerDeath -= OnPlayerDeath;
-            CustomInputManager.EnableInputEvent -= DeselectCurrentActionWrapper;
         }
 
         private void OnDestroy()
@@ -93,59 +91,35 @@ namespace Managers
         #region ActionSelection
 
         /// <summary>
-        /// Triggered by the <see cref="CustomInputManager"/> Visually Selects the Action at the given Index. It refers to the <see cref="ActionsUI._actionCells"/> Order
+        /// Used to set the <see cref="ActionsUI"/> Cell at the Index Active and Adjust the <see cref="CurrentActionController"/>
         /// </summary>
-        /// <param name="actionIndex">The (Zero Based) Index of the Action</param>
+        /// <param name="newActionType">The Action to Display</param>
         /// <seealso cref="ActionsUI"/>
-        public void SelectAction(int actionIndex)
-        {
-            // When the Selected Action is Selected Again, it should be only deselected instead   
-            if (actionIndex == CurrentSelection) DeselectCurrentAction();
-            else DisplayNewAction(actionIndex);
-        }
-
-        /// <summary>
-        /// Internally used to set the <see cref="ActionsUI"/> Cell at the Index Active and Adjust the <see cref="CurrentActionController"/>
-        /// </summary>
-        /// <param name="actionIndex">The (Zero Based) Index of the Action Cell</param>
-        /// <seealso cref="ActionsUI"/>
-        private void DisplayNewAction(int actionIndex)
+        public void DisplayNewAction(CharacterAction.ActionTypes newActionType)
         {
             // Disable old ActionCell
-            if (CurrentSelection != -1) action.SetCellStateAtIndex(CurrentSelection, false, out _);
+            if (CurrentSelection != -1) action.SetCellStateAtIndex(CurrentSelection, false);
 
+            int index = action.GetIndexWithType(newActionType, out var actionAsset);    
+            
             // Select new Action
-            CurrentSelection = actionIndex;
-            action.SetCellStateAtIndex(actionIndex, true, out CharacterAction actionInCell);
-            currentAction.SetAction(actionInCell);
+            CurrentSelection = index;
+            action.SetCellStateAtIndex(index, true);
+            currentAction.SetAction(actionAsset);
 
-            Debug.Log($"Displayed the {actionInCell}Action Visuals");
+            Debug.Log($"Displayed the {newActionType}Action Visuals");
         }
 
         /// <summary>
         /// Deselect the current Action in the <see cref="CurrentActionController"/> and the <see cref="ActionCell"/> in the <see cref="ActionsUI"/>
         /// </summary>
-        private void DeselectCurrentAction()
+        public void DeselectCurrentAction()
         {
-            action.SetCellStateAtIndex(CurrentSelection, false, out _);
+            action.SetCellStateAtIndex(CurrentSelection, false);
             currentAction.SetAction(null);
             CurrentSelection = -1;
                 
             Debug.Log("Hid the Current Action Visuals");
-        }
-        
-        /// <summary>
-        /// Wrapper to Disable the Current Action when a Player Action end, i.e. the <see cref="CharStateController"/> full ends with a <see cref="CustomInputManager.EnableInputEvent"/> Event
-        /// </summary>
-        /// <param name="disabledAction">The Action that was Disabled</param>
-        private void DeselectCurrentActionWrapper(CharacterAction.ActionTypes disabledAction)
-        {
-            // If nothing is Selected Ignore
-            if (CurrentSelection == -1) return;
-            
-            // Deselect Action when Finished, i.e. only if the Type is the Current type 
-            if (disabledAction == action.GetActionWithIndex(CurrentSelection).Type) 
-                DeselectCurrentAction();
         }
         
         #endregion

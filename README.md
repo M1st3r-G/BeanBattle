@@ -12,8 +12,7 @@ ToDo:
   - Settings
   - Pause Menu
   - Bugs:
-    - Input is not disabled when ending an attack action
-
+    - Dont hide Actions Imediatly
   
 - Enhancements
   - Better Song (Not that annoying)
@@ -35,6 +34,7 @@ ToDo:
   - AI
   - Terrain?
   - Controller Input
+  - Path Flackern
   - Other Actions
     - Over-watch
 

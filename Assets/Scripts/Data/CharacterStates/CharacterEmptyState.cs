@@ -1,3 +1,4 @@
+using System.Collections;
 using Controller;
 using UnityEngine;
 
@@ -11,7 +12,11 @@ namespace Data.CharacterStates
         public override void StateSetUp(CharStateController s) { }
         public override void StateDisassembly(CharStateController s){ }
         public override bool ExecuteStateFrame(CharStateController s) => false;
-        
+        protected override IEnumerator ExecuteStateAndAnimate(CharStateController s)
+        {
+            yield return null;
+        }
+
         #endregion
     }
 }

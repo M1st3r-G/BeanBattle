@@ -1,6 +1,4 @@
-using Controller;
 using Data;
-using UIContent.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +10,8 @@ namespace Managers
         // Component References
         [SerializeField] private InputActionReference numberAction;
         [SerializeField] private InputActionReference nextPhaseAction;
+        
+        // Requests
         [SerializeField] private InputActionReference mouseClick;
         [SerializeField] private InputActionReference acceptAction;
         [SerializeField] private InputActionReference stopAction;
@@ -21,11 +21,6 @@ namespace Managers
         // Publics
         public static CustomInputManager Instance { get; private set; }
 
-        public delegate void EnableInputDelegate(CharacterAction.ActionTypes type);
-        public static EnableInputDelegate EnableInputEvent;
-        public delegate void DisableInputDelegate(CharacterAction.ActionTypes type);
-        public static DisableInputDelegate DisableInputEvent;
-        
         #endregion
 
         #region SetUp
@@ -42,9 +37,6 @@ namespace Managers
 
         private void OnEnable()
         {
-            DisableInputEvent += DisableInputAction;
-            EnableInputEvent += EnableInputAction;
-            
             numberAction.action.Enable();
             numberAction.action.performed += NumberPressed;
             nextPhaseAction.action.Enable();
@@ -56,9 +48,6 @@ namespace Managers
 
         private void OnDisable()
         {
-            DisableInputEvent -= DisableInputAction;
-            EnableInputEvent -= EnableInputAction;
-            
             numberAction.action.performed -= NumberPressed;
             numberAction.action.Disable();
             nextPhaseAction.action.performed -= EndPhase;
@@ -74,35 +63,33 @@ namespace Managers
 
         private void EndPhase(InputAction.CallbackContext _)
         {
-            if (_isListeningToInput) GameManager.Instance.EndPhase();
+            if (_isListeningToInput) GameManager.Instance.OnEndPhaseAction();
         }
 
         #endregion
         
         #region ActionInputManaging
 
+        public void ActionCellPressed(CharacterAction action) => SelectAction(action);
         private void NumberPressed(InputAction.CallbackContext ctx)
         {
             // The Value [1;9] describes the number key pressed
             int index = (int)ctx.ReadValue<float>() - 1;
             CharacterAction action = UIManager.Instance.GetActionWithIndex(index);
-            SelectAction(index, action);
+            SelectAction(action);
         }
-
-        public void ActionCellPressed(int index, CharacterAction action) => SelectAction(index, action);
         
         /// <summary>
         /// Triggered either by Clicking on the Cell (<see cref="ActionCellPressed"/>) or the number buttons on the Keyboard (<see cref="NumberPressed"/>))
+        /// UI is taken Care of by the State in <see cref="Controller.CharStateController"/>
         /// </summary>
-        /// <param name="actionIndex">The Index (Zero Based) of the Action in the <see cref="ActionsUI"/> list</param>
         /// <param name="action">The <see cref="CharacterAction"/> action triggered</param>
-        private void SelectAction(int actionIndex, CharacterAction action)
+        private void SelectAction(CharacterAction action)
         {
             //If Input is Enabled, it Selects Actions. The Methods handle disabling when the Same Action is Triggered again
             if (!_isListeningToInput) return;
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Click);
-            UIManager.Instance.SelectAction(actionIndex);
             GameManager.Instance.TriggerState(action.Type);
         }
 
@@ -113,8 +100,8 @@ namespace Managers
 
         #region EnablingAndDisablingInput
 
-        private void EnableInputAction(CharacterAction.ActionTypes type) => SetInputAction(true);
-        private void DisableInputAction(CharacterAction.ActionTypes type) => SetInputAction(false);
+        public void EnableInput() => SetInputAction(true);
+        public void DisableInput() => SetInputAction(false);
         
         private void SetInputAction(bool state) => _isListeningToInput = state;
 

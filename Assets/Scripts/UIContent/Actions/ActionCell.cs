@@ -16,13 +16,11 @@ namespace UIContent.Actions
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI nameText;
         // Temps
-        private int _indexInParent;
         public CharacterAction Action { get; private set; }
         
         public void SetToAction(CharacterAction action, int index)
         {
             background.gameObject.SetActive(false);
-            _indexInParent = index;
             Action = action;
             image.sprite = action.ActionImage;
             nameText.text = $"[{index + 1}]\n{action.ActionName}";
@@ -33,6 +31,6 @@ namespace UIContent.Actions
         /// <summary>
         /// When a Cell is Clicked, its Action is Triggered
         /// </summary>
-        public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(_indexInParent, Action);
+        public void OnClicked() => CustomInputManager.Instance.ActionCellPressed(Action);
     }
 }

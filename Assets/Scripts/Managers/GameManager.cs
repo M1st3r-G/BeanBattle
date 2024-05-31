@@ -102,8 +102,11 @@ namespace Managers
 
         #region EventMethods
         
-        public void EndPhase() => TriggerNextRound();
-        
+        public void OnEndPhaseAction()
+        {
+            if(CurrentPlayer.Initiative > 0) TriggerNextRound();
+        }
+
         private void RemoveDeadPlayer(CharController player)
         {
             _playOrder.Remove(player);
@@ -124,17 +127,18 @@ namespace Managers
         {
             while(_gameLoop)
             {
-                CustomInputManager.DisableInputEvent?.Invoke(CharacterAction.ActionTypes.None);
                 //Select and Display the next Player
                 yield return NextPlayer();
                 Debug.Log("Selected new Player");
                 UIManager.Instance.ChangeActiveCharacter(CurrentPlayer);
                 
-                CustomInputManager.EnableInputEvent?.Invoke(CharacterAction.ActionTypes.None); // Enables number Shortcuts
+                Debug.LogWarning("PlayerWindow opened");
+                CustomInputManager.Instance.EnableInput(); // Enables number Shortcuts
 
                 // Wait for EndOfPhase
                 _nextPhasePressed = false;
                 yield return new WaitUntil(() => _nextPhasePressed);
+                CustomInputManager.Instance.DisableInput();
             }
         }
 
@@ -147,7 +151,7 @@ namespace Managers
         {
             if (CurrentPlayer is not null)
             {
-                CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
+                //TODO: Unneccesary? CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
                 //Add him to the Order and Reorders, then Displays the List
                 _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
@@ -184,7 +188,7 @@ namespace Managers
         /// <summary>
         /// Triggers the Next Round
         /// </summary>
-        public void TriggerNextRound()
+        private void TriggerNextRound()
         {
             Debug.LogWarning("Next Round Was Triggered");
             _nextPhasePressed = true;
@@ -209,6 +213,13 @@ namespace Managers
             OnGameOver?.Invoke(winningTeam);
         }
 
+        public void FullActionEnd()
+        {
+            CurrentPlayer.AddInitiative(UIManager.Instance.GetTimeCost());
+            if(CurrentPlayer.Initiative >= 10) TriggerNextRound();
+            else CustomInputManager.Instance.EnableInput();
+        }
+        
         /// <summary>
         /// Returns the Number of Turns, and the Number of Steps
         /// </summary>
