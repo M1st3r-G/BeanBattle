@@ -1,6 +1,7 @@
 # BeanBattle
 
 ![](Assets/Art/Images/MainMenuBackground.png)
+
  
 This is Bean Battle, a **Very** simple (probably) unfinished X-Com like game, just to try out different styles and Mechanics. 
 It's more to be seen as a learning and testing Project than a finished game.
@@ -41,6 +42,8 @@ ToDo:
 Math:
 - [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)
 
+StateController Planning:
+![](Assets/Art/Images/PlanningForReadMe.png)
 
 Credits:
 - [Title Font: Monaz 3D](https://www.fontspace.com/monaz-3d-font-f110367)
