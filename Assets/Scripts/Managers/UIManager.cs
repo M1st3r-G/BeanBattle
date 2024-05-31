@@ -91,33 +91,23 @@ namespace Managers
         #region ActionSelection
 
         /// <summary>
-        /// Triggered by the <see cref="CustomInputManager"/> Visually Selects the Action at the given Index. It refers to the <see cref="ActionsUI._actionCells"/> Order
+        /// Used to set the <see cref="ActionsUI"/> Cell at the Index Active and Adjust the <see cref="CurrentActionController"/>
         /// </summary>
-        /// <param name="actionIndex">The (Zero Based) Index of the Action</param>
+        /// <param name="newActionType">The Action to Display</param>
         /// <seealso cref="ActionsUI"/>
-        public void SelectAction(int actionIndex)
-        {
-            // When the Selected Action is Selected Again, it should be only deselected instead   
-            if (actionIndex == CurrentSelection) DeselectCurrentAction();
-            else DisplayNewAction(actionIndex);
-        }
-
-        /// <summary>
-        /// Internally used to set the <see cref="ActionsUI"/> Cell at the Index Active and Adjust the <see cref="CurrentActionController"/>
-        /// </summary>
-        /// <param name="actionIndex">The (Zero Based) Index of the Action Cell</param>
-        /// <seealso cref="ActionsUI"/>
-        private void DisplayNewAction(int actionIndex)
+        public void DisplayNewAction(CharacterAction.ActionTypes newActionType)
         {
             // Disable old ActionCell
-            if (CurrentSelection != -1) action.SetCellStateAtIndex(CurrentSelection, false, out _);
+            if (CurrentSelection != -1) action.SetCellStateAtIndex(CurrentSelection, false);
 
+            int index = action.GetIndexWithType(newActionType, out var actionAsset);    
+            
             // Select new Action
-            CurrentSelection = actionIndex;
-            action.SetCellStateAtIndex(actionIndex, true, out CharacterAction actionInCell);
-            currentAction.SetAction(actionInCell);
+            CurrentSelection = index;
+            action.SetCellStateAtIndex(index, true);
+            currentAction.SetAction(actionAsset);
 
-            Debug.Log($"Displayed the {actionInCell}Action Visuals");
+            Debug.Log($"Displayed the {newActionType}Action Visuals");
         }
 
         /// <summary>
@@ -125,7 +115,7 @@ namespace Managers
         /// </summary>
         public void DeselectCurrentAction()
         {
-            action.SetCellStateAtIndex(CurrentSelection, false, out _);
+            action.SetCellStateAtIndex(CurrentSelection, false);
             currentAction.SetAction(null);
             CurrentSelection = -1;
                 

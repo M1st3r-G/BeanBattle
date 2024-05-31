@@ -151,7 +151,7 @@ namespace Managers
         {
             if (CurrentPlayer is not null)
             {
-                CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
+                //TODO: Unneccesary? CurrentPlayer.TriggerCharacterState(CharacterAction.ActionTypes.None);
                 //Add him to the Order and Reorders, then Displays the List
                 _playOrder.Add(CurrentPlayer);
                 _playOrder.Sort((l, r) => l.Initiative.CompareTo(r.Initiative));
@@ -215,7 +215,8 @@ namespace Managers
 
         public void FullActionEnd()
         {
-            if(CurrentPlayer.Initiative > 10) TriggerNextRound();
+            CurrentPlayer.AddInitiative(UIManager.Instance.GetTimeCost());
+            if(CurrentPlayer.Initiative >= 10) TriggerNextRound();
             else CustomInputManager.Instance.EnableInput();
         }
         

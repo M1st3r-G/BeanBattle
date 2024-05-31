@@ -56,7 +56,7 @@ namespace Data.CharacterStates
         protected abstract IEnumerator ExecuteStateAndAnimate(CharStateController s);
         /* CustomInputManager.DisableInput();
          * Animate();
-         * GameManager.FullActionEnd();
+         * GameManager.FullActionEnd(timeCost -> Currently taken from UI);
          */
     }
 }

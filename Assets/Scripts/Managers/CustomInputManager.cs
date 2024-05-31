@@ -1,5 +1,4 @@
 using Data;
-using UIContent.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -71,28 +70,26 @@ namespace Managers
         
         #region ActionInputManaging
 
+        public void ActionCellPressed(CharacterAction action) => SelectAction(action);
         private void NumberPressed(InputAction.CallbackContext ctx)
         {
             // The Value [1;9] describes the number key pressed
             int index = (int)ctx.ReadValue<float>() - 1;
             CharacterAction action = UIManager.Instance.GetActionWithIndex(index);
-            SelectAction(index, action);
+            SelectAction(action);
         }
-
-        public void ActionCellPressed(int index, CharacterAction action) => SelectAction(index, action);
         
         /// <summary>
         /// Triggered either by Clicking on the Cell (<see cref="ActionCellPressed"/>) or the number buttons on the Keyboard (<see cref="NumberPressed"/>))
+        /// UI is taken Care of by the State in <see cref="Controller.CharStateController"/>
         /// </summary>
-        /// <param name="actionIndex">The Index (Zero Based) of the Action in the <see cref="ActionsUI"/> list</param>
         /// <param name="action">The <see cref="CharacterAction"/> action triggered</param>
-        private void SelectAction(int actionIndex, CharacterAction action)
+        private void SelectAction(CharacterAction action)
         {
             //If Input is Enabled, it Selects Actions. The Methods handle disabling when the Same Action is Triggered again
             if (!_isListeningToInput) return;
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Click);
-            UIManager.Instance.SelectAction(actionIndex);
             GameManager.Instance.TriggerState(action.Type);
         }
 

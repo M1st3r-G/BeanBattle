@@ -86,6 +86,7 @@ namespace Controller
         {
             _currentState = stateLibrary.GetState(type);
             _currentState.StateSetUp(this);
+            UIManager.Instance.DisplayNewAction(type);
         }
         
         private void Update()

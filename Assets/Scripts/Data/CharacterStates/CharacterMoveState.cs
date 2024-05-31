@@ -22,6 +22,7 @@ namespace Data.CharacterStates
         public override void StateDisassembly(CharStateController s)
         {
             s.MyCharacter.Indicator.SetActive(false);
+            GridManager.Instance.ResetRange(); // Hide Path
         }
 
         public override bool ExecuteStateFrame(CharStateController s)
@@ -62,7 +63,8 @@ namespace Data.CharacterStates
         protected override IEnumerator ExecuteStateAndAnimate(CharStateController s)
         {
             CustomInputManager.Instance.DisableInput();
-            
+            yield return null;
+            GridManager.Instance.RenderPath(s.path);
             // for each field in the Path
             foreach (Vector2Int currentTargetCell in s.path)
             {
