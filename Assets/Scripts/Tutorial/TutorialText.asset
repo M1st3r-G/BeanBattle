@@ -16,3 +16,31 @@ MonoBehaviour:
   - "Wilkommen im Tutorial:<br>Das ist dein Character. Er ist entweder in Team Blau
     oder Rot.<br>[Leider m\xFCssen in diesem Spielstand noch beide Teams vom Spieler
     \xFCbenommen werden].<br>Fangen wir doch erstmal Langsam an.<br>(Klicke um Fortzufahren)"
+  - "Hier siehst du alle Spieler und ihre Initiative. Der Spieler mit der niedrigsten
+    Initiative ist immer der N\xE4chste<br>(Klicke um Fortzufahren)"
+  - "Hier siehst du die Aktionsm\xF6glichkeiten deiner Aktiven Figur<br>Beginnen
+    wir doch erstmal mit der Bewegung. Dazu kannst du entweder die UI Zelle ancklicken
+    oder du dr\xFCckst die Passende Taste auf der Tastatur."
+  - "Du bist jetzt im Bewegunsmodus.<br>Unten links siehst du mehr Informationen
+    zu der Aktion. Dort siehst du auch ihre Kosten. Wenn du die Aktion ausf\xFChrst,
+    erh\xF6ht sich deine initiative um den angegeben Wert.<br>(Klicke um Fortzufahren.)"
+  - "W\xE4hrend du dich im Bewegungsmodus befindest, kannst du auf Zellen auf dem
+    Spielfeld klicken um dich zu Bewegen.<br>Bewege dich doch einmal zur Angezeigten
+    Position.<br>Zeige einfach mit dem Mauszeiger auf sie und klicke die Zelle an.<br>(Bonustipp:
+    Wenn du mit der Maus \xFCber einen Character gehst, zeigt das Spiel seine Kampfreichweite
+    an.)"
+  - "Sehr gut, du hast verstanden wie man sich Bewegt.<br>Dein Zug wird automatisch
+    beende, sollte deine Initiative \xFCber 10 Steigen.<br>Andernfalls kannst du
+    deinen Zug auch manuell beenden.<br>Beende deinen Zug mit der Tab-Taste."
+  - "Dieser Zweite Character kann nur Angreifen. W\xE4hle daf\xFCr doch einmal die
+    Angriffsaktion aus.<br>(Bonustipp: Sp\xE4ter kanst du auch Aktionen wieder abw\xE4hlen.
+    Dr\xFCcke dazu einfach Esc oder die gleiche Taste erneut. "
+  - "Du bist jetzt im Angriffsmodus.<br>Du kannst nun die Reichweite deines Characters
+    sehen.<br>Da nur ein Spieler in Reichweite ist, wird dieser automatisch f\xFCr
+    dich ausgew\xE4hlt.<br> Den Angriff kannst du mit Leertaste Best\xE4tigen."
+  - "Sehr gut, du hast verstanden, wie man Angreift.<br>Sp\xE4ter kann es dazu kommen,
+    dass sich mehrere Gegner in deiner Reichweite befinden. Dann musst du druch das
+    Klicken auf den Character deine Auswahl angeben.<br>(Klicke um Fortzufahren)"
+  - "Du hast das Tutorial abgeschlossen.<br>Du kennst nun die Grundlagen.<br>Versuche
+    durch geschicktes Zeitmanagement und Abstand halten die \xDCberhand im Kampf
+    zu behalten.<br>(Sp\xE4ter werden hier sicherlich noch mehr Aktionen erkl\xE4r)"

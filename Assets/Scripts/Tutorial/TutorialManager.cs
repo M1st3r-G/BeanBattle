@@ -53,11 +53,12 @@ namespace Tutorial
 
             display.Next(); //Willkommen
             yield return new WaitUntil(() => mouseClick.action.WasPerformedThisFrame());
-
+            yield return null;
+            
             display.Next(); //Spieler
             UIManager.Instance.ShowInitiative();
             yield return new WaitUntil(() => mouseClick.action.WasPerformedThisFrame());
-
+            yield return null;
 
 
             UIManager.Instance.ShowCurrentCharacter(); // And actionsUI
@@ -70,6 +71,7 @@ namespace Tutorial
             display.Next(); // Bewegungsmodus
 
             yield return new WaitUntil(() => mouseClick.action.WasPerformedThisFrame());
+            yield return null;
         }
 
         public void TriggerState()
