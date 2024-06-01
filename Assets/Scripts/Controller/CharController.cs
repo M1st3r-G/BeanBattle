@@ -92,6 +92,7 @@ namespace Controller
             }
         }
 
+        public void SkipState() => _stateController.SkipState();
         public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.TriggerState(type);
         public void SetSelector(bool state) => selector.SetActive(state);
         public override string ToString() => $"{name} ({CurrentHealth}): {Initiative}";

@@ -69,17 +69,22 @@ namespace Controller
                 }
                 else //other State
                 {
-                    RemoveState();
+                    RemoveState(false);
                     SetNewState(type);
                 }
             }
         }
 
-        private void RemoveState()
+        /// <summary>
+        /// Only used by the Game Manager to end a State when their turn ends.
+        /// </summary>
+        public void SkipState() => RemoveState();
+
+        private void RemoveState(bool hideAction = true)
         {
             _currentState.StateDisassembly(this);
             _currentState = stateLibrary.EmptyState;
-            UIManager.Instance.DeselectCurrentAction();
+            if (hideAction) UIManager.Instance.DeselectCurrentAction();
         }
         
         private void SetNewState(CharacterAction.ActionTypes type)
@@ -91,7 +96,14 @@ namespace Controller
         
         private void Update()
         {
-            if (_currentState.ExecuteStateFrame(this) || CustomInputManager.Instance.StoppedThisFrame()) RemoveState();
+            if (_currentState.ExecuteStateFrame(this))
+            {
+                RemoveState(false);
+            }
+            else if (CustomInputManager.Instance.StoppedThisFrame())
+            {
+                RemoveState();
+            }
         }
         
         #endregion

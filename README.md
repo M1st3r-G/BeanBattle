@@ -13,7 +13,6 @@ ToDo:
   - Settings
   - Pause Menu
   - Bugs:
-    - Dont hide Actions Imediatly
   
 - Enhancements
   - Better Song (Not that annoying)

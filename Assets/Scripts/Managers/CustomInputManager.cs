@@ -44,6 +44,7 @@ namespace Managers
             
             mouseClick.action.Enable();
             acceptAction.action.Enable();
+            stopAction.action.Enable();
         }
 
         private void OnDisable()
@@ -55,6 +56,7 @@ namespace Managers
             
             mouseClick.action.Disable();
             acceptAction.action.Disable();
+            stopAction.action.Enable();
         }
 
         #endregion
