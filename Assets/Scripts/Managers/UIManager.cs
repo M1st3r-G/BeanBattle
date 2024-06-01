@@ -60,11 +60,7 @@ namespace Managers
 
         private void OnGameOver(int winningTeam)
         {
-            // Hides all UI
-            currentCharacter.gameObject.SetActive(false); 
-            currentAction.gameObject.SetActive(false);
-            initiativeUI.gameObject.SetActive(false);
-            action.gameObject.SetActive(false);
+            HideAll();
                 
             // Shows Game Over
             gameOver.gameObject.SetActive(true);
@@ -131,6 +127,29 @@ namespace Managers
         public int GetTimeCost() => currentAction.GetTimeCost();
 
         #endregion
+
+        #region Tutoial
+
+        public void HideAll()
+        {
+            // Hides all UI
+            currentCharacter.gameObject.SetActive(false); 
+            currentAction.gameObject.SetActive(false);
+            initiativeUI.gameObject.SetActive(false);
+            action.gameObject.SetActive(false);
+        }
+
+        public void ShowInitiative(){
+            initiativeUI.gameObject.SetActive(true);
+        }
+        public void ShowCurrentCharacter(){
+            currentCharacter.gameObject.SetActive(true); 
+            action.gameObject.SetActive(true);
+        } 
+        public void ShowActiveAction(){
+            currentAction.gameObject.SetActive(true);
+        }
         
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 using Data;
+using Tutorial;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -92,7 +93,9 @@ namespace Managers
             if (!_isListeningToInput) return;
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Click);
-            GameManager.Instance.TriggerState(action.Type);
+
+            if (GameManager.Instance is null) TutorialManager.Instance.TriggerState();
+            else GameManager.Instance.TriggerState(action.Type);
         }
 
         public bool AcceptedThisFrame() => acceptAction.action.WasPerformedThisFrame() && _isListeningToInput;
