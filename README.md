@@ -9,7 +9,10 @@ It's more to be seen as a learning and testing Project than a finished game.
 ---
 ToDo:
 - Next
-  - Tutorial
+  - Tutorial:
+    - Add Players
+    - Add Text
+    - Add States to Players
   - Settings
   - Pause Menu
   - Bugs:

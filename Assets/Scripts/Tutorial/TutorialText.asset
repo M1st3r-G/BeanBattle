@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TutorialText
   m_EditorClassIdentifier: 
   content:
-  - "Wilkommen im Tutorial: \\nDas ist dein Character. Er ist entweder in Team Blau
-    oder Rot. [Leider m\xFCssen in diesem Spielstand noch beide Teams vom Spieler
-    \xFCbenommen werden]. \\nFangen wir doch erstmal Langsam an.\\n(Klicke um Fortzufahren)"
+  - "Wilkommen im Tutorial:<br>Das ist dein Character. Er ist entweder in Team Blau
+    oder Rot.<br>[Leider m\xFCssen in diesem Spielstand noch beide Teams vom Spieler
+    \xFCbenommen werden].<br>Fangen wir doch erstmal Langsam an.<br>(Klicke um Fortzufahren)"
