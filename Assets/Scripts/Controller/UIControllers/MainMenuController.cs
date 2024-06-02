@@ -24,9 +24,15 @@ namespace Controller.UIControllers
         private IEnumerator StartWrapper()
         {
             yield return ButtonClickSound();
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         }
 
+        private IEnumerator TutorialWrapper()
+        {
+            yield return ButtonClickSound();
+            SceneManager.LoadScene(1);
+        }
+        
         private IEnumerator QuitWrapper()
         {
             yield return ButtonClickSound();
@@ -35,5 +41,6 @@ namespace Controller.UIControllers
         
         public void StartButtonAction() => StartCoroutine(StartWrapper());
         public void QuitButtonAction() => StartCoroutine(QuitWrapper());
+        public void TutorialButtonAction() => StartCoroutine(TutorialWrapper());
     }
 }
