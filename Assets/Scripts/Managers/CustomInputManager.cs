@@ -11,6 +11,7 @@ namespace Managers
         // Component References
         [SerializeField] private InputActionReference numberAction;
         [SerializeField] private InputActionReference nextPhaseAction;
+        [SerializeField] private InputActionReference pauseAction;
         
         // Requests
         [SerializeField] private InputActionReference mouseClick;
@@ -42,11 +43,15 @@ namespace Managers
             numberAction.action.performed += NumberPressed;
             nextPhaseAction.action.Enable();
             nextPhaseAction.action.performed += EndPhase;
+            pauseAction.action.Enable();
+            pauseAction.action.performed += OnPause;
             
             mouseClick.action.Enable();
             acceptAction.action.Enable();
             stopAction.action.Enable();
         }
+
+        
 
         private void OnDisable()
         {
@@ -54,6 +59,8 @@ namespace Managers
             numberAction.action.Disable();
             nextPhaseAction.action.performed -= EndPhase;
             nextPhaseAction.action.Disable();
+            pauseAction.action.Disable();
+            pauseAction.action.performed -= OnPause;
             
             mouseClick.action.Disable();
             acceptAction.action.Disable();
@@ -101,6 +108,12 @@ namespace Managers
             else GameManager.Instance.TriggerState(action.Type);
         }
 
+        private void OnPause(InputAction.CallbackContext _)
+        {
+            Debug.Log("Found on Pause");
+            UIManager.Instance.TogglePause(_isListeningToInput);
+        }
+        
         public bool AcceptedThisFrame() => acceptAction.action.WasPerformedThisFrame() && _isListeningToInput;
         public bool MouseClickedThisFrame() => mouseClick.action.WasPerformedThisFrame() && _isListeningToInput;
         public bool StoppedThisFrame() => stopAction.action.WasPerformedThisFrame() && _isListeningToInput;

@@ -11,7 +11,6 @@ In its current state it needs to be played as a Hotseat multiplayer
 ToDo:
 - Next
   - Settings
-  - Pause Menu
   - Animations
     - Attack
   

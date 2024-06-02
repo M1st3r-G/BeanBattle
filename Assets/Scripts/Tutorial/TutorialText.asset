@@ -19,7 +19,7 @@ MonoBehaviour:
   - "You are now in the Movement state.<br>In the bottom-left Corner, you can see more Information about your action. You can also find its Cost. When you perform the Action, your Initiative raises by the same amount.<br>(Click to proceed)"
   - "While in the Movement state, you can click the ground to move.<br>Try moving to the highlighted location.<br>(Bonus: If you hover a Character while in movement state, you can see it's Combat Range)"
   - "Very good, you understood how to move.<br>Your turn is ended automatically when your Initiative exceeds 10, but you can end it manually with the Tabulator-Key.<br>Try ending your Turn."
-  - "This other Character can only Attack.Try selecting the Attack action. (Bonus: Later you can delesect action by using Esc or pressing the same button a second time. This is disabled in the Tutorial)"
+  - "This other Character can only Attack.Try selecting the Attack action. (Bonus: Later you can delesect action by using ^ or pressing the same button a second time. This is disabled in the Tutorial)"
   - "You are now in the Attack state.<br>You can see your characters attack range.<br>Because only one enemy in Range, it is automatically selected. You can verify the attack with the Space-key."
   - "Very good, you understood how to attack.<br>Later there could be multiple enemys in your attack range. If so, you mus click the Character you want to attack to select it.<br>(Click to proceed)"
   - "You made it through the Tutorial.<br>You now know the core mecanics<br>Try to manage you initiative and distances wisely to win.<br>[Later, there will be more action explained]<br>(Clickt to return to the Main Menu)"

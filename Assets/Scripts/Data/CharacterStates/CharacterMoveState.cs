@@ -2,7 +2,6 @@ using System.Collections;
 using Controller;
 using Managers;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Data.CharacterStates
 {
@@ -55,7 +54,7 @@ namespace Data.CharacterStates
             }
 
             // If(Accept)
-            if (!Mouse.current.leftButton.wasPressedThisFrame) return false;
+            if (!CustomInputManager.Instance.MouseClickedThisFrame()) return false;
             s.MyCharacter.StartCoroutine(ExecuteStateAndAnimate(s));
             return true;
         }

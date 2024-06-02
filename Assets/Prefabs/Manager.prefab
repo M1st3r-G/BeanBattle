@@ -79,6 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberAction: {fileID: 7080820377471110002, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
   nextPhaseAction: {fileID: -183864215795943140, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
+  pauseAction: {fileID: -7655455962474144362, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
   mouseClick: {fileID: -8295211101789692694, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
   acceptAction: {fileID: -864339171949513493, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}
   stopAction: {fileID: -3043140693664414466, guid: f467ee317a0d5444ab1f2b05db5f7d57, type: 3}

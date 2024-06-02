@@ -17,6 +17,7 @@ namespace Managers
         [SerializeField] private InitiativeUI initiativeUI;
         [SerializeField] private ActionsUI action;
         [SerializeField] private GameOverController gameOver;
+        [SerializeField] private PauseController pauseMenu;
         
         private int CurrentSelection { get; set; } = -1;
         
@@ -111,12 +112,15 @@ namespace Managers
         /// </summary>
         public void DeselectCurrentAction()
         {
+            if (CurrentSelection == -1) return;
             action.SetCellStateAtIndex(CurrentSelection, false);
             currentAction.SetAction(null);
             CurrentSelection = -1;
                 
             Debug.Log("Hid the Current Action Visuals");
         }
+
+        public void TogglePause(bool restoreAfter) => pauseMenu.TogglePause(restoreAfter);
         
         #endregion
 
