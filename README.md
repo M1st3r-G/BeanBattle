@@ -15,6 +15,7 @@ ToDo:
 
 
 - Enhancements
+  - Rework the Tutorial 
   - Better Song (Not that annoying)
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
