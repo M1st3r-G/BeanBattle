@@ -359,7 +359,7 @@ namespace Managers
         
         public CharController GetOccupier(Vector2Int cell) => _occupied.FirstOrDefault(x => x.Value == cell).Key;
         public bool IsOccupied(Vector2Int cell) => _occupied.ContainsValue(cell);
-        public Vector2Int GetPosition(CharController charController) => _occupied[charController];
+        private Vector2Int GetPosition(CharController charController) => _occupied[charController];
         
         #endregion
     }

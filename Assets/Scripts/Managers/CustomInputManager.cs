@@ -66,7 +66,10 @@ namespace Managers
 
         private void EndPhase(InputAction.CallbackContext _)
         {
-            if (_isListeningToInput) GameManager.Instance.OnEndPhaseAction();
+            if (!_isListeningToInput) return;
+            
+            if(GameManager.Instance is null) TutorialManager.Instance.Continue();
+            else GameManager.Instance.OnEndPhaseAction();
         }
 
         #endregion
@@ -94,7 +97,7 @@ namespace Managers
             
             AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Click);
 
-            if (GameManager.Instance is null) TutorialManager.Instance.TriggerState();
+            if (GameManager.Instance is null) TutorialManager.Instance.Continue();
             else GameManager.Instance.TriggerState(action.Type);
         }
 

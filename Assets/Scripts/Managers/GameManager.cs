@@ -30,8 +30,8 @@ namespace Managers
         public static OnGameOverDelegate OnGameOver;
 
         //Data
-        private int totalSteps;
-        private int totalTurns;
+        private int _totalSteps;
+        private int _totalTurns;
         
         #endregion
 
@@ -42,7 +42,7 @@ namespace Managers
             Instance = this;
 
             _gameLoop = true;
-            totalSteps = totalTurns = 0;
+            _totalSteps = _totalTurns = 0;
         }
 
         private void OnDestroy()
@@ -178,7 +178,7 @@ namespace Managers
             CurrentPlayer = _playOrder[0];
             _playOrder.RemoveAt(0);
 
-            totalTurns++;
+            _totalTurns++;
         }
         
         #endregion
@@ -227,12 +227,12 @@ namespace Managers
         /// <returns></returns>
         public Tuple<int, int> GetGameStats()
         {
-            return new Tuple<int, int>(totalTurns, totalSteps);
+            return new Tuple<int, int>(_totalTurns, _totalSteps);
         }
         
         public void CountSteps(int amount)
         {
-            totalSteps += amount;
+            _totalSteps += amount;
         }
         
         #endregion
