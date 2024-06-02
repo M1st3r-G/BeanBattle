@@ -32,10 +32,7 @@ namespace Data.CharacterStates
         public override void StateDisassembly(CharStateController s)
         {
             //Reset State Variables
-            s.LookingForSelection = false;
             if (s.CurrentSelection is not null) s.CurrentSelection.SetSelector(false);
-            s.CurrentSelection = null;
-            
             GridManager.Instance.ResetRange();
         }
         
@@ -63,6 +60,7 @@ namespace Data.CharacterStates
         protected override IEnumerator ExecuteStateAndAnimate(CharStateController s)
         {
             CustomInputManager.Instance.DisableInput();
+            yield return new WaitForSeconds(s.MyCharacter.Attack(s.CurrentSelection.transform));
             s.CurrentSelection.TakeDamage(s.MyCharacter.GetData.Damage);
             yield return null;
             GameManager.Instance.FullActionEnd();

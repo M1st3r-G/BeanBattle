@@ -15,6 +15,7 @@ namespace Controller
         [SerializeField] private GameObject selector;
         private MeshRenderer _renderer;
         private CharStateController _stateController;
+        private AttackController _attackController;
         //PublicComponentReferences
         public GameObject Indicator { get; private set; }
         // PublicTemps
@@ -34,6 +35,7 @@ namespace Controller
         {
             _renderer = GetComponent<MeshRenderer>();
             _stateController = GetComponent<CharStateController>();
+            _attackController = GetComponentInChildren<AttackController>();
             selector = transform.GetChild(0).gameObject;
         }
 
@@ -47,9 +49,9 @@ namespace Controller
             GetData = characterClass;
             Initiative = Random.Range(GetData.InitiativeStartRange.x, GetData.InitiativeStartRange.y);
             CurrentHealth = GetData.BaseHealth;
-            name = GetData.Name + $"(Team {TeamID})";
             
             TeamID = team;
+            name = GetData.Name + $"(Team {TeamID})";
             _renderer.material = GetData.Material(TeamID);
             
             Indicator = CreateIndicator();
@@ -91,7 +93,8 @@ namespace Controller
                 AudioEffectsManager.Instance.PlayEffect(AudioEffectsManager.AudioEffect.Death);
             }
         }
-
+        
+        public float Attack(Transform target) => _attackController.Attack(target);
         public void SkipState() => _stateController.SkipState();
         public void TriggerCharacterState(CharacterAction.ActionTypes type) => _stateController.TriggerState(type);
         public void SetSelector(bool state) => selector.SetActive(state);
