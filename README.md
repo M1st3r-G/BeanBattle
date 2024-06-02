@@ -9,12 +9,8 @@ It's more to be seen as a learning and testing Project than a finished game.
 ---
 ToDo:
 - Next
-  - Tutorial:
-    - Add Players (Spawn)
-    - Add States to Players
   - Settings
   - Pause Menu
-  - Bugs:
   
 - Enhancements
   - Better Song (Not that annoying)
