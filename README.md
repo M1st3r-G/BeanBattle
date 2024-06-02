@@ -28,6 +28,7 @@ ToDo:
     - Attack  Size Propotional to damage
     - Better Hover Zone/ Indicator
     - Fix Path Flickering
+    - Prevent Projectiles Passing through other Characters
   - Balancing
     - First team Has lower Time Overflow?
     - Faster Movement?
