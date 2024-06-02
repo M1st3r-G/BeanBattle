@@ -11,7 +11,6 @@ ToDo:
 - Next
   - Settings
   - Pause Menu
-  - Change Tutorial Language
   
 - Enhancements
   - Better Song (Not that annoying)
