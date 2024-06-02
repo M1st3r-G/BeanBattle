@@ -5,20 +5,22 @@
  
 This is Bean Battle, a **Very** simple (probably) unfinished X-Com like game, just to try out different styles and Mechanics. 
 It's more to be seen as a learning and testing Project than a finished game.
+In its current state it needs to be played as a Hotseat multiplayer
 
 ---
 ToDo:
 - Next
   - Settings
   - Pause Menu
+  - Animations
+    - Attack
   
 - Enhancements
   - Better Song (Not that annoying)
-  - Animations
-    - Attack
   - Implement More Actions
     - Evil/Help as Healing or De-Buff
     - Hide/Cover
+    - Over-watch
   - Optimisation
     - Check round end for time > 0
     - MovementState only on Cell Change
@@ -26,15 +28,13 @@ ToDo:
   - Balancing
     - First team Has lower Time Overflow?
     - Faster Movement?
+  - Fix Path Flickering
 
 
-- Later:
+- Later Features:
   - AI
   - Terrain?
   - Controller Input
-  - Path Flackern
-  - Other Actions
-    - Over-watch
 
 Math:
 - [Desmos Graph Start-Positions](https://www.desmos.com/calculator/lqxf4nhqil)
@@ -43,7 +43,7 @@ StateController Planning:
 ![](Assets/Art/Images/PlanningForReadMe.png)
 
 Tutorial Planning:
-![](F:\Git\BeanBattle\Assets\Art\Images\TutorialPlanning.png)
+![](Assets/Art/Images/TutorialPlanning.png)
 
 Credits:
 - [Title Font: Monaz 3D](https://www.fontspace.com/monaz-3d-font-f110367)
