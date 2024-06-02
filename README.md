@@ -11,6 +11,7 @@ ToDo:
 - Next
   - Settings
   - Pause Menu
+  - Change Tutorial Language
   
 - Enhancements
   - Better Song (Not that annoying)
@@ -41,6 +42,9 @@ Math:
 
 StateController Planning:
 ![](Assets/Art/Images/PlanningForReadMe.png)
+
+Tutorial Planning:
+![](F:\Git\BeanBattle\Assets\Art\Images\TutorialPlanning.png)
 
 Credits:
 - [Title Font: Monaz 3D](https://www.fontspace.com/monaz-3d-font-f110367)
