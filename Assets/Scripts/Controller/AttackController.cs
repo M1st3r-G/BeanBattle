@@ -24,8 +24,6 @@ namespace Controller
 
             float distance = Vector3.Distance(target.position, transform.position);
             
-            Debug.Log($"Distance: {distance}");
-            
             if (!(distance < 1.5f))
                 return ShotProjectile(direction, distance);
             

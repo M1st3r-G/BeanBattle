@@ -174,7 +174,6 @@ namespace Tutorial
                 }
                 if (!GridManager.Instance.IsOccupied(hoveredCell))
                 {
-                    Debug.LogError($"Position:  {hoveredCell}");
                     // Stop showing Enemy's Ranges
                     GridManager.Instance.ResetRange();
                 
@@ -252,6 +251,9 @@ namespace Tutorial
             yield return new WaitUntil(() => CustomInputManager.Instance.AcceptedThisFrame());
 
             // Animate
+            
+            CustomInputManager.Instance.DisableInput();
+            yield return new WaitForSeconds(CurrentPlayer.Attack(_playOrder[^1].transform));
             _playOrder[^1].TakeDamage(CurrentPlayer.GetData.Damage);
         }
         

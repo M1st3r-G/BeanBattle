@@ -10,10 +10,10 @@ In its current state it needs to be played as a Hotseat multiplayer
 ---
 ToDo:
 - Next
-  - Settings
-  - Animations
-    - Attack
-  
+  - Settings (Volume)
+  - Add Pause to the Tutorial
+
+
 - Enhancements
   - Better Song (Not that annoying)
   - Implement More Actions
@@ -23,11 +23,14 @@ ToDo:
   - Optimisation
     - Check round end for time > 0
     - MovementState only on Cell Change
-  - Better Hover Zone/ Indicator
+  - Visuals
+    - Attack  Size Propotional to damage
+    - Better Hover Zone/ Indicator
+    - Fix Path Flickering
   - Balancing
     - First team Has lower Time Overflow?
     - Faster Movement?
-  - Fix Path Flickering
+    - Faster Shooting
 
 
 - Later Features:
